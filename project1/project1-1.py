@@ -70,8 +70,7 @@ eps=np.zeros(n)
 for i in range(n):
     eps[i]=rel_error(v[i], u[i])
 
-
-    
+Hei ingvild
 print u
 """
 
