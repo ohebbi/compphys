@@ -136,8 +136,10 @@ September 10, 2018
 \section{Abstract}
 
 We study the one-dimensional Poissons equation with Dirichlet boundary conditions by rewriting it as a set of linear equations.
-The result is verified versus the exact solution. We find that increasing the number of iterations
+The result is verified versus the exact solution. We find that increasing the number of grid points
 will result in a smaller error.
+
+Time --> general tridiagonal vs LU ?  (flops?)
 
 \section{Introduction}
 
@@ -149,7 +151,6 @@ The learning curve has been very steep, but it is very motivating getting unders
 
 
 \section{Theoretical models and technicalities}
-
 We want to solve the equation
 
 \begin{equation*}
@@ -232,7 +233,8 @@ $$-u''(x)=f(x)$$
 \end{split}
 \end{equation*}
 
-Can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied.
+Now we can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied.
+Then we can develop a general algorithm to solve this (Ingvild).
 
 
 
@@ -248,7 +250,7 @@ Can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied
 
 
 
-\section{1a) Answer}
+
 
 
 
