@@ -257,8 +257,31 @@ a_1 & b_2 & c_2 & & \\
 
 
 
-First, we use forward substitution, which uses Gaussian elimination to get rid of the elements below the diagonal. 
+First, we use forward substitution, which uses Gaussian elimination to get the matrix on the echolon form, which in this case means $a_i=0$. The Gaussian elimination requires the elements along the diagonal in $\mathbf{A}$ and $\mathbf{\tilde{b}}$ to be updated. The algorithm for this process is given by
 
+\begin{equation*}
+\begin{split}
+b_i'&=b_i-\frac{a_{i-1}c_{i-1}}{b_{i-1}'}\\
+\tilde{b}_i'&=\tilde{b}_i-\frac{a_{i-1}d_{i-1}}{b_{i-1}'}
+\end{split}
+\end{equation*}
+
+where $b_i'$ and $\tilde{b}_i'$ represent the updated values of $\mathbf{b}$ and $\mathbf{\tilde{b}}$ and $i=1, 2, ..., n$.
+
+Now we are able to solve the equation by backward substitution. This algorithm is given by
+
+\begin{equation*}
+\begin{split}
+v_n&=b_n'\\
+v_i&=\frac{1}{b_i'}(\tilde{b_i}'-c_iv_{i+1})\\
+\end{split}
+\end{equation*}
+
+where $i=n-1, n-2, ..., 1$.
+
+The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (ref), and therefore we will not repeat it in this report.
+
+First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers, $a_i, b_i$ and $c_i$, so we assigned the vectors random values in a for loop. Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$. These are the values we used for the rest of the project.
 
 
 \section{Results and Discussion}
