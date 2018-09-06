@@ -3,6 +3,8 @@
 *.so
 *.a
 # temporary files:
+*.pdf
+*.gz
 *.pyc
 *.bak
 *.swp
