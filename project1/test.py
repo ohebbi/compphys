@@ -39,6 +39,8 @@ for i in range (1,8):
         h.append(np.log10(float(a[1])))
     fy.close()
 plt.plot(h, eps)
+plt.title("The Error as a Function of h")
+ply.legend(["log(eps)"])
 plt.xlabel("log(h)")
 plt.ylabel("log(eps)")
 plt.show()    
