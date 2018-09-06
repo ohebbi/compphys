@@ -27,7 +27,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 \usepackage{comment}
-
+\usepackage{listings}
 \usepackage{lmodern}         % Latin Modern fonts derived from Computer Modern
 
 % Hyperlinks in PDF:
@@ -284,7 +284,16 @@ The theory behind the algorithms for forward and backward substitution are thoro
 First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers,
 $a_i, b_i$ and $c_i$, so we assigned the vectors random values in a \textit{for loop}.
 Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$ for $i=1, 2, ..., n$.
-These are the values we used for the rest of the project.\\
+These are the values we used for the rest of the project. The difference between them is a line in the forward substitution algorithm which is changed from
+\begin{lstlisting}
+b[i] = b[i]-s*c[i-1];
+\end{lstlisting}
+to
+\begin{lstlisting}
+b[i] = b[0]-1./b[i-1];
+\end{lstlisting}
+for the special case.
+
 \section{Results and Discussion}
 
 \section{Conclusion and Perspective}
