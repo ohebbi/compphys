@@ -11,7 +11,7 @@ from math import exp, log
 import matplotlib.pyplot as plt
 import sys
 
-f = open("taskc.txt", "r")
+f = open("task.txt", "r")
 x = []
 v = []
 u = []
