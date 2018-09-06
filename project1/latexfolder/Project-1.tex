@@ -284,7 +284,7 @@ The theory behind the algorithms for forward and backward substitution are thoro
 First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers,
 $a_i, b_i$ and $c_i$, so we assigned the vectors random values in a \textit{for loop}.
 Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$ for $i=1, 2, ..., n$.
-These are the values we used for the rest of the project. The difference between them is a line in the forward substitution algorithm which is changed from
+These are the values we used for the rest of the project. The difference between them is a line in the forward substitution algorithm, which is changed from
 \begin{lstlisting}
 b[i] = b[i]-s*c[i-1];
 \end{lstlisting}
@@ -293,9 +293,30 @@ to
 b[i] = b[0]-1./b[i-1];
 \end{lstlisting}
 for the special case.
-
+\newpage{}
 \section{Results and Discussion}
+From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease.
+The number of flops from the general algorithm is $5N$ from the forward substitution and $3N+1$ flops
+from the backward substitution, making it a total of $8N+1$ flops. 
 
+\begin{figure}
+  \includegraphics[scale=0.5]{figur1b_10.png}
+  \centering
+  \caption{Matrix with the size of 10 x 10 compared to the closed-form solution.}
+  \label{1b_10}
+\end{figure}
+\begin{figure}
+  \includegraphics[scale=0.5]{figur1b_100.png}
+  \caption{Matrix with the size of 100 x 100 compared to the closed-form solution.}
+  \label{1b_100}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[scale=0.5]{figur1b_1000.png}
+  \caption{Matrix with the size of 1000 x 1000 compared to the closed-form solution.}
+  \label{1b_1000}
+\end{figure}
+\newpage{}
 \section{Conclusion and Perspective}
 
 \section{Appendix}
