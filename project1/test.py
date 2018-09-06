@@ -22,14 +22,17 @@ for i in f1:
     v.append(float(a[1]))
     u.append(float(a[2]))
 f.close()
-   
+
 plt.plot(x,v)
 plt.plot(x, u)
+plt.xlabel("x")
+plt.ylabel("u")
+plt.legend(['Numerical solution', 'Exact solution'])
 plt.show()
 
 h = []
 eps = []
-    
+
 for i in range (1,8):
     fy = open("taskdn"+str(i)+".txt", "r")
     f1 = fy.readlines()
@@ -41,5 +44,4 @@ for i in range (1,8):
 plt.plot(h, eps)
 plt.xlabel("log(h)")
 plt.ylabel("log(eps)")
-plt.show()    
-    
+plt.show()

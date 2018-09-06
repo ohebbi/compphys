@@ -164,13 +164,13 @@ where $f_i=f(x_i)$.
 
 
 
-We define the discretized approximation  to $u$ as $v_i$  with 
+We define the discretized approximation  to $u$ as $v_i$  with
 grid points $x_i=ih$ where $h$ is defined as $h=1/(n+1)$ and $x$ is in the interval from $x_0=0$ to $x_{n+1}=1$.
 
 We have the boundary conditions $v_0 = v_{n+1} = 0$.
 
 
-Rewriting the approximation gives 
+Rewriting the approximation gives
 
 \begin{equation*}
 -v_{i+1}+2v_{i}-v_{i-1} = h^2f_i=\tilde{b}_i
@@ -241,7 +241,7 @@ Can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied
 
 
 
-Gaussian elimination is a very useful method for solving a large set of equations, which can be represented by the form $\mathbf{Av}=\mathbf{b}$. In our case the matrix, $\mathbf{A}$, is a tridigonal matrix, which allows us to simplify the method further. 
+Gaussian elimination is a very useful method for solving a large set of equations, which can be represented by the form $\mathbf{Av}=\mathbf{b}$. In our case the matrix, $\mathbf{A}$, is a tridigonal matrix, which allows us to simplify the method further.
 
 %---------maybe we dont need the explanation of the tridiag matrix
 A tridiagonal matrix is a $n\times n$ matrix with numbers along the diagonal and at the positions directly above and below the diagonal and zeroes on all other positions. To visualize it, the form is shown below.
@@ -279,11 +279,12 @@ v_i&=\frac{1}{b_i'}(\tilde{b_i}'-c_iv_{i+1})\\
 
 where $i=n-1, n-2, ..., 1$.
 
-The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (ref), and therefore we will not repeat it in this report.
+The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (Hjort-Jensen, M., 2015 $Computational$ $Physics$), and therefore we will not repeat it in this report.
 
-First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers, $a_i, b_i$ and $c_i$, so we assigned the vectors random values in a \textit{for loop}. Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$ for $i=1, 2, ..., n$. These are the values we used for the rest of the project.
-
-
+First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers,
+$a_i, b_i$ and $c_i$, so we assigned the vectors random values in a \textit{for loop}.
+Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$ for $i=1, 2, ..., n$.
+These are the values we used for the rest of the project.\\
 \section{Results and Discussion}
 
 \section{Conclusion and Perspective}
@@ -292,7 +293,7 @@ First we wanted to write a script that would solve the equation $\mathbf{Av}=\ma
 
 \section{Bibliography}
 
-
+- Hjort-Jensen, M., 2015 $Computational$ $physics$, accesible at course github repository. 551 pages.
 
 
 
