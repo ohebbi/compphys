@@ -4,7 +4,7 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
-
+#include <time.h>
 
 using namespace std;
 
@@ -33,23 +33,60 @@ double maks(vector<double> y){
 }
 
 //b)
-tuple<vector<double>,vector<double> ,vector<double>> task_b(int nlim){
-    vector<double> a(nlim-1, 0.0);
-    vector<double> b(nlim, 0.0);
-    vector<double> c(nlim-1, 0.0);    
 
-    b[0] = rand() % 100;
-    for(int i=0;i<(nlim-1);i+=1){
-        a[i] = rand() % 100;
-        b[i+1] = rand() % 100;
-        c[i] = rand() % 100;
+vector<double> task_b(int n, vector<double> a, vector<double> b, vector<double> c, vector<double> v, vector<double> b_tilde) {
+  //forward substitution
+    double s;
+    
+    for(int i = 1; i<n; i+=1){
+        s = a[i-1]/b[i-1];  
+        b[i] = b[i]-s*c[i-1];
+        b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
+	
+        
+    } 
+
+//backward substitution
+    v[n-1]=b_tilde[n-1]/b[n-1];
+    
+    for(int i = 1; i<n; i+=1){
+        int j = n-1-i;
+        v[j]=(b_tilde[j]-c[j]*v[j+1])/b[j];
+        
     }
-    return {a, b, c};
+    return v;
+}
+
+//c)
+
+vector<double> task_c(int n, vector<double> a, vector<double> b, vector<double> c, vector<double> v, vector<double> b_tilde) {
+  //forward substitution
+    double s;
+    
+    for(int i = 1; i<n; i+=1){
+        s = a[i-1]/b[i-1];  
+        b[i] = b[0]-1./b[i-1];
+        b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
+	
+        
+    } 
+
+//backward substitution
+    v[n-1]=b_tilde[n-1]/b[n-1];
+    
+    for(int i = 1; i<n; i+=1){
+        int j = n-1-i;
+        v[j]=(b_tilde[j]-c[j]*v[j+1])/b[j];
+        
+    }
+    return v;
 }
 
 
-//c)
-tuple<vector<double>,vector<double> ,vector<double>> task_c(int nlim){
+
+
+//installere vektorer
+tuple<vector<double>,vector<double> ,vector<double>> inst(int nlim){
     vector<double> a(nlim-1, 0.0);
     vector<double> b(nlim, 0.0);
     vector<double> c(nlim-1, 0.0);    
@@ -69,8 +106,6 @@ int main(int argc,char* argv[]){
     float n = pow(10.0, atof(argv[1])); 
     float h = 1.0/(n+1);
     
-    double s;
-    
 
     vector<double> x = linspace(0,1,n-1);
     vector<double> v(n, 0.0);
@@ -85,30 +120,17 @@ int main(int argc,char* argv[]){
                
     }
 
-//installing vectors a, b and c for task b or c
-    auto tas = task_c(n);
+
+    auto tas = inst(n);
     vector<double> a = get<0>(tas);
     vector<double> b = get<1>(tas);
     vector<double> c = get<2>(tas);
 
- 
-    
-//forward substitution
-    for(int i = 1; i<n; i+=1){
-        s = a[i-1]/b[i-1];  
-        b[i] = b[i]-s*c[i-1];
-        b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
-        
-    } 
-
-//backward substitution
-    v[n-1]=b_tilde[n-1]/b[n-1];
-    
-    for(int i = 1; i<n; i+=1){
-        int j = n-1-i;
-        v[j]=(b_tilde[j]-c[j]*v[j+1])/b[j];
-        
-    }
+    clock_t start = clock();
+    v = task_b(n, a, b, c, v, b_tilde);
+    clock_t end=clock();
+    double time = (double) (end-start)/ CLOCKS_PER_SEC;
+    cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
 
 //exact solution
     for(int i = 1; i<n; i+=1){
@@ -131,9 +153,7 @@ int main(int argc,char* argv[]){
     double max = maks(eps);
     myfile.open("taskdn"+string (argv[1])+".txt");
     
-    myfile << max << " " << h;
-
-    
+    myfile << max << " " << h;    
     
 
     return 0;
