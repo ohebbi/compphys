@@ -150,26 +150,27 @@ the use of dynamical memory allocation to the usage of some programs in the libr
 The learning curve has been very steep, but it is very motivating getting understandable results.
 
 
-\section{Theoretical models and technicalities}
-We want to solve the equation
+\section{Theoretical Models and Technicalities}
 
+The purpose of this project is to solve the Poisson equation numerically. We have the equation
 \begin{equation*}
 -u''(x) = f(x), \hspace{0.5cm} x\in(0,1), \hspace{0.5cm} u(0) = u(1) = 0.
 \end{equation*}
-
-We define the discretized approximation  to $u$ as $v_i$  with
-grid points $x_i=ih$   in the interval from $x_0=0$ to $x_{n+1}=1$.
-The step length or spacing is defined as $h=1/(n+1)$.
-We have then the boundary conditions $v_0 = v_{n+1} = 0$.
-We  approximate the second
-derivative of $u$ with
-
+and we approximate the second derivative of $u$ by
 \begin{equation*}
-u''(x)\approx -\frac{v_{i+1}+v_{i-1}-2v_i}{h^2} = f_i  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,\dots, n,
+-u''(x_i)\approx -\frac{v_{i+1}+v_{i-1}-2v_i}{h^2} = f_i  \hspace{0.5cm} \mathrm{for} \hspace{0.1cm} i=1,\dots, n,
 \end{equation*}
 where $f_i=f(x_i)$.
 
-Rewriting this approximation gives
+
+
+We define the discretized approximation  to $u$ as $v_i$  with 
+grid points $x_i=ih$ where $h$ is defined as $h=1/(n+1)$ and $x$ is in the interval from $x_0=0$ to $x_{n+1}=1$.
+
+We have the boundary conditions $v_0 = v_{n+1} = 0$.
+
+
+Rewriting the approximation gives 
 
 \begin{equation*}
 -v_{i+1}+2v_{i}-v_{i-1} = h^2f_i=\tilde{b}_i
@@ -185,9 +186,7 @@ Solving for a slection of $i$ values reveals a pattern\\
   i &=n: -v_{n+1}+2v_n-v_{n-1} = -v_{n-1}+2v_{n}=\tilde{b}_n\\
 \end{align*}
 
-
-
-and the equation, $-v_{i+1}-v_{i-1}+2v_i =\tilde{b}_i$, can be written as
+and the equation, $v_{i+1}+v_{i-1}-2v_i =\tilde{b}_i$, can be written as
 $$\mathbf{Av}=\mathbf{\tilde{b}} $$\\
 
 where
@@ -207,7 +206,7 @@ v_2\\
 v_3\\
 \vdots\\
 v_n
-\end{bmatrix} \textnormal{and}\,
+\end{bmatrix},
 \mathbf{\tilde{b}}=\begin{bmatrix}
 \tilde{b}_1\\
 \tilde{b}_2\\
@@ -217,11 +216,13 @@ v_n
 \end{bmatrix}
 \end{equation*}
 
+and $\mathbf{A}$ is a $n\times n$ matrix.
+
 \vskip0.7cm
-The function $f$ is set to be
+The function $f$ is defined as
 $$f(x)=100e^{-10x}$$
 
-Checking the solution $u(x)=1-(1-e^{-10})x-e^{-10x}$ by inserting $f$ and $u$ into the Poisson equation.
+Checking the exact solution $u(x)=1-(1-e^{-10})x-e^{-10x}$ by inserting $f$ and $u$ into the Poisson equation.
 
 $$-u''(x)=f(x)$$
 
@@ -229,16 +230,61 @@ $$-u''(x)=f(x)$$
 \begin{split}
 \frac{d^2}{dx^2}u&=\frac{d^2}{dx^2}(1-x+e^{-10}x-e^{-10x})\\
 &=\frac{d}{dx}(1+e^{-10}+10e^{-10x})\\
-&=-100e^{-10x} = f(x)
+&=-100e^{-10x} = -f(x)
 \end{split}
 \end{equation*}
 
-Now we can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied.
-Then we can develop a general algorithm to solve this (Ingvild).
+Can see that $-u''(x)$ is equal to $f(x)$, and the Poisson equation is satisfied.
+
+\vskip1cm
 
 
 
-\section{Results and discussion}
+
+Gaussian elimination is a very useful method for solving a large set of equations, which can be represented by the form $\mathbf{Av}=\mathbf{b}$. In our case the matrix, $\mathbf{A}$, is a tridigonal matrix, which allows us to simplify the method further. 
+
+%---------maybe we dont need the explanation of the tridiag matrix
+A tridiagonal matrix is a $n\times n$ matrix with numbers along the diagonal and at the positions directly above and below the diagonal and zeroes on all other positions. To visualize it, the form is shown below.
+\begin{equation*}
+\mathbf{A}=\begin{bmatrix}
+b_1 & c_1 & 0 & \cdots & 0\\
+a_1 & b_2 & c_2 & & \\
+0 & a_2 & b_3 & & \vdots \\
+\vdots & & & \ddots & c_{n-1}\\
+0 & \cdots & 0 & a_{n-1} & b_n
+\end{bmatrix}
+\end{equation*}
+
+
+
+First, we use forward substitution, which uses Gaussian elimination to get the matrix on the echolon form, which in this case means $a_i=0$. The Gaussian elimination requires the elements along the diagonal in $\mathbf{A}$ and $\mathbf{\tilde{b}}$ to be updated. The algorithm for this process is given by
+
+\begin{equation*}
+\begin{split}
+b_i'&=b_i-\frac{a_{i-1}c_{i-1}}{b_{i-1}'}\\
+\tilde{b}_i'&=\tilde{b}_i-\frac{a_{i-1}d_{i-1}}{b_{i-1}'}
+\end{split}
+\end{equation*}
+
+where $b_i'$ and $\tilde{b}_i'$ represent the updated values of $\mathbf{b}$ and $\mathbf{\tilde{b}}$ and $i=1, 2, ..., n$.
+
+Now we are able to solve the equation by backward substitution. This algorithm is given by
+
+\begin{equation*}
+\begin{split}
+v_n&=b_n'\\
+v_i&=\frac{1}{b_i'}(\tilde{b_i}'-c_iv_{i+1})\\
+\end{split}
+\end{equation*}
+
+where $i=n-1, n-2, ..., 1$.
+
+The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (ref), and therefore we will not repeat it in this report.
+
+First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers, $a_i, b_i$ and $c_i$, so we assigned the vectors random values in a \textit{for loop}. Later we wanted to specialize our code to the Poisson equation by defining $a_i=c_i=-1$ and $b_i=2$ for $i=1, 2, ..., n$. These are the values we used for the rest of the project.
+
+
+\section{Results and Discussion}
 
 \section{Conclusion and Perspective}
 
