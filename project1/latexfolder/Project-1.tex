@@ -28,7 +28,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \usepackage[utf8x]{inputenc}
 \usepackage{comment}
 \usepackage{listings}
-\usepackage{lmodern} 
+\usepackage{lmodern}
 \usepackage{amsmath}        % Latin Modern fonts derived from Computer Modern
 \usepackage{float}
 
@@ -284,7 +284,7 @@ where $i=n-1, n-2, ..., 1$.
 The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (Hjort-Jensen, M., 2015 $Computational$ $Physics$), and therefore we will not repeat it in this report.
 
 First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers,
-$a_i, b_i$ and $c_i$. We used the matrix $\mathbf A$, but we wrote the algorithm as if the matrix contained random numbers along the diagonals, as shown below. 
+$a_i, b_i$ and $c_i$. We used the matrix $\mathbf A$, but we wrote the algorithm as if the matrix contained random numbers along the diagonals, as shown below.
 \begin{lstlisting}
 s=a[i-1]/b[i-1]
 b[i] = b[i]-s*c[i-1];
@@ -303,10 +303,8 @@ When calculating the $v_i$-values, it's interesting to compare the results to th
 
 \newpage{}
 \section{Results and Discussion}
-The number of flops in the general algorithm is $5N$ from the forward substitution and $3N+1$ flops
-from the backward substitution, making it a total of $8N+1$ flops. 
 
-The general algorithm has been ploted against the excact value, as seen in figurs 1-3.
+The general algorithm has been plotted against the excact value, as seen in figurs 1-3.
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{figur1b_10.png}
@@ -329,7 +327,7 @@ The general algorithm has been ploted against the excact value, as seen in figur
 \end{figure}
 \newpage{}
 
-From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease. The step length between each $v$ value is decided by $h$, which is inversely proportional to $n$. This means that a bigger $n$ gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until $h$ reaches a minimum value. When this happens, the error will increase. This is plotted logarithmically in figure 4. 
+From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease. The step length between each $v$ value is decided by $h$, which is inversely proportional to $n$. This means that a bigger $n$ gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until $h$ reaches a minimum value. When this happens, the error will increase. This is plotted logarithmically in figure 4.
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{fig-error.png}
@@ -340,9 +338,11 @@ From figure 1-3 it is pretty obvious that increasing the number of grid points m
 As we can see from figure 4, the most exact result will be for a $10^6*10^6$ matrix. When n=$10^7$, the error increases again.
 
 
-We check the efficiency of the general and the specific algorithm by running the c++ code while timing the algorithm for $n=10^6$. We check each algorithm ten times each and then find the average time of both of them. The result is that the specific time uses 0.07571 seconds while the general uses 0.079627 seconds. This means that the specific algorithm is faster. 
+We check the efficiency of the general and the specific algorithm by running the c++ code while timing the algorithm for $n=10^6$. We check each algorithm ten times each and then find the average time of both of them. The result is that the specific time uses 0.07571 seconds while the general uses 0.079627 seconds. This means that the specific algorithm is faster.
+This makes sense because the number of flops from the general algorithm scales with $8N$ ($5N$ flops from the forward substitution, and $3N$ flops from the backward substitution), and the flops from the specific case scales with $7N$ ($4N$ flops from the forward substitution, and $3N$ flops from the backward substitution).
 
 When comparing the LU decomposition algorithm against our specialized algorithm, we look at the elapsed time of the algorithms with $n=10$, $n=100$ and $n=1000$. We run the algorithms ten times each and then compute the average value. The results can be found in table 1 and table 2.
+The flops in LU-decomposition scales as $\frac{2}{3} n^3$. If we are going to use LU-decomposition for computing the a $10^5$ x $10^5$ matrix, it requires $\frac{2}{3}10^{15}$ flops. This requires an tremendous amount more memory compared to our general and special logarithm.
 
 \begin{table}[H]
     \centering
@@ -360,7 +360,7 @@ When comparing the LU decomposition algorithm against our specialized algorithm,
       8  & 0.000105 s & 0.000153 s & 0.010998 s\\
       9  & 0.000104 s & 0.000162 s & 0.008004 s\\
       10 & 0.000104 s & 0.000156 s & 0.010687 s\\
-      \hline 
+      \hline
       Average & 0.000109 s & 0.000166 s & 0.011007 s\\
       \hline
     \end{tabular}
@@ -384,7 +384,7 @@ When comparing the LU decomposition algorithm against our specialized algorithm,
       8  & $7.0*10^{-6}$ s & $2.3*10^{-5}$ s & 0.000151 s\\
       9  & $7.0*10^{-6}$ s & $2.3*10^{-5}$ s  & 0.000155 s\\
       10 & $9.0*10^{-6}$ s & $2.2*10^{-5}$ s & 0.000109 s\\
-      \hline 
+      \hline
       Average & $7.4*10^{-6}$ s & $2.02*10^{-5}$ s & $1.203*10^{-4}$ s\\
       \hline
     \end{tabular}
@@ -392,9 +392,7 @@ When comparing the LU decomposition algorithm against our specialized algorithm,
     \label{tab:my_label}
 \end{table}
 
-As we can see, our specialized algorithm is a lot faster than the LU decomposition. 
-
-
+As we can see, our specialized algorithm is a lot faster than the LU decomposition, which makes sense because of the number of flops.
 
 
 \section{Conclusion and Perspective}
