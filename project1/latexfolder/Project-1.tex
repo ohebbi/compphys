@@ -329,11 +329,7 @@ The general algorithm has been ploted against the excact value, as seen in figur
 \end{figure}
 \newpage{}
 
-From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease. This is because we are using a numerical approximation that uses the last value of v[i] to calculate the next one, v[i+1]. The step length between each v-value is decided by h, which is given as
-\begin{center}
-    $h=\frac{1}{n+1}$
-\end{center}
-Here n gives the number of grid points as n*n. This means that a bigger n gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until h reaches a minimum value. When this happens, the error will get bigger. This is plotted logarithmicly in figure 4. 
+From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease. The step length between each $v$ value is decided by $h$, which is inversely proportional to $n$. This means that a bigger $n$ gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until $h$ reaches a minimum value. When this happens, the error will increase. This is plotted logarithmically in figure 4. 
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{fig-error.png}
@@ -342,11 +338,11 @@ Here n gives the number of grid points as n*n. This means that a bigger n gives 
 \end{figure}
 
 As we can see from figure 4, the most exact result will be for a $10^6*10^6$ matrix. When n=$10^7$, the error increases again.
-\section{Conclusion and Perspective}
+
 
 We check the efficiency of the general and the specific algorithm by running the c++ code while timing the algorithm for $n=10^6$. We check each algorithm ten times each and then find the average time of both of them. The result is that the specific time uses 0.07571 seconds while the general uses 0.079627 seconds. This means that the specific algorithm is faster. 
 
-When comparing the LU decomposition algorithm against our specialized algorithm, we compare the elapsed time of the algorithms with n=10, n=100 and n=1000. We run the algorithms ten times each and then compute the average value. The results can be found in table 1 and table 2.
+When comparing the LU decomposition algorithm against our specialized algorithm, we look at the elapsed time of the algorithms with $n=10$, $n=100$ and $n=1000$. We run the algorithms ten times each and then compute the average value. The results can be found in table 1 and table 2.
 
 \begin{table}[H]
     \centering
@@ -399,6 +395,10 @@ When comparing the LU decomposition algorithm against our specialized algorithm,
 As we can see, our specialized algorithm is a lot faster than the LU decomposition. 
 
 
+
+
+\section{Conclusion and Perspective}
+
 \section{Appendix}
 
 \section{Bibliography}
@@ -408,222 +408,6 @@ As we can see, our specialized algorithm is a lot faster than the LU decompositi
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\begin{comment}
-\paragraph{Project 1 b):}
-We can rewrite our matrix $\mathbf{A}$ in terms of one-dimensional vectors $a,b,c$
-of length $1:n$.
-Our linear equation reads
-
-\[
-    \mathbf{A} = \begin{bmatrix}
-                           b_1& c_1 & 0 &\dots   & \dots &\dots \\
-                           a_1 & b_2 & c_2 &\dots &\dots &\dots \\
-                           & a_2 & b_3 & c_3 & \dots & \dots \\
-                           & \dots   & \dots &\dots   &\dots & \dots \\
-                           &   &  &a_{n-2}  &b_{n-1}& c_{n-1} \\
-                           &    &  &   &a_{n-1} & b_n \\
-                      \end{bmatrix}\begin{bmatrix}
-                           v_1\\
-                           v_2\\
-                           \dots \\
-                          \dots  \\
-                          \dots \\
-                           v_n\\
-                      \end{bmatrix}
-  =\begin{bmatrix}
-                           \tilde{b}_1\\
-                           \tilde{b}_2\\
-                           \dots \\
-                           \dots \\
-                          \dots \\
-                           \tilde{b}_n\\
-                      \end{bmatrix}.
-\]
-
-
-
-
-Note well that we do not include the endpoints since the boundary
-conditions are used resulting in a fixed value for $v_i$.  A
-tridiagonal matrix is a special form of banded matrix where all the
-elements are zero except for those on and immediately above and below
-the leading diagonal.  Develop a general algorithm first which does
-not assume that we have a matrix with the same elements along the
-diagonal and the non-diagonal elements.  The algorithm for solving
-this set of equations is rather simple and requires two steps only, a
-decomposition and forward substitution and finally a backward
-substitution.
-
-Before we proceed with the solution of the differential equation, you should now plan the organization of your data flow. Here you will find it convenient to define vectors that will contain the matrix elements, the solution to the problem and the function $f(x)$ when discretized. You should also plan on to read input data, whether you do this from the command line or from a selected file. We recommend strongly that you use dynamical memory allocation.
-An example of a C++ program which reads from the command line various input parameters can \href{{https://github.com/CompPhysics/ComputationalPhysicsMSU/blob/master/doc/Projects/2018/Project1/CodeExamples/TridiagonalSimple.cpp}}{be found here}
-
-Your first task is to set up the general algorithm (assuming different
-values for the matrix elements) for solving this set of linear
-equations.  Find also the precise number of floating point operations
-needed to solve the above equations. For the general algorithm you
-need to specify the values of the array elements $a$, $b$ and $c$ by
-inserting their explicit values.
-
-
-Then you should code the above algorithm and solve the problem for matrices of the size
-$10\times 10$, $100\times 100$ and $1000\times 1000$.  That means that you select $n=10$, $n=100$ and
-$n=1000$ grid points.
-
-Compare your results (make plots) with the closed-form solution for the different number of grid points  in the
-interval $x\in(0,1)$.  The different number of grid points corresponds to different step lengths $h$.
-
-
-\paragraph{Project 1 c):}
-Use thereafter the fact that the matrix has identical matrix elements along the diagonal and identical (but different) values for the non-diagonal elements. Specialize your algorithm to the special case and find the number of floating point operations
-for this specific tri-diagonal matrix. Compare the CPU time with the general algorithm from the previous point for matrices up to  $n=10^6$ grid points.
-
-\paragraph{Project 1 d):}
-Compute the relative error  in the data set $i=1,\dots, n$,by setting up
-
-\[
-   \epsilon_i=log_{10}\left(\left|\frac{v_i-u_i}
-                 {u_i}\right|\right),
-\]
-as function of $log_{10}(h)$ for the function values $u_i$ and $v_i$.
-For each step length extract the max value of the relative error.
-Try to increase $n$ to $n=10^7$.  Make a table of the results and
-comment your results. You can use either the algorithm from b) or c).
-
-\paragraph{Project 1 e):}
-Compare your results with those from the LU decomposition codes for the matrix of sizes $10\times 10$, $100\times 100$ and
-$1000\times 1000$. Here you should use the library functions provided  on the webpage of the course. Alternatively, if you use armadillo as a library, you can use the similar function for LU decomposition.  The armadillo function for the LU decomposition is called $LU$ while the function for solving linear sets of equations is called $solve$.
-Use for example the unix function \emph{time} when you run your codes
-and compare the time usage between LU decomposition and  your
-tridiagonal solver.   Alternatively, you can use the functions in C++, Fortran or Python that measure the time used.
-
-Make a table of the results and comment the differences
-in execution time
-How many floating point operations does the LU decomposition use to solve the set of linear equations?
-Can you run the standard LU decomposition
-for a matrix of the size $10^5\times 10^5$?
-Comment your results.
-
-
-To compute the elapsed time in c++ you can use the following statements
-\end{comment}
-
-\begin{comment}
-...
-#include "time.h"   //  you have to include the time.h header
-int main()
-{
-    // declarations of variables
-    ...
-    clock_t start, finish;  //  declare start and final time
-    start = clock();
-    // your code is here, do something and then get final time
-    finish = clock();
-    ( (finish - start)/CLOCKS_PER_SEC );
-...
-
-Similarly, in Fortran, this simple example shows how to compute the elapsed time.
-
-PROGRAM time
- REAL :: etime          ! Declare the type of etime()
- REAL :: elapsed(2)     ! For receiving user and system time
- REAL :: total          ! For receiving total time
- INTEGER :: i, j
-
- WRITE(*,*) 'Start'
-
- DO i = 1, 5000000
-      j = j + 1
- ENDDO
-
- total = ETIME(elapsed)
- WRITE(*,*) 'End: total=', total, ' user=', elapsed(1), &
-              ' system=', elapsed(2)
-
-END PROGRAM time
-
-\end{comment}
-
-
-
-\begin{comment}
-
-\subsection*{Introduction to numerical projects}
-
-Here follows a brief recipe and recommendation on how to write a report for each
-project.
-
-\begin{itemize}
-  \item Give a short description of the nature of the problem and the eventual  numerical methods you have used.
-
-  \item Describe the algorithm you have used and/or developed. Here you may find it convenient to use pseudocoding. In many cases you can describe the algorithm in the program itself.
-
-  \item Include the source code of your program. Comment your program properly.
-
-  \item If possible, try to find analytic solutions, or known limits in order to test your program when developing the code.
-
-  \item Include your results either in figure form or in a table. Remember to        label your results. All tables and figures should have relevant captions        and labels on the axes.
-
-  \item Try to evaluate the reliabilty and numerical stability/precision of your results. If possible, include a qualitative and/or quantitative discussion of the numerical stability, eventual loss of precision etc.
-
-  \item Try to give an interpretation of you results in your answers to  the problems.
-
-  \item Critique: if possible include your comments and reflections about the  exercise, whether you felt you learnt something, ideas for improvements and  other thoughts you've made when solving the exercise. We wish to keep this course at the interactive level and your comments can help us improve it.
-
-  \item Try to establish a practice where you log your work at the  computerlab. You may find such a logbook very handy at later stages in your work, especially when you don't properly remember  what a previous test version  of your program did. Here you could also record  the time spent on solving the exercise, various algorithms you may have tested or other topics which you feel worthy of mentioning.
-\end{itemize}
-
-\noindent
-\subsection*{Format for electronic delivery of report and programs}
-
-The preferred format for the report is a PDF file. You can also use DOC or postscript formats or as an ipython notebook file.  As programming language we prefer that you choose between C/C++, Fortran2008 or Python. The following prescription should be followed when preparing the report:
-
-\begin{itemize}
-  \item Use Devilry to hand in your projects, log in  at  \href{{http://devilry.ifi.uio.no}}{\nolinkurl{http://devilry.ifi.uio.no}} with your normal UiO username and password and choose either 'fys3150' or 'fys4150'. There you can load up the files within the deadline.
-
-  \item Upload \textbf{only} the report file!  For the source code file(s) you have developed please provide us with your link to your github domain.  The report file should include all of your discussions and a list of the codes you have developed.  Do not include library files which are available at the course homepage, unless you have made specific changes to them.
-
-  \item In your git repository, please include a folder which contains selected results. These can be in the form of output from your code for a selected set of runs and input parameters.
-
-  \item In this and all later projects, you should include tests (for example unit tests) of your code(s).
-
-  \item Comments  from us on your projects, approval or not, corrections to be made  etc can be found under your Devilry domain and are only visible to you and the teachers of the course.
-\end{itemize}
-
-\noindent
-Finally,
-we encourage you to work two and two together. Optimal working groups consist of
-2-3 students. You can then hand in a common report.
-
-\end{comment}
-
-% ------------------- end of main content ---------------
 
 \end{document}
 
