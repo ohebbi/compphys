@@ -120,13 +120,15 @@ September 10, 2018
 
 We study the one-dimensional Poisson equation with Dirichlet boundary conditions by rewriting it as a set of linear equations.
 The result is verified by comparing it to the exact solution. We find that increasing the number of grid points
-will result in a smaller error up until a certain point. We also find that the number of flops in the algorithm is of great significance when computing a large number of grid points, which could be visualized with measuring CPU time. 
+will result in a smaller error up until a certain point. We also find that the number of flops in the algorithm is of great significance when computing a large number of grid points, which could be beautifully visualized when measuring CPU time.
 
 \section{Introduction}
 
-This project is our first encounter with the programming language C++ and the subject computational physics. With the one dimensional Poisson equation as a base, we explore the limits of numerical precision and optimization of CPU time. 
+This project is our first encounter with the programming language C++ and the subject computational physics. With the one dimensional Poisson equation as a base, we explore the limits of numerical precision and optimization of CPU time.
 
 We will be using C++ for the calculations and Python for plotting our data.
+
+First we look at the general algorithm, and compare it with a specialized one. Thereby we look at the error as a function of step length, and check CPU-time of both algorithms as well as for the LU-decomposition.
 
 The learning curve has been very steep, but it is very motivating getting understandable results.
 
@@ -376,7 +378,18 @@ As we can see, our specialized algorithm is a lot faster than the LU decompositi
 
 \section{Conclusion and Perspective}
 
+From our results it's easy to see that the specialized algorithm is the most flop-efficient of the three computed ones. LU-decomposition is extremely easy to use, and is therefore beautiful in its own way when dealing with small matrices. However the flop count is way too high when facing matrices of high magnitude.
+
+We found that C++ was a valuable tool when computing algorithm, but Python excelled in presenting visual data. This is why we implemented them both in our project. This will sure get handy when diving into the deep pool of Computational Physics.
+
+Github got implemented in our project a bit late which makes the version control go back to the beginning. For our next project we will enjoy the pleasure of git and GitHub from the very start.
+
+Finally we also found that being structured and planning an effective code requires a bit of work, especially when dealing with dynamic memory allocations. 
+
 \section{Appendix}
+
+-Link to our GitHub repository:
+https://github.com/ohebbi/compphys.git
 
 \section{Bibliography}
 
