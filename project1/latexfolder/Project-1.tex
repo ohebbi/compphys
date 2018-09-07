@@ -298,6 +298,8 @@ b[i] = b[0]-1./b[i-1];
 \end{lstlisting}
 for the special case because we know that $a_i=c_i=-1$ for all $i=1, 2, ..., n$.
 
+When calculating the $v_i$-values, it's interesting to compare the results to the exact values of u(x). This error is calculated as $\epsilon_{i}=log_{10}(|\frac{v_i-u_i}{u_i}1)$. Doing this for a value of n will generate all errors for that n. We can then extract the maximum error value for that specific n. This will be a good way of comparing when n, and thereby h, generates the most exact numerical result.
+
 
 \newpage{}
 \section{Results and Discussion}
@@ -331,9 +333,9 @@ From figure 1-3 it is pretty obvious that increasing the number of grid points m
 \begin{center}
     $h=\frac{1}{n+1}$
 \end{center}
-where n gives the number of grid points as n*n. This means that a bigger n gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until h reaches a minimum value. When this happens, the error will get bigger. This is plotted logarithmicly in figure 4.
+Here n gives the number of grid points as n*n. This means that a bigger n gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until h reaches a minimum value. When this happens, the error will get bigger. This is plotted logarithmicly in figure 4. 
 
-
+As we can se from figure 4, the most exact result will be for a $10^6*10^6$ matrix. When n=$10^7$, the error increases again.
 \section{Conclusion and Perspective}
 
 
