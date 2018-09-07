@@ -12,7 +12,7 @@ using namespace std;
 vector<double> linspace(double start, double end, double steps){
     vector<double> x;
     double h = (end-start)/(steps);
-    for (double i = start; i < end+1; i+=step_length){
+    for (double i = start; i < end+1; i+=h){
         x.push_back(i);
     }
     return x;
