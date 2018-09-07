@@ -39,8 +39,8 @@ vector<double> task_b(int n, vector<double> a, vector<double> b, vector<double> 
     double s;
     
     for(int i = 1; i<n; i+=1){
-        s = a[i-1]/b[i-1];  
-        b[i] = b[i]-s*c[i-1];
+        s = 1/b[i-1];  
+        b[i] = b[i]+s*c[i-1];
         b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
 	
         
@@ -64,9 +64,9 @@ vector<double> task_c(int n, vector<double> a, vector<double> b, vector<double> 
     double s;
     
     for(int i = 1; i<n; i+=1){
-        s = a[i-1]/b[i-1];  
-        b[i] = b[0]-1./b[i-1];
-        b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
+        s = 1.0/b[i-1];  
+        b[i] = 2-s;
+        b_tilde[i]=b_tilde[i]+s*b_tilde[i-1];
 	
         
     } 
@@ -127,7 +127,8 @@ int main(int argc,char* argv[]){
     vector<double> c = get<2>(tas);
 
     clock_t start = clock();
-    v = task_b(n, a, b, c, v, b_tilde);
+    //chose v = task_b or task_c to use the algorithm from the task you want
+    v = task_c(n, a, b, c, v, b_tilde);
     clock_t end=clock();
     double time = (double) (end-start)/ CLOCKS_PER_SEC;
     cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
