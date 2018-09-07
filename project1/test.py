@@ -28,6 +28,7 @@ plt.plot(x, u)
 plt.xlabel("x")
 plt.ylabel("u")
 plt.legend(['Numerical solution', 'Exact solution'])
+plt.title("n=1000 for the general matrix")
 plt.show()
 
 h = []
@@ -42,8 +43,8 @@ for i in range (1,8):
         h.append(np.log10(float(a[1])))
     fy.close()
 plt.plot(h, eps)
-plt.title("The Error as a Function of h")
-ply.legend(["log(eps)"])
+plt.title("Logarithmic Plot The Error as a Function of h")
+plt.legend(['log(eps)'])
 plt.xlabel("log(h)")
 plt.ylabel("log(eps)")
 plt.show()

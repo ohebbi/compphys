@@ -128,7 +128,7 @@ int main(int argc,char* argv[]){
 
     clock_t start = clock();
     //chose v = task_b or task_c to use the algorithm from the task you want
-    v = task_c(n, a, b, c, v, b_tilde);
+    v = task_b(n, a, b, c, v, b_tilde);
     clock_t end=clock();
     double time = (double) (end-start)/ CLOCKS_PER_SEC;
     cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
