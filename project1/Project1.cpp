@@ -11,7 +11,7 @@ using namespace std;
 
 vector<double> linspace(double start, double end, double steps){
     vector<double> x;
-    double step_length = (end-start)/(steps);
+    double h = (end-start)/(steps);
     for (double i = start; i < end+1; i+=step_length){
         x.push_back(i);
     }
@@ -104,7 +104,7 @@ int main(int argc,char* argv[]){
     ofstream myfile;
     
     float n = pow(10.0, atof(argv[1])); 
-    float h = 1.0/(n+1);
+    double h = 1/(n+1); 
     
 
     vector<double> x = linspace(0,1,n-1);
