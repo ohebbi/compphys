@@ -17,7 +17,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \usepackage{relsize,makeidx,color,setspace,amsmath,amsfonts,amssymb}
 \usepackage[table]{xcolor}
 \usepackage{bm,ltablex,microtype}
-
+\usepackage{float}
 \usepackage[pdftex]{graphicx}
 
 \usepackage{fancyvrb} % packages needed for verbatim environments
@@ -28,7 +28,7 @@ final,                   % draft: marks overfull hboxes, figures with paths
 \usepackage[utf8x]{inputenc}
 \usepackage{comment}
 \usepackage{listings}
-\usepackage{lmodern} 
+\usepackage{lmodern}
 \usepackage{amsmath}        % Latin Modern fonts derived from Computer Modern
 \usepackage{float}
 
@@ -284,7 +284,7 @@ where $i=n-1, n-2, ..., 1$.
 The theory behind the algorithms for forward and backward substitution are thoroughly described in the lecture notes (Hjort-Jensen, M., 2015 $Computational$ $Physics$), and therefore we will not repeat it in this report.
 
 First we wanted to write a script that would solve the equation $\mathbf{Av}=\mathbf{b}$ for general numbers,
-$a_i, b_i$ and $c_i$. We used the matrix $\mathbf A$, but we wrote the algorithm as if the matrix contained random numbers along the diagonals, as shown below. 
+$a_i, b_i$ and $c_i$. We used the matrix $\mathbf A$, but we wrote the algorithm as if the matrix contained random numbers along the diagonals, as shown below.
 \begin{lstlisting}
 s=a[i-1]/b[i-1]
 b[i] = b[i]-s*c[i-1];
@@ -298,15 +298,19 @@ b[i] = b[0]-1./b[i-1];
 \end{lstlisting}
 for the special case because we know that $a_i=c_i=-1$ for all $i=1, 2, ..., n$.
 
-When calculating the $v_i$-values, it's interesting to compare the results to the exact values of u(x). This error is calculated as $\epsilon_{i}=log_{10}(|\frac{v_i-u_i}{u_i}1)$. Doing this for a value of n will generate all errors for that n. We can then extract the maximum error value for that specific n. This will be a good way of comparing when n, and thereby h, generates the most exact numerical result.
-
 
 \newpage{}
 \section{Results and Discussion}
-The number of flops in the general algorithm is $5N$ from the forward substitution and $3N+1$ flops
-from the backward substitution, making it a total of $8N+1$ flops. 
+From figure 1-3 it is pretty obvious that increasing the number of grid points makes the error decrease.
+But what kind of error is this, and why does it decrease with increasing number of grid points?
+The number of flops from the general algorithm is $5(N-1)$ from the forward substitution and $3N-2$ flops
+from the backward substitution, making it a total of $8N-7$ flops. If $N$ is a very big number, we can simplify it to $8N$ total number flops for our general algorithm. Please check our code in our repository at GitHub for how we calculated the flops.
+This results in CPU time in table (INGVILD). \\
+We have not changed the backward substitution algorithm for the special case, but we have changed the forward substitution as described in the previous section. This results in a total number of $7N$ flops.
 
-The general algorithm has been ploted against the excact value, as seen in figurs 1-3.
+The flops in LU-decomposition scales as $\frac{2}{3} n^3$. If we are going to use LU-decomposition for computing the a $10^5$ x $10^5$ matrix, it requires $\frac{2}{3}10^{15}$ flops. This requires an tremendous amount more memory compared to our general and special logarithm.
+
+For computing $10^5 $x$ 10^5$ matrix with LU-decomposition (which goes)
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{figur1b_10.png}
@@ -314,13 +318,12 @@ The general algorithm has been ploted against the excact value, as seen in figur
   \caption{Matrix with the size of 10 x 10 compared to the closed-form solution.}
   \label{1b_10}
 \end{figure}
+
 \begin{figure}[H]
   \includegraphics[scale=0.5]{figur1b_100.png}
   \caption{Matrix with the size of 100 x 100 compared to the closed-form solution.}
   \label{1b_100}
 \end{figure}
-
-
 
 \begin{figure}[H]
   \includegraphics[scale=0.5]{figur1b_1000.png}
@@ -333,15 +336,9 @@ From figure 1-3 it is pretty obvious that increasing the number of grid points m
 \begin{center}
     $h=\frac{1}{n+1}$
 \end{center}
-Here n gives the number of grid points as n*n. This means that a bigger n gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until h reaches a minimum value. When this happens, the error will get bigger. This is plotted logarithmicly in figure 4. 
+where n gives the number of grid points as n*n. This means that a bigger n gives a smaller step length. The smaller the step length, the more accurate the numerical approximation will be, until h reaches a minimum value. When this happens, the error will get bigger. This is plotted logarithmicly in figure 4.
 
-\begin{figure}[H]
-  \includegraphics[scale=0.5]{fig-error.png}}
-  \caption{$log_{10}(eps_n)$ vs $log_{10}(h)$}
-  \label{1d}
-\end{figure}
 
-As we can se from figure 4, the most exact result will be for a $10^6*10^6$ matrix. When n=$10^7$, the error increases again.
 \section{Conclusion and Perspective}
 
 
