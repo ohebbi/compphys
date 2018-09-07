@@ -39,8 +39,8 @@ vector<double> task_b(int n, vector<double> a, vector<double> b, vector<double> 
     double s;
     
     for(int i = 1; i<n; i+=1){
-        s = 1/b[i-1];  
-        b[i] = b[i]+s*c[i-1];
+        s = a[i-1]/b[i-1];  
+        b[i] = b[i]-s*c[i-1];
         b_tilde[i]=b_tilde[i]-s*b_tilde[i-1];
 	
         
