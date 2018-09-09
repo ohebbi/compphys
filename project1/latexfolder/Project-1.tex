@@ -323,7 +323,7 @@ We check the efficiency of the general and the specific algorithm by running the
 This makes sense because the number of flops from the general algorithm scales with $8N$ ($5N$ flops from the forward substitution, and $3N$ flops from the backward substitution), and the flops from the specific case scales with $7N$ ($4N$ flops from the forward substitution, and $3N$ flops from the backward substitution).
 
 When comparing the LU decomposition algorithm against our specialized algorithm, we look at the elapsed time of the algorithms with $n=10$, $n=100$ and $n=1000$. We run the algorithms ten times each and then compute the average value. The results can be found in table 1 and table 2.
-The flops in LU-decomposition scales as $\frac{2}{3} n^3$. If we are going to use LU-decomposition for computing the a $10^5$ x $10^5$ matrix, it requires $\frac{2}{3}10^{15}$ flops. This requires a tremendous amount more memory compared to our general and special logarithm, which uses $n\times 1$ vectors to store the values, instead of storing all the zeroes of the tridiagonal matrix.
+The flops in LU-decomposition scales as $\frac{2}{3} n^3$. If we are going to use LU-decomposition for computing the a $10^5$ x $10^5$ matrix, it requires $\frac{2}{3}10^{15}$ flops. This requires a tremendous amount more memory compared to our general and special algorithm, which uses $n\times 1$ vectors to store the values, instead of storing all the zeroes of the tridiagonal matrix.
 
 \begin{table}[H]
     \centering
@@ -384,7 +384,7 @@ We found that C++ was a valuable tool when computing algorithm, but Python excel
 
 Github got implemented in our project a bit late which makes the version control go back to the beginning. For our next project we will enjoy the pleasure of git and GitHub from the very start.
 
-Finally we also found that being structured and planning an effective code requires a bit of work, especially when dealing with dynamic memory allocations. 
+Finally we also found that being structured and planning an effective code requires a bit of work, especially when dealing with dynamic memory allocations.
 
 \section{Appendix}
 
