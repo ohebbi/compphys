@@ -23,7 +23,7 @@ m1/=(h**2)
 m2 = m1.copy() #controlling eigenvalues at the end
 
 """
-Finding indexes with max value
+Finding indices with max value
 """
 def maksoffdiag(matrise, n, max=0,q=0,p=0):
     for i in range(n):
