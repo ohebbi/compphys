@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+
+\title{\textbf{FYS4150/FYS1350 - Project 2}}
+\author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
+\date{October 1}
+
+
+
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\section{Abstract}
+
+
+\section{Introduction}
+
+
+\section{Theoretical Models and Technicalities}
+
+We have av orthogonal matrix so that
+$$\mathbf{v}_j^T\mathbf{v}_i=\delta_{ij}$$
+and othogonal transformation $\mathbf{w}$.\\
+\vskip0.1cm
+$\mathbf{w}_i=\mathbf{Uv}_i$\\
+\vskip0.1cm
+$\mathbf{w}_j^T\cdot \mathbf{w}_i=(\mathbf{Uv}_j)^T\cdot (\mathbf{Uv}_i)$
+\vskip0.5cm
+Calculating $\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ separately.
+\begin{equation*}
+\mathbf{Uv}_i=\begin{bmatrix}
+u_{11} & u_{12} & \cdots & u_{1n}\\
+u_{21} & u_{22} & \cdots & u_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+u_{n1} & u_{n2} & \cdots & u_{nn}\\
+\end{bmatrix} \begin{bmatrix}
+v_{i1} \\
+v_{i2} \\
+\vdots \\
+v_{in} \\
+\end{bmatrix}=\begin{bmatrix}
+u_{11}v_{i1} + u_{12}v_{i2} + \cdots + u_{1n}v_{in}\\
+u_{21}v_{i1} + u_{22}v_{i2} + \cdots + u_{2n}v_{in}\\
+\vdots \\
+u_{n1}v_{i1} +  u_{n2}v_{i2} + \cdots + u_{nn}v_{in}\\
+\end{bmatrix}
+\end{equation*}
+
+
+
+\begin{equation*}
+\begin{split}
+(\mathbf{Uv}_j)^T&=\begin{bmatrix}
+u_{11}v_{j1} + \cdots + u_{1n}v_{jn} &
+u_{21}v_{j1} +  \cdots + u_{2n}v_{jn} &
+\cdots &
+u_{n1}v_{j1} + \cdots + u_{nn}v_{jn}\\
+\end{bmatrix}\\
+&=\begin{bmatrix}
+v_{j1} &
+v_{j2} &
+\cdots &
+v_{jn} 
+\end{bmatrix}\begin{bmatrix}
+u_{11} & u_{21} & \cdots & u_{n1}\\
+u_{12} & u_{22} & \cdots & u_{n2}\\
+\vdots & \vdots & \ddots & \vdots\\
+u_{1n} & u_{2n} & \cdots & u_{nn}\\
+\end{bmatrix} \\
+&=\mathbf{v}_j^T\mathbf{U}^T
+\end{split}
+\end{equation*}
+
+$\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ inserted back into the equation gives
+
+\begin{equation*}
+\begin{split}
+\mathbf{w}_j^T\cdot \mathbf{w}_i&=(\mathbf{Uv}_j)^T\cdot (\mathbf{Uv}_i)\\
+&=\mathbf{v}_j^T\mathbf{U}^T\mathbf{Uv}_i\\
+&=\mathbf{v}_j^T\mathbf{I}\mathbf{v}_i\\
+&=\mathbf{v}_j^T\mathbf{v}_i\\
+&=\delta_{ij}
+\end{split}
+\end{equation*}
+
+The orthogonal transformation preserves orthogonality and the dot product.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Results and Discussion}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+
+\begin{bmatrix}
+1 & 1 & 0 & 2\\
+0 & 1 & 0 & 1\\
+1 & 0 & 0 & 1\\
+1 & 0 & 1 & 2\\
+\end{bmatrix}
