@@ -6,13 +6,13 @@ import time
 
 
 """
-Making a matrix and finding eigenvalues with lib func.
+Making a tridiagonal Toeplitz matrix
 """
 
 def tridiag(n):
     m1 = np.reshape(np.zeros(n**2),(n,n))
-    infinity = 13.
-    h = infinity/n
+    infinity = 10.
+    h = infinity/(n+1)
 
     for i in range(n):
         for j in range(n):
@@ -20,11 +20,8 @@ def tridiag(n):
             V_d = p**2 #for task d
             omega_r = 5.
             """
-            if i == 0: #for task e
-                V_e = (omega_r**2)*p**2
-            else:
-                V_e = (omega_r**2)*p**2 + 1./p
-                """
+            V_e = (omega_r**2)*p**2 + 1./p
+            """
             if i==j:
                 m1[i,i] = (2./(h**2)) + V_d
             elif i+1 == j:
@@ -51,7 +48,7 @@ def maksoffdiag(matrise, n, max=0,q=0,p=0):
 Jacobi's method
 """
 
-def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
+def jacobi(m1, n, A=1., antall=0, eps = 1E-15):
 
     while A>eps:
 
@@ -85,7 +82,7 @@ def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
 
         z=0.
 
-    #Frobenius norm
+        #Frobenius norm
         for u in range(n):
             for v in range(n):
                 if u != v:
@@ -93,6 +90,7 @@ def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
         A=np.sqrt(z)
 
         antall += 1 #how many similarity transformation needed
+
     return m1, antall
 
 """
@@ -154,7 +152,7 @@ def test_tridiag():
         success = np.abs(x[i] - B1[i]) < tol
     assert success
 
-n=40
+n=20
 A, antall = jacobi(tridiag(n),n)
 B =[]
 for i in range(n):
@@ -162,3 +160,4 @@ for i in range(n):
 B=sorted(B)
 for i in B:
     print i
+print sorted(np.linalg.eigvalsh(A))
