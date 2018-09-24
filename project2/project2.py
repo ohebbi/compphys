@@ -11,26 +11,26 @@ Making a matrix and finding eigenvalues with lib func.
 
 def tridiag(n):
     m1 = np.reshape(np.zeros(n**2),(n,n))
-    infinity = 8.30
+    infinity = 13.
     h = infinity/n
 
     for i in range(n):
         for j in range(n):
-            p = i*h
+            p = (i+1)*h
             V_d = p**2 #for task d
             omega_r = 5.
+            """
             if i == 0: #for task e
                 V_e = (omega_r**2)*p**2
             else:
                 V_e = (omega_r**2)*p**2 + 1./p
+                """
             if i==j:
-                m1[i,i] = (2./(h**2)) + V_e
+                m1[i,i] = (2./(h**2)) + V_d
             elif i+1 == j:
                 m1[i,j] = -1./(h**2)
             elif i-1 == j:
                 m1[i,j] = -1./(h**2)
-
-    m1 /= (h**2)
     return m1
 
 """
@@ -154,7 +154,7 @@ def test_tridiag():
         success = np.abs(x[i] - B1[i]) < tol
     assert success
 
-n=11
+n=40
 A, antall = jacobi(tridiag(n),n)
 B =[]
 for i in range(n):
