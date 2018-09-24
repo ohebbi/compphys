@@ -2,6 +2,7 @@ import numpy as np
 import math
 import random
 import matplotlib.pyplot as plt
+import time
 
 
 """
@@ -10,18 +11,26 @@ Making a matrix and finding eigenvalues with lib func.
 
 def tridiag(n):
     m1 = np.reshape(np.zeros(n**2),(n,n))
+    infinity = 8.30
+    h = infinity/n
 
     for i in range(n):
         for j in range(n):
+            p = i*h
+            V_d = p**2 #for task d
+            omega_r = 5.
+            if i == 0: #for task e
+                V_e = (omega_r**2)*p**2
+            else:
+                V_e = (omega_r**2)*p**2 + 1./p
             if i==j:
-                m1[i,i] = 2.
+                m1[i,i] = (2./(h**2)) + V_e
             elif i+1 == j:
-                m1[i,j] = -1.
+                m1[i,j] = -1./(h**2)
             elif i-1 == j:
-                m1[i,j] = -1.
-    h = 1./n #
+                m1[i,j] = -1./(h**2)
+
     m1 /= (h**2)
-    m2  = m1.copy() #controlling eigenvalues at the end
     return m1
 
 """
@@ -104,21 +113,52 @@ def transformation(m):
     plt.title("Plot of similarity transformation")
     plt.show()
     #plt.savefig("numberoftrans.png")
-n=10
-transformation(n)
-matrix, antall = jacobi(tridiag(n), n)
+
+def time_it():
+    n=10
+    A = tridiag(n)
+    start1 = time.clock()
+    jacobi(A, n)
+    elapsed1 = (time.clock()-start1)
+    start2 = time.clock()
+    np.linalg.eigvalsh(A)
+    elapsed2 = (time.clock()-start2)
+    print "Time needed for jacobi's method: ", elapsed1
+    print "Time needed for Numpy's eigenvalue function:", elapsed2
+
+
 
 """
-comparing the results with a function from numpy
+Testing our functions.
 """
 
+def test_maksoffdiag():
+    dimension = 5
+    tol = 1E-5
+    A = np.reshape(np.zeros(dimension**2),(dimension,dimension))
+    A[2][3] = 1. #random
+    p,q = maksoffdiag(A,dimension)
+    success = np.abs(A[2][3] - A[p][q]) < tol
+    assert success
 
+def test_tridiag():
+    dimension = 5
+    A = tridiag(dimension)
+    B, antall = jacobi((A),dimension)
+    tol = 1E-5
+    x = sorted(np.linalg.eigvalsh(A))
+    B1 = []
+    for i in range(len(x)):
+        B1.append(B[i][i])
+        B1 = sorted(B1)
+        success = np.abs(x[i] - B1[i]) < tol
+    assert success
+
+n=11
+A, antall = jacobi(tridiag(n),n)
+B =[]
 for i in range(n):
-    print "eigenvalues = ", matrix[i][i]
-
-"""
-x = np.linalg.eigvalsh(m2)
-
-for i in range(len(x)):
-    print "from numpy: eigenvalues = ", x[i]
-"""
+    B.append(A[i][i])
+B=sorted(B)
+for i in B:
+    print i
