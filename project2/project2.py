@@ -9,10 +9,9 @@ import time
 Making a tridiagonal Toeplitz matrix
 """
 
-def tridiag(n):
+def tridiag(n, infinity):
     m1 = np.reshape(np.zeros(n**2),(n,n))
-    infinity = 10.
-    h = infinity/(n+1)
+    h = float(infinity)/(n+1)
 
     for i in range(n):
         for j in range(n):
@@ -152,8 +151,10 @@ def test_tridiag():
         success = np.abs(x[i] - B1[i]) < tol
     assert success
 
-n=20
-A, antall = jacobi(tridiag(n),n)
+n=18
+infinity = 5.
+A, antall = jacobi(tridiag(n, infinity),n)
+
 B =[]
 for i in range(n):
     B.append(A[i][i])
@@ -161,3 +162,44 @@ B=sorted(B)
 for i in B:
     print i
 print sorted(np.linalg.eigvalsh(A))
+
+anal = [3,7,11,15]
+diff = 0
+for i in range(len(anal)):
+    diff += abs(anal[i]-B[i])
+    
+print diff
+   
+
+
+"""
+anal = [3,7,11,15]
+minn = 0
+mini = 0
+for n in range(len(anal), 100):
+    diffn = 10000;
+    diffi = 10000;
+    for infinity in range(len(anal), 100):
+        diffin = 0
+        
+        A, antall = jacobi(tridiag(n, infinity), n)
+        B = []
+        
+        for i in range(n):
+            B.append(A[i][i])
+            B=sorted(B)
+                     
+        for i in range (0, len(anal)):
+            diffin += abs(anal[i]-B[i])
+        if diffin < diffi:
+            diffi = diffin
+            mini = infinity
+            
+    if diffi < diffn:
+        diffn = diffi
+        minn = n
+    if diffn <= 0.0001:
+        print minn, mini
+     
+"""      
+        
