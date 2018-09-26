@@ -91,49 +91,51 @@ $\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ inserted back into the equation gives
 
 The orthogonal transformation preserves orthogonality and the dot product.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Results and Discussion}
 
+\subsection{Number of grid points and $\rho_{max}$ for the one electron system}
+
+When modeling quantum dots in three dimension for one electron, the choice of the number of integration points N and $\rho_{max}$ is important to discuss. Chosing wrong values results in wrong eigenvalues when compared to the analytical results. From the project we know what the four first eigenvalues should be. In the project2.py program, different values for N and $\rho_{max}$ was tested through a loop. 
+It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the analytical values, but the difference kept decreasing as N increased. Thus, we set the limitation such that the numerical eigenvalues should be equal to the analyitcal ones when using four leading digits. It was found that this happened when N=11, aswell as for bigger values of N. This means that when using four leading digits, we should use N=11 and $\rho_{max}=4$ to get the analytical results. Using theese values we got the result as presented in table ??????
 
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+     Nummerical eigenvalues & Analytical eigenvalues\\
+     \hline
+      2.965  &  3\\
+      6.825  &  7\\
+      10.61  &  11\\
+      14.53  &  15\\
+     \hline
+    \end{tabular}
+    \caption{Nummerical eigenvalues for N=11 and $\rho_{max}$=4}
+    \label{tab:my_label}
+\end{table}
 
+\subsection{Ground state eigenvalues for varying $\omega_r$}
 
+When comparing the eigenvalues for the two-electron system, we use the same values for N and $\rho_{max}$ as before, N=11 and $\rho_{max}=4$. This gives us some interesting eigenvalues of the ground state of the system which can be found in table`??????
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    $\rho_{max}$ & Nummerical eigenvalue \\
+    \hline
+    0.01 & 1.177  \\
+    0.5  & 2.249  \\
+    1.0 & 4.021  \\
+    5.0 &  16.44  \\
+     \hline
+    \end{tabular}
+    \caption{Ground state eigenvalues for N=11 and $\rho_{max}$=4 for different values of $\omega_r$}
+    \label{tab:my_label}
+\end{table}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We see from the table that the eigenvalues increase as the frequency increase. This is as we have learned to expect from a one electron system, and it seems to be fitting for the two electron system aswell. Using Table 1 in M. Taut, Phys. Rev. A 48, 3561 (1993), the energies also increase as the frequency increase.
 
 \end{document}
 
