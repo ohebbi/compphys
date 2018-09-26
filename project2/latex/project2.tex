@@ -148,7 +148,24 @@ We perform the similarity transformations until all non-diagonal elements are ze
 To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
 
 
+\subsection{Quantum Dots in Three Dimentions}
 
+First we will look at one electron in a harmonic oscillator potential. 
+
+The Schroedinger equation can be written as 
+$$-\frac{d^2}{d\rho^2}u(\rho)+\rho^2u(\rho)=\lambda u(\rho)$$
+where $\rho$ and $\lambda$ are dimentionless substitutions for $r$ and $E$.
+
+Discretizing the equation with $\rho$ values
+$$\rho_i=\rho_0+ih$$
+gives the following expression for the Schroedinger equation
+\begin{equation*}
+\begin{split}
+-\frac{u(\rho_i+h)-2u(\rho_i)+u(\rho_i-h)}{h^2}+\rho_i^2u(\rho_i)&=\lambda u(\rho_i)\\
+-\frac{u_{i+1}-2u_i+u_{i-1}}{h^2}+\rho_i^2u_i&=\lambda u_i\\
+\end{split}
+\end{equation*}
+%må fortsette her
 
 \section{Results and Discussion}
 
