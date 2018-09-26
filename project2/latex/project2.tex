@@ -19,7 +19,7 @@
 
 \section{Abstract}
 
-Here we explore the use of Jacobi's rotation method when faced with eigenvalue problems. We develop an algorithm that will find the eigenvalues using Jacobi's method. The first problem introduce equations of a buckling beam. We find that our algorithms are extremely accurate when it comes to reproducing the eigenvalues found with numpys own eigenvalue-finder.  This allow for the use of theese algorithms in the second problem; the Schroedinger's equation for one and two electrons in a three dimensional harmonic oscillator well. Here we find that it is important to chose variables such as the number of integration points and the infamous $\rho_{max}$. For the one electron-system, the increase of N will grant better results when compared to analytical ones, but it also increase the cpu time. We found that if we need accuracy down to four leading digits while, the best choice is N=11 and $\rho_{max}$=4. When dealing with two electrons we find eigenvalues for the ground states of different frequencies $\omega_r$. We find that our choice of N and $\rho_{max}$ in this system grants stable results, and the eigenvalues increase as the frequency increase.  
+Here we explore the use of Jacobi's rotation method when faced with eigenvalue problems. We develop an algorithm that will find the eigenvalues using Jacobi's method. The first problem introduce equations of a buckling beam. We find that our algorithms are extremely accurate when it comes to reproducing the eigenvalues found with numpys own eigenvalue-finder.  This allow for the use of theese algorithms in the second problem; the Schroedinger's equation for one and two electrons in a three dimensional harmonic oscillator well. Here we find that it is important to chose variables such as the number of integration points and the infamous $\rho_{max}$. For the one electron-system, the increase of N will grant better results when compared to analytical ones, but it also increase the cpu time. We found that if we need accuracy down to four leading digits while, the best choice is N=11 and $\rho_{max}$=4. When dealing with two electrons we find eigenvalues for the ground states of different frequencies $\omega_r$. We find that our choice of N and $\rho_{max}$ in this system grants stable results, and the eigenvalues increase as the frequency increase.
 
 \section{Introduction}
 
@@ -121,7 +121,7 @@ Now we want to solve the eigenvalue problem using Jacobi's rotation method. The 
 
 which has the property $\mathbf{S^T}=\mathbf{S^{-1}}$. The matrix has $1$ along the diagonal except $s_{kk}$ and $s_{ll}$ which is $\cos\theta$. Element $s_{kl}$ and $s_{lk}$ is $-\sin\theta$ and $\sin\theta$ respectively. All other elements are zero.
 
-Performing the similarity transformation 
+Performing the similarity transformation
 $$\mathbf{B}=\mathbf{S^TAS}$$
 repeatedly will result in a diagonal matrix by choosing an appropriate value for $\theta$ for every transformation. We get $\mathbf{B}$ on the form
 
@@ -152,12 +152,34 @@ To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
 
 \section{Results and Discussion}
 
-\subsection{Similarity transformation}
+\subsection{Eigenvalues}
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|r|}
+    \hline
+     Eigenvalues & Jacobi's method & Numpy's eigenvalue function\\
+     \hline
+      $\lambda_1$  & 8.101  & 8.101 \\
+      $\lambda_2$  & 31.749  & 31.749 \\
+      $\lambda_3$  & 69.028  & 69.028 \\
+      $\lambda_4$  & 116.916  & 116.916 \\
+      $\lambda_5$  & 171.537 & 171.537 \\
+      $\lambda_6$  & 228.463  & 228.463 \\
+      $\lambda_7$  & 283.083  & 283.083 \\
+      $\lambda_8$  & 330.972 & 330.972 \\
+      $\lambda_9$  & 368.250 & 368.250 \\
+      $\lambda_{10}$ & 391.898 & 391.898 \\
+      \hline
+    \end{tabular}
+    \caption{Eigenvalues for a tridiagonal matrix using Jacobi's method and Numpy's eigenvalues without adding the potential needed in quantum mechanics}
+    \label{eigenvalues}
+\end{table}
 
-For a given tolerance (we used eps$=10^{-15})$) we estimated the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
+The Jacobi method is pretty accurate, as seen in table \ref{eigenvalues}. But
+for a given tolerance (we used eps $=10^{-15})$) we estimated the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
 But the scale is not linear, which means we should not neccesarily use this Jacobi's rotation algorithm for very big matrices because of the number of similarity transformations will increase with the dimensionality of the matrix.
-If we time this with the number of flops in Jacobi's method (), it's easy to understand why we can draw this conclusion, and why it takes it very long time computing the eigenvalues, as seen in table \ref{timeusednumpy} and table \ref{timeusedjacobi}.
+If we look at it in context with the number of flops in Jacobi's method (which have a total amount of flops in the range of $12n^3 - 20n^3$), it's easy to understand why we can draw this conclusion, and why it takes a very long time computing the eigenvalues, as seen in table \ref{timeusedjacobi} and table \ref{timeusednumpy}.
 
 
 \begin{table}[H]
@@ -271,4 +293,3 @@ M. Taut Two electrons in an external oscillator potential: Particular analytic s
 \end{thebibliography}
 
 \end{document}
-
