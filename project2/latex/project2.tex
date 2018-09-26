@@ -2,18 +2,21 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{float}
-
-
-\title{\textbf{FYS4150/FYS1350 - Project 2}}
-\author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
-\date{October 1}
-
-
-
-
 \begin{document}
 
+
+\title{\textbf{FYS4150/FYS3150 - Project 2}}
+\author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
+\date{October 1}
 \maketitle
+
+\begin{figure}[H]
+  \includegraphics[scale=0.4]{Forsiden.jpg}
+  \label{}
+  \centering
+\end{figure}
+
+
 
 \newpage
 
@@ -148,6 +151,11 @@ We perform the similarity transformations until all non-diagonal elements are ze
 To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
 
 
+\subsection{Unit tests}
+
+We added two test functions to our program. The first one evaluates Jacobi's method. It generates a magnificent tridiagonal matrix, throws it into the washing machine (Jacobi's rotation method), and checks it up against Numpy's eigenvalue problem.
+
+The second one evaluates the ``maksoffdiag" function, and checks if the biggest non-diagonal element indices got returned each time. This is done by generating a known matrix with one large value in an element, and checking if the indices to this element is returned.
 
 
 \section{Results and Discussion}
@@ -172,13 +180,13 @@ To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
       $\lambda_{10}$ & 391.898 & 391.898 \\
       \hline
     \end{tabular}
-    \caption{Eigenvalues for a tridiagonal matrix using Jacobi's method and Numpy's eigenvalues without adding the potential needed in quantum mechanics}
+    \caption{Eigenvalues for a tridiagonal matrix using Jacobi's method and Numpy's eigenvalues without adding the potential needed in quantum mechanics.}
     \label{eigenvalues}
 \end{table}
 
 The Jacobi method is pretty accurate, as seen in table \ref{eigenvalues}. But
-for a given tolerance (we used eps $=10^{-15})$) we estimated the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
-But the scale is not linear, which means we should not neccesarily use this Jacobi's rotation algorithm for very big matrices because of the number of similarity transformations will increase with the dimensionality of the matrix.
+for a given tolerance (we used eps $=10^{-15}$) we estimate the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
+But the scale is not linear, which means we should not neccesarily use this Jacobi's rotation algorithm for very big matrices because of the number of similarity transformations will increase with the dimensionality of the matrix. It seems like the curve is rising as $y \approx 2\cdot x^2$ when using data points (10, 200), (20, 800) and (30, 1800).
 If we look at it in context with the number of flops in Jacobi's method (which have a total amount of flops in the range of $12n^3 - 20n^3$), it's easy to understand why we can draw this conclusion, and why it takes a very long time computing the eigenvalues, as seen in table \ref{timeusedjacobi} and table \ref{timeusednumpy}.
 
 
@@ -232,11 +240,11 @@ If we look at it in context with the number of flops in Jacobi's method (which h
 
 
 
-%\begin{figure}
- % \includegraphics{simtransformations.eps}
-  %\caption{Plot of the number of similarity transformations given by a tolerance of $10^{-15}$ without extending to quantum mechanics.}
- % \label{simtrans}
-%\end{figure}
+\begin{figure}
+  \includegraphics{simtransformations.eps}
+  \caption{Plot of the number of similarity transformations given by a tolerance of $10^{-15}$ without extending to quantum mechanics.}
+  \label{simtrans}
+\end{figure}
 
 
 
