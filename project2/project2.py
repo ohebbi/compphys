@@ -2,26 +2,31 @@ import numpy as np
 import math
 import random
 import matplotlib.pyplot as plt
+import time
 
 
 """
-Making a matrix and finding eigenvalues with lib func.
+Making a tridiagonal Toeplitz matrix
 """
 
-def tridiag(n):
+def tridiag(n, infinity):
     m1 = np.reshape(np.zeros(n**2),(n,n))
+    h = float(infinity)/(n+1)
 
     for i in range(n):
         for j in range(n):
+            p = (i+1)*h
+            V_d = p**2 #for task d
+            omega_r = 5.
+            """
+            V_e = (omega_r**2)*p**2 + 1./p
+            """
             if i==j:
-                m1[i,i] = 2.
+                m1[i,i] = (2./(h**2)) + V_d
             elif i+1 == j:
-                m1[i,j] = -1.
+                m1[i,j] = -1./(h**2)
             elif i-1 == j:
-                m1[i,j] = -1.
-    h = 1./n #
-    m1 /= (h**2)
-    m2  = m1.copy() #controlling eigenvalues at the end
+                m1[i,j] = -1./(h**2)
     return m1
 
 """
@@ -42,7 +47,7 @@ def maksoffdiag(matrise, n, max=0,q=0,p=0):
 Jacobi's method
 """
 
-def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
+def jacobi(m1, n, A=1., antall=0, eps = 1E-15):
 
     while A>eps:
 
@@ -76,7 +81,7 @@ def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
 
         z=0.
 
-    #Frobenius norm
+        #Frobenius norm
         for u in range(n):
             for v in range(n):
                 if u != v:
@@ -84,6 +89,7 @@ def jacobi(m1, n, A=1., antall=0, eps = 1E-8):
         A=np.sqrt(z)
 
         antall += 1 #how many similarity transformation needed
+
     return m1, antall
 
 """
@@ -104,21 +110,96 @@ def transformation(m):
     plt.title("Plot of similarity transformation")
     plt.show()
     #plt.savefig("numberoftrans.png")
-n=10
-transformation(n)
-matrix, antall = jacobi(tridiag(n), n)
+
+def time_it():
+    n=10
+    A = tridiag(n)
+    start1 = time.clock()
+    jacobi(A, n)
+    elapsed1 = (time.clock()-start1)
+    start2 = time.clock()
+    np.linalg.eigvalsh(A)
+    elapsed2 = (time.clock()-start2)
+    print "Time needed for jacobi's method: ", elapsed1
+    print "Time needed for Numpy's eigenvalue function:", elapsed2
+
+
 
 """
-comparing the results with a function from numpy
+Testing our functions.
 """
 
+def test_maksoffdiag():
+    dimension = 5
+    tol = 1E-5
+    A = np.reshape(np.zeros(dimension**2),(dimension,dimension))
+    A[2][3] = 1. #random
+    p,q = maksoffdiag(A,dimension)
+    success = np.abs(A[2][3] - A[p][q]) < tol
+    assert success
 
+def test_tridiag():
+    dimension = 5
+    A = tridiag(dimension)
+    B, antall = jacobi((A),dimension)
+    tol = 1E-5
+    x = sorted(np.linalg.eigvalsh(A))
+    B1 = []
+    for i in range(len(x)):
+        B1.append(B[i][i])
+        B1 = sorted(B1)
+        success = np.abs(x[i] - B1[i]) < tol
+    assert success
+
+n=18
+infinity = 5.
+A, antall = jacobi(tridiag(n, infinity),n)
+
+B =[]
 for i in range(n):
-    print "eigenvalues = ", matrix[i][i]
+    B.append(A[i][i])
+B=sorted(B)
+for i in B:
+    print i
+print sorted(np.linalg.eigvalsh(A))
+
+anal = [3,7,11,15]
+diff = 0
+for i in range(len(anal)):
+    diff += abs(anal[i]-B[i])
+    
+print diff
+   
+
 
 """
-x = np.linalg.eigvalsh(m2)
-
-for i in range(len(x)):
-    print "from numpy: eigenvalues = ", x[i]
-"""
+anal = [3,7,11,15]
+minn = 0
+mini = 0
+for n in range(len(anal), 100):
+    diffn = 10000;
+    diffi = 10000;
+    for infinity in range(len(anal), 100):
+        diffin = 0
+        
+        A, antall = jacobi(tridiag(n, infinity), n)
+        B = []
+        
+        for i in range(n):
+            B.append(A[i][i])
+            B=sorted(B)
+                     
+        for i in range (0, len(anal)):
+            diffin += abs(anal[i]-B[i])
+        if diffin < diffi:
+            diffi = diffin
+            mini = infinity
+            
+    if diffi < diffn:
+        diffn = diffi
+        minn = n
+    if diffn <= 0.0001:
+        print minn, mini
+     
+"""      
+        
