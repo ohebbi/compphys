@@ -90,15 +90,52 @@ $\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ inserted back into the equation gives
 \end{equation*}
 
 The orthogonal transformation preserves orthogonality and the dot product.
+\vskip0.5cm
 
-Now we want to solve the eigenvalue problem using Jacobi's rotation method. The method uses orthogonal transformations to diagonalize the matrix 
+For an eigenvalue problem
+$$\mathbf{Ax}=\lambda\mathbf{x}$$
+one can insert $\mathbf{B}=\mathbf{S^TAS}$ so that
+$$\mathbf{B(S^Tx)}=\lambda(\mathbf{S^Tx})$$
+which shows that $\mathbf{A}$ and $\mathbf{B}$ has the same eigenvalues, but different eigenvectors. This means that by finding the eigenvalues for $\mathbf{B}$ we also have the eigenvalues for $\mathbf{A}$.
+\vskip0.5cm
+Now we want to solve the eigenvalue problem using Jacobi's rotation method. The method uses orthogonal transformations to diagonalize the matrix by plane rotation around an angle $\theta$. The orthogonal transformation matrix is a $n\times n$ matrix on the form
 
+\begin{equation*}
+\mathbf{S}=\begin{bmatrix}
+1 & 0 & & & \cdots & & & 0\\
+0 & 1 & & & & & \\
+ &  &\ddots & & & & &\\
+\vdots &  & & \cos\theta & \cdots & \sin\theta & &\\
+ & & &\vdots & \ddots & & &\\
+ & & & -\sin\theta & \cdots & \cos\theta & & \\
+ & & & & & & \ddots & \\
+0 &  & & & \cdots  & & & 1\\
+\end{bmatrix}
+\end{equation*}
 
+which has the property $\mathbf{S^T}=\mathbf{S^{-1}}$. The matrix has $1$ along the diagonal except $s_{kk}$ and $s_{ll}$ which is $\cos\theta$. Element $s_{kl}$ and $s_{lk}$ is $-\sin\theta$ and $\sin\theta$ respectively. All other elements are zero.
 
+Performing the similarity transformation 
+$$\mathbf{B}=\mathbf{S^TAS}$$
+repeatedly will result in a diagonal matrix by choosing an appropriate value for $\theta$ for every transformation.
 
+One transformation has the objective of setting the highest non-diagonal element, $b_{kl}$, to zero and changes the elements $b_{kk}$, $b_{ll}$, $b_{ik}$ and $b_{il}$ for all $i$ except $i=k,l$ the following way
 
+\begin{equation*}
+\begin{split}
+b_{ik}&=a_{ik}\cos\theta-a_{il}\sin\theta\\
+b_{il}&=a_{il}\cos\theta+a_{ik}\sin\theta\\
+b_{kk}&=a_{kk}\cos^2\theta-2a_{kl}\cos\theta\sin\theta+a_{ll}\sin^2\theta\\
+b_{ll}&=a_{ll}\cos^2\theta+2a_{kl}\cos\theta\sin\theta+a_{kk}\sin^2\theta\\
+b_{kl}&=(a_{kk}-a_{ll})\cos\theta\sin\theta+a_{kl}(\cos^2\theta-\sin^2\theta)\\
+\end{split}
+\end{equation*}
 
+$\theta$ is determined by demanding $b_{kl}=0$.
 
+We perform the similarity transformations until all non-diagonal elements are zero, and we end up with a diagonal matrix. By definition the elements on the diagonal of a diagonal matrix, $\mathbf{D}$ are the eigenvalues of $\mathbf{D}$.
+
+ 
 
 
 
