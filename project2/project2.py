@@ -12,17 +12,16 @@ Making a tridiagonal Toeplitz matrix
 def tridiag(n, infinity):
     m1 = np.reshape(np.zeros(n**2),(n,n))
     h = float(infinity)/(n+1)
-
+    omega_r = 0.1
     for i in range(n):
         for j in range(n):
             p = (i+1)*h
-            V_d = p**2 #for task d
-            omega_r = 5.
-            """
+            #V_d = p**2 #for task d
+                        
             V_e = (omega_r**2)*p**2 + 1./p
-            """
+            
             if i==j:
-                m1[i,i] = (2./(h**2)) + V_d
+                m1[i,i] = (2./(h**2))+V_e
             elif i+1 == j:
                 m1[i,j] = -1./(h**2)
             elif i-1 == j:
@@ -151,8 +150,8 @@ def test_tridiag():
         success = np.abs(x[i] - B1[i]) < tol
     assert success
 
-n=18
-infinity = 5.
+n=11
+infinity = 4.
 A, antall = jacobi(tridiag(n, infinity),n)
 
 B =[]
@@ -163,16 +162,9 @@ for i in B:
     print i
 print sorted(np.linalg.eigvalsh(A))
 
-anal = [3,7,11,15]
-diff = 0
-for i in range(len(anal)):
-    diff += abs(anal[i]-B[i])
-    
-print diff
-   
-
 
 """
+
 anal = [3,7,11,15]
 minn = 0
 mini = 0
@@ -198,8 +190,7 @@ for n in range(len(anal), 100):
     if diffi < diffn:
         diffn = diffi
         minn = n
-    if diffn <= 0.0001:
-        print minn, mini
-     
-"""      
+    print minn, mini
+
+"""        
         
