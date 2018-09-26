@@ -22,9 +22,11 @@
 
 \section{Introduction}
 
+In this project we will be looking at eigenvalue problems
 
 \section{Theoretical Models and Technicalities}
 
+\subsection{Othogonal Transformation}
 We have av orthogonal matrix so that
 $$\mathbf{v}_j^T\mathbf{v}_i=\delta_{ij}$$
 and othogonal transformation $\mathbf{w}$.\\
@@ -91,8 +93,8 @@ $\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ inserted back into the equation gives
 \end{equation*}
 
 The orthogonal transformation preserves orthogonality and the dot product.
-\vskip0.5cm
 
+\subsection{Jacobi's Rotation Method}
 For an eigenvalue problem
 $$\mathbf{Ax}=\lambda\mathbf{x}$$
 one can insert $\mathbf{B}=\mathbf{S^TAS}$ so that
@@ -107,7 +109,7 @@ Now we want to solve the eigenvalue problem using Jacobi's rotation method. The 
 0 & 1 & & & & & \\
  &  &\ddots & & & & &\\
 \vdots &  & & \cos\theta & \cdots & \sin\theta & &\\
- & & &\vdots & \ddots & & &\\
+ & & &\vdots & \ddots & \vdots & &\\
  & & & -\sin\theta & \cdots & \cos\theta & & \\
  & & & & & & \ddots & \\
 0 &  & & & \cdots  & & & 1\\
@@ -116,12 +118,15 @@ Now we want to solve the eigenvalue problem using Jacobi's rotation method. The 
 
 which has the property $\mathbf{S^T}=\mathbf{S^{-1}}$. The matrix has $1$ along the diagonal except $s_{kk}$ and $s_{ll}$ which is $\cos\theta$. Element $s_{kl}$ and $s_{lk}$ is $-\sin\theta$ and $\sin\theta$ respectively. All other elements are zero.
 
-<<<<<<< HEAD
 Performing the similarity transformation 
 $$\mathbf{B}=\mathbf{S^TAS}$$
-repeatedly will result in a diagonal matrix by choosing an appropriate value for $\theta$ for every transformation.
+repeatedly will result in a diagonal matrix by choosing an appropriate value for $\theta$ for every transformation. We get $\mathbf{B}$ on the form
 
-One transformation has the objective of setting the highest non-diagonal element, $b_{kl}$, to zero and changes the elements $b_{kk}$, $b_{ll}$, $b_{ik}$ and $b_{il}$ for all $i$ except $i=k,l$ the following way
+$$\mathbf{B}=\mathbf{S}^T_N...\mathbf{S}^T_1\mathbf{A}\mathbf{S}_1...\mathbf{S}_N$$
+
+where $N$ is the number of transformations required to obtain a diagonal matrix.
+
+One transformation has the objective of setting the highest non-diagonal element, $b_{kl}$, to zero which in the process changes the elements $b_{kk}$, $b_{ll}$, $b_{ik}$ and $b_{il}$ for all $i$ except $i=k,l$ the following way
 
 \begin{equation*}
 \begin{split}
@@ -135,9 +140,9 @@ b_{kl}&=(a_{kk}-a_{ll})\cos\theta\sin\theta+a_{kl}(\cos^2\theta-\sin^2\theta)\\
 
 $\theta$ is determined by demanding $b_{kl}=0$.
 
-We perform the similarity transformations until all non-diagonal elements are zero, and we end up with a diagonal matrix. By definition the elements on the diagonal of a diagonal matrix, $\mathbf{D}$ are the eigenvalues of $\mathbf{D}$.
-
- 
+We perform the similarity transformations until all non-diagonal elements are zero, and we end up with a diagonal matrix. By definition the elements on the diagonal of a diagonal matrix, $\mathbf{D}$, are the eigenvalues of $\mathbf{D}$.
+\vskip0.5cm
+To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
 
 
 
@@ -202,11 +207,11 @@ If we time this with the number of flops in Jacobi's method (), it's easy to und
 
 
 
-\begin{figure}
-  \includegraphics{simtransformations.eps}
-  \caption{Plot of the number of similarity transformations given by a tolerance of $10^{-15}$ without extending to quantum mechanics.}
-  \label{simtrans}
-\end{figure}
+%\begin{figure}
+ % \includegraphics{simtransformations.eps}
+  %\caption{Plot of the number of similarity transformations given by a tolerance of $10^{-15}$ without extending to quantum mechanics.}
+ % \label{simtrans}
+%\end{figure}
 
 
 
