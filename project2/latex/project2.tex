@@ -4,7 +4,7 @@
 \usepackage{float}
 
 
-\title{\textbf{FYS4150/FYS1350 - Project 2}}
+\title{\textbf{FYS4150/FYS3150 - Project 2}}
 \author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
 \date{October 1}
 
@@ -23,7 +23,7 @@ Here we explore the use of Jacobi's rotation method when faced with eigenvalue p
 
 \section{Introduction}
 
-In this project we will be looking at eigenvalue problems
+Linear transformations are a very useful tool in many different situations, and in this project we will be looking at one of them. We will solve an eigenvalue problem that arises from discretizing differential equations, and by using the Jacobi rotation method to diagonalize the matrix we find the eigenvalues. This project addresses some of the strengths and weaknesses of the method, and ...
 
 
 
@@ -95,7 +95,7 @@ $\mathbf{Uv}_i$ and $(\mathbf{Uv}_j)^T$ inserted back into the equation gives
 \end{split}
 \end{equation*}
 
-The orthogonal transformation preserves orthogonality and the dot product.
+where $\mathbf{I}$ is the $n\times n$ identity matrix. The orthogonal transformation preserves orthogonality and the dot product.
 
 \subsection{Jacobi's Rotation Method}
 For an eigenvalue problem
@@ -163,9 +163,22 @@ gives the following expression for the Schroedinger equation
 \begin{split}
 -\frac{u(\rho_i+h)-2u(\rho_i)+u(\rho_i-h)}{h^2}+\rho_i^2u(\rho_i)&=\lambda u(\rho_i)\\
 -\frac{u_{i+1}-2u_i+u_{i-1}}{h^2}+\rho_i^2u_i&=\lambda u_i\\
+-\frac{u_{i+1}-2u_i+u_{i-1}}{h^2}+V_i^2u_i&=\lambda u_i\\
+-\frac{u_{i+1}}{h^2}+(\tfrac{2}{h^2}+V_i)u_i-\frac{u_{i-1}}{h^2}&=\lambda u_i\\
 \end{split}
 \end{equation*}
-%må fortsette her
+
+Applying this to the method that we already have for solving this type of problem gives
+
+$$d_i=\frac{2}{h^2}+V_i$$\\
+$$e_i=-\frac{1}{h^2}$$
+
+where $V_i=\rho_i$ is the harmonic oscillator potential and $d_i$ is the diagonal elements and $e_i$ is the elements directly above and below the diagonal in the tridiagonal matrix.
+
+We use the same algorithm on the new matrix with the harmonic oscillator potential as before. We use the try-and-fail method to find the lowest number of integration points, $N$, and approximation to $\rho_{max}$ which gives eigenvalues that equals the analytical eigenvalues, $\lambda=3, 7, 11, 15,...$ , with four leading digits after the decimal point.
+\vskip0.7cm
+Further, we look at a two electron system. 
+
 
 \section{Results and Discussion}
 
@@ -194,7 +207,7 @@ gives the following expression for the Schroedinger equation
 \end{table}
 
 The Jacobi method is pretty accurate, as seen in table \ref{eigenvalues}. But
-for a given tolerance (we used eps $=10^{-15})$) we estimated the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
+for a given tolerance (we used $\epsilon=10^{-15}$) we estimated the number of transformations found in figure \ref{simtrans}. If the dimension of a matrix increases, so will the number of similarity transformations.
 But the scale is not linear, which means we should not neccesarily use this Jacobi's rotation algorithm for very big matrices because of the number of similarity transformations will increase with the dimensionality of the matrix.
 If we look at it in context with the number of flops in Jacobi's method (which have a total amount of flops in the range of $12n^3 - 20n^3$), it's easy to understand why we can draw this conclusion, and why it takes a very long time computing the eigenvalues, as seen in table \ref{timeusedjacobi} and table \ref{timeusednumpy}.
 
@@ -219,7 +232,7 @@ If we look at it in context with the number of flops in Jacobi's method (which h
       Average & 0.10344 s & 1.85812  s & 9.68704 s\\
       \hline
     \end{tabular}
-    \caption{Elapsed time for Jacobi's rotation method in Python with n equal the matrix dimension}
+    \caption{Elapsed time for Jacobi's rotation method in Python with $n$ equal to the matrix dimension.}
     \label{timeusedjacobi}
 \end{table}
 
@@ -243,7 +256,7 @@ If we look at it in context with the number of flops in Jacobi's method (which h
       Average & 0.000263 s & 0.000339 s & 0.000346 s\\
       \hline
     \end{tabular}
-    \caption{Elapsed time for Numpy's eigenvalue function in Python with n equal the matrix dimension.}
+    \caption{Elapsed time for Numpy's eigenvalue function in Python with $n$ equal to the matrix dimension.}
     \label{timeusednumpy}
 \end{table}
 
