@@ -150,14 +150,6 @@ We perform the similarity transformations until all non-diagonal elements are ze
 \vskip0.5cm
 To find the analytical eigenvalues we used the numpy function linalg.eigvalsh.
 
-
-
-\subsection{Unit tests}
-
-We added two test functions to our program. The first one evaluates Jacobi's method. It generates a magnificent tridiagonal matrix, throws it into the washing machine (Jacobi's rotation method), and checks it up against Numpy's eigenvalue problem.
-
-The second one evaluates the ``maksoffdiag" function, and checks if the biggest non-diagonal element indices got returned each time. This is done by generating a known matrix with one large value in an element, and checking if the indices to this element is returned.
-
 \subsection{Quantum Dots in Three Dimentions}
 
 
@@ -219,6 +211,12 @@ This results in
   -\frac{d^2}{d\rho^2}\psi(\rho)+\omega_r^2\rho^2\psi(\rho) + \frac{1}{\rho}= \lambda \psi\rho
 \end{align*}
 This is how the Coloumb interaction results in a new potential $w_r^2\rho^2 + 1/\rho$.
+\subsection{Unit tests}
+
+We added two test functions to our program. The first one evaluates Jacobi's method. It generates a magnificent tridiagonal matrix, throws it into the washing machine (Jacobi's rotation method), and checks it up against Numpy's eigenvalue problem.
+
+The second one evaluates the ``maksoffdiag" function, and checks if the biggest non-diagonal element indices got returned each time. This is done by generating a known matrix with one large value in an element, and checking if the indices to this element is returned.
+
 \section{Results and Discussion}
 
 \subsection{Eigenvalues}
@@ -314,7 +312,7 @@ If we look at it in context with the number of flops in Jacobi's method (which h
 \subsection{Number of grid points and $\rho_{max}$ for the one electron system}
 
 When modeling quantum dots in three dimension for one electron, the choice of the number of integration points N and $\rho_{max}$ is important to discuss. Chosing wrong values results in wrong eigenvalues when compared to the analytical results. From the project we know what the four first eigenvalues should be. In the project2.py program, different values for N and $\rho_{max}$ was tested through a loop.
-It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the analytical values, but the difference kept decreasing as N increased. Thus, we set the limitation such that the numerical eigenvalues should be equal to the analyitcal ones when using four leading digits. It was found that this happened when N=11, aswell as for bigger values of N. This means that when using four leading digits, we should use N=11 and $\rho_{max}=4$ to get the analytical results. Using theese values we got the result as presented in table \ref{tabelur1}
+It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the analytical values, but the difference kept decreasing as N increased. Thus, we set the limitation such that the numerical eigenvalues should be equal to the analyitcal ones when using four leading digits. It was found that this happened when N=11, aswell as for bigger values of N. This means that when using four leading digits, we should use N=11 and $\rho_{max}=4$ to get the analytical results. Using these values we got the result as presented in table \ref{tabelur1}
 
 \begin{table}[H]
     \centering
@@ -340,7 +338,7 @@ When comparing the eigenvalues for the two-electron system, we use the same valu
     \centering
     \begin{tabular}{|l|c|}
     \hline
-    $\rho_{max}$ & Nummerical eigenvalue \\
+    $\rho_{max}$ & Numerical eigenvalue \\
     \hline
     0.01 & 1.177  \\
     0.5  & 2.249  \\
