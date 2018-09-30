@@ -22,7 +22,7 @@
 
 \section{Abstract}
 
-Here we explore the use of Jacobi's rotation method when faced with eigenvalue problems. We develop an algorithm that will find the eigenvalues using Jacobi's method. The first problem introduces equations of a buckling beam. We find that our algorithms are extremely accurate when it comes to reproducing the eigenvalues found with numpy's own eigenvalue-finder.  This allow for the use of these algorithms in the second problem; the Schroedinger's equation for one and two electrons in a three dimensional harmonic oscillator well. Here we find that it is important to chose variables such as the number of integration points and the infamous $\rho_{max}$. For the one electron-system, the increase of N will grant better results when compared to analytical ones, but it also increase the cpu time. We found that if we need accuracy down to four leading digits while, the best choice is N=11 and $\rho_{max}$=4. When dealing with two electrons we find eigenvalues for the ground states of different frequencies $\omega_r$. We find that our choice of N and $\rho_{max}$ in this system grants stable results, and the eigenvalues increase as the frequency increase.
+Here we explore the use of Jacobi's rotation method when faced with eigenvalue problems. We develop an algorithm that will find the eigenvalues using Jacobi's method. The first problem introduces equations of a buckling beam. We find that our algorithms are extremely accurate when it comes to reproducing the eigenvalues found with numpy's own eigenvalue-finder.  This allow for the use of these algorithms in the second problem; the Schroedinger's equation for one and two electrons in a three dimensional harmonic oscillator well. Here we find that it is important to chose variables such as the number of integration points and the infamous $\rho_{max}$. For the one electron-system, the increase of $N$ will grant better results when compared to analytical ones, but it also increase the CPU time. We found that if we need accuracy down to four leading digits while, the best choice is $N=11$ and $\rho_{max}$=4. When dealing with two electrons we find eigenvalues for the ground states of different frequencies $\omega_r$. We find that our choice of $N$ and $\rho_{max}$ in this system grants stable results, and the eigenvalues increase as the frequency increase.
 
 \section{Introduction}
 
@@ -181,8 +181,8 @@ where $V_i=\rho_i$ is the harmonic oscillator potential and $d_i$ is the diagona
 
 We use the same algorithm on the new matrix with the harmonic oscillator potential as before. We use the try-and-fail method to find the lowest number of integration points, $N$, and approximation to $\rho_{max}$ which gives eigenvalues that equals the analytical eigenvalues, $\lambda=3, 7, 11, 15,...$ , with four leading digits after the decimal point.
 \vskip0.7cm
-Further, we look at a two electron system where we deal with a two electron wave function $u(r_1,r_2)$ and two electron energy $E^{(2)}$, and we introduce the relative coordinate \textbf{r} =\textbf{r}$_1-$\textbf{r}$_2$ and the center of mass coordinate \textbf{R}=$1/2($\textbf{r}$_1$+\textbf{r}$_2)$.
-We seperate the equations for r and R as $u(r,R)=\psi(r)\phi(R)$, and make an expression for the relative energy $E_r$ and the center of mass energy $E_R$ which is
+Further, we look at a two electron system where we deal with a two electron wave function $u(r_1,r_2)$ and two electron energy $E^{(2)}$, and we introduce the relative coordinate $\mathbf{r} =\mathbf{r}_1-\mathbf{r}_2$ and the center of mass coordinate $\mathbf{R}=\frac{1}{2}(\mathbf{r}_1+\mathbf{r}_2)$.
+We seperate the equations for $\mathbf{r}$ and $\mathbf{R}$ as $u(r,R)=\psi(r)\phi(R)$, and make an expression for the relative energy $E_r$ and the center of mass energy $E_R$ which is
 \begin{align*}
   E_r=E^{(2)}-E_R.
 \end{align*}
@@ -307,12 +307,10 @@ If we look at it in context with the number of flops in Jacobi's method (which h
 
 
 
-
-
 \subsection{Number of grid points and $\rho_{max}$ for the one electron system}
 
-When modeling quantum dots in three dimension for one electron, the choice of the number of integration points N and $\rho_{max}$ is important to discuss. Chosing wrong values results in wrong eigenvalues when compared to the analytical results. From the project we know what the four first eigenvalues should be. In the project2.py program, different values for N and $\rho_{max}$ was tested through a loop.
-It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the analytical values, but the difference kept decreasing as N increased. Thus, we set the limitation such that the numerical eigenvalues should be equal to the analyitcal ones when using four leading digits. It was found that this happened when N=11, aswell as for bigger values of N. This means that when using four leading digits, we should use N=11 and $\rho_{max}=4$ to get the analytical results. Using these values we got the result as presented in table \ref{tabelur1}
+When modeling quantum dots in three dimension for one electron, the choice of the number of integration points $N$ and $\rho_{max}$ is important to discuss. Chosing wrong values results in wrong eigenvalues when compared to the analytical results. From the project we know what the four first eigenvalues should be. In the project2.py program, different values for $N$ and $\rho_{max}$ was tested through a loop.
+It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the analytical values, but the difference kept decreasing as $N$ increased. Thus, we set the limitation such that the numerical eigenvalues should be equal to the analyitcal ones when using four leading digits. It was found that this happened when $N=11$, aswell as for bigger values of $N$. This means that when using four leading digits, we should use $N=11$ and $\rho_{max}=4$ to get the analytical results. Using these values we got the result as presented in table \ref{tabelur1}
 
 \begin{table}[H]
     \centering
@@ -326,13 +324,13 @@ It was quickly found that a $\rho_{max}=4$ gave the minimum difference from the 
       14.53  &  15\\
      \hline
     \end{tabular}
-    \caption{Nummerical eigenvalues for N=11 and $\rho_{max}$=4}
+    \caption{Nummerical eigenvalues for $N=11$ and $\rho_{max}$=4}
     \label{tabelur1}
 \end{table}
 
 \subsection{Ground state eigenvalues for varying $\omega_r$}
 
-When comparing the eigenvalues for the two-electron system, we use the same values for N and $\rho_{max}$ as before, N=11 and $\rho_{max}=4$. This gives us some interesting eigenvalues of the ground state of the system which can be found in table \ref{tabelur2}
+When comparing the eigenvalues for the two-electron system, we use the same values for $N$ and $\rho_{max}$ as before, $N=11$ and $\rho_{max}=4$. This gives us some interesting eigenvalues of the ground state of the system which can be found in table \ref{tabelur2}
 
 \begin{table}[H]
     \centering
@@ -346,7 +344,7 @@ When comparing the eigenvalues for the two-electron system, we use the same valu
     5.0 &  16.44  \\
      \hline
     \end{tabular}
-    \caption{Ground state eigenvalues for N=11 and $\rho_{max}$=4 for different values of $\omega_r$}
+    \caption{Ground state eigenvalues for $N=11$ and $\rho_{max}$=4 for different values of $\omega_r$}
     \label{tabelur2}
 \end{table}
 
