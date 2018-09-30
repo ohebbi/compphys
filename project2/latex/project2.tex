@@ -189,8 +189,36 @@ where $V_i=\rho_i$ is the harmonic oscillator potential and $d_i$ is the diagona
 
 We use the same algorithm on the new matrix with the harmonic oscillator potential as before. We use the try-and-fail method to find the lowest number of integration points, $N$, and approximation to $\rho_{max}$ which gives eigenvalues that equals the analytical eigenvalues, $\lambda=3, 7, 11, 15,...$ , with four leading digits after the decimal point.
 \vskip0.7cm
-Further, we look at a two electron system. 
-
+Further, we look at a two electron system where we deal with a two electron wave function $u(r_1,r_2)$ and two electron energy $E^{(2)}$, and we introduce the relative coordinate \textbf{r} =\textbf{r}$_1-$\textbf{r}$_2$ and the center of mass coordinate \textbf{R}=$1/2($\textbf{r}$_1$+\textbf{r}$_2)$.
+We seperate the equations for r and R as $u(r,R)=\psi(r)\phi(R)$, and make an expression for the relative energy $E_r$ and the center of mass energy $E_R$ which is
+\begin{align*}
+  E_r=E^{(2)}-E_R.
+\end{align*}
+Adding the repulsive Coulomb interaction between to electrons
+\begin{align*}
+  V(r_1,r_2)=\frac{\beta e^2}{|\boldsymbol{r_1}-\boldsymbol{r_2}|} = \frac{\beta e^2}{r}
+\end{align*}
+results in a Schroeding equation (with a dimensionless variable $\rho=r/\alpha$)
+\begin{align}
+  -\frac{d^2}{d\rho^2}\psi(\rho)+\frac{1}{4}\frac{mk}{\hbar^2}\alpha^4\rho^2\psi(\rho)+\frac{m\alpha\beta e^2}{\rho \hbar^2}\psi(\rho) = \frac{m\alpha^2}{\hbar^2}E_r\psi(\rho)
+\end{align}
+Instead of storing all the constants as its real values, we scale them down to a practical purpose. This is done by setting the constants before the second term in the above equation as a new frequency
+\begin{align*}
+  w_r^2=\frac{1}{4}\frac{mk}{\hbar^2}\alpha^4
+\end{align*}
+and scaling the third term as
+\begin{align*}
+  \frac{m\alpha \beta e^2}{\hbar^2}=1.
+\end{align*}
+This way we can also define our new eigenvalue with a Coloumb interaction as
+\begin{align*}
+  \lambda = \frac{m\alpha^2}{\hbar^2}E_r.
+\end{align*}
+This results in
+\begin{align*}
+  -\frac{d^2}{d\rho^2}\psi(\rho)+\omega_r^2\rho^2\psi(\rho) + \frac{1}{\rho}= \lambda \psi\rho
+\end{align*}
+This is how the Coloumb interaction results in a new potential $w_r^2\rho^2 + 1/\rho$.
 \section{Results and Discussion}
 
 \subsection{Eigenvalues}
@@ -328,7 +356,7 @@ We see from the table that the eigenvalues increase as the frequency increase. T
 
 \section{Conclusion}
 
-We have witnessed the numerical accuracy of the Jacobi rotation method and that the precision increases with increasing number of integration points. This brute force kind of approach has proven to be inefficient when it comes to CPU time, but quality of the results makes it worth it. Of course, this limits the size of the matrix, or number of integration points, but we do not see this as a problem because we get satisfactory precision before the size of the matrix becomes problematic. The ability to master different approaches when facing a problem is important in any profession, and physics is no exception. Thus, our competence as physicists has surely grown after learning this valuable method. 
+We have witnessed the numerical accuracy of the Jacobi rotation method and that the precision increases with increasing number of integration points. This brute force kind of approach has proven to be inefficient when it comes to CPU time, but quality of the results makes it worth it. Of course, this limits the size of the matrix, or number of integration points, but we do not see this as a problem because we get satisfactory precision before the size of the matrix becomes problematic. The ability to master different approaches when facing a problem is important in any profession, and physics is no exception. Thus, our competence as physicists has surely grown after learning this valuable method.
 
 
 \begin{thebibliography}{}
