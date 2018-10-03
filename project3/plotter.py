@@ -4,7 +4,7 @@ from math import exp, log
 import matplotlib.pyplot as plt
 import sys
 
-f = open("task.txt", "r")
+f = open("values3.txt", "r")
 rx = []
 ry = []
 
@@ -20,5 +20,5 @@ plt.plot(rx,ry)
 plt.xlabel("rx")
 plt.ylabel("ry")
 plt.legend(['rx', 'ry'])
-plt.title("n=1000 for the general matrix")
+plt.title("n=100000 for the general matrix")
 plt.show()
