@@ -21,7 +21,8 @@ class Planet {
 
 
 
-tuple<vector<double>, vector<double>, vector<double>> bane(int n, vector<double> init){
+tuple<vector<double>, vector<double>, vector<double>> bane(float final_time, vector<double> init){
+    int n = 10000;
     
     vector<double> vx(n, 0);
     vector<double> vy(n, 0);
@@ -32,15 +33,15 @@ tuple<vector<double>, vector<double>, vector<double>> bane(int n, vector<double>
     vector<double> ax(n, 0);
     vector<double> ay(n, 0);
 
-    vx[0]=(-1.24465);
-    vy[0]=(6.132);
-    vz[0]=(-0.00044);
-    rx[0]=(1.0);
-    ry[0]=(0.0);
-    rz[0]=(0.0);
+    vx[0]=(init[0]);
+    vy[0]=(init[1]);
+    vz[0]=(init[2]);
+    rx[0]=(init[3]);
+    ry[0]=(init[4]);
+    rz[0]=(init[5]);
     
     float b = 3.;
-    float h = 1./n;
+    float h = final_time/n;
     
     for(int i = 1; i < n; i++){
         double r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
@@ -71,13 +72,11 @@ tuple<vector<double>, vector<double>, vector<double>> bane(int n, vector<double>
 int main(int argc,char* argv[]){
     ofstream myfile;
 
-    int n = 10;
-
     Planet earth;
     earth.mass = 1;
     earth.DS = 1;
-    earth.inv = {-1.24465, 6.132, -0.00044};
-    auto over = bane(n, earth.inv);
+    earth.inv = {-1.1369, 6.172, 0.000365 , 0.987018, 0.1720378, -0.851238};
+    auto over = bane(3.0, earth.inv);
     earth.orbit = over;
     
 
