@@ -115,7 +115,7 @@ int bane(float final_time, Planet first, Planet second){
 
 int main(int argc,char* argv[]){
     
-    double final_time = 20000.0;
+    double final_time = 20.0;
 
     Planet earth;
     earth.mass = 6.0e24;
