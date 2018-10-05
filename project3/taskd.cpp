@@ -12,8 +12,8 @@ using namespace std;
 
 class Planet {
     public:
-        float mass;
-        float DS;
+        double mass;
+        double DS;
         vector<double> inv;
         tuple<vector<double>, vector<double>, vector<double>> orbit;
         
@@ -40,23 +40,21 @@ tuple<vector<double>, vector<double>, vector<double>> bane(float final_time, vec
     ry[0]=(init[4]);
     rz[0]=(init[5]);
     
-    float b = 3.;
-    float h = final_time/n;
+    double b = 3.;
+    double h = final_time/n;
     double r;
     r = sqrt(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2));
-    float ax1 = -4*pow(M_PI, 2.0)*rx[0]/pow(r, b);
-    float ay1 = -4*pow(M_PI, 2.0)*ry[0]/pow(r, b);
-    float az1 = -4*pow(M_PI, 2.0)*rz[0]/pow(r, b);
-    
-    
+    double ax1 = -4*pow(M_PI, 2.0)*rx[0]/pow(r, b);
+    double ay1 = -4*pow(M_PI, 2.0)*ry[0]/pow(r, b);
+    double az1 = -4*pow(M_PI, 2.0)*rz[0]/pow(r, b);
     
     
     for(int i = 1; i < n; i++){
         
       
-        float ax = ax1;
-        float ay = ay1;
-        float az = az1;
+        double ax = ax1;
+        double ay = ay1;
+        double az = az1;
      
 
         rx[i] = rx[i-1]+h*vx[i-1]+pow(h,2.0)/2.0*ax;
@@ -83,20 +81,27 @@ tuple<vector<double>, vector<double>, vector<double>> bane(float final_time, vec
 
 int main(int argc,char* argv[]){
     ofstream myfile;
+    double final_time = 1.0
 
     Planet earth;
     earth.mass = 1;
     earth.DS = 1;
-    //earth.inv = {-1.1369, 6.172, 0.000365 , 0.987018, 0.1720378, -0.0000851238};
-    earth.inv = {0, 2*M_PI, 0 , 1, 0, 0};
-    auto over = bane(1.0, earth.inv);
+    earth.inv = {-1.3497, 6.1340, 0.00042945 , 0.980205, 0.205756, -0.0000874989};
+    //earth.inv = {0, 2*M_PI, 0 , 1, 0, 0};
+    auto over = bane(final_time, earth.inv);
     earth.orbit = over;
-    
+
+    Planet jupiter;
+    jupiter.mass = 6.0e3/1.9;
+    jupiter.DS = 5.2;
+    jupiter.inv = {2.342, -1.264, -0.04712, -2.71845, -4.6282558, 0.0800034};
+    auto j_over = bane(final_time, jupiter.inv);
+
 
     myfile.open("values3.txt");
 
     for (int i = 0; i < get<0>(earth.orbit).size(); i++){
-        myfile << get<0>(earth.orbit)[i] << " " << get<1>(earth.orbit)[i] << " " << get<2>(earth.orbit)[i] << endl;
+        myfile << get<0>(earth.orbit)[i] << " " << get<1>(earth.orbit)[i] << " " << get<2>(earth.orbit)[i] << "\n";
     }
     myfile.close();
 
