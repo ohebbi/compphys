@@ -22,7 +22,7 @@ class Planet {
 
 
 tuple<vector<double>, vector<double>, vector<double>> bane(float final_time, vector<double> init){
-    int n = 10000;
+    int n = 1000;
     
     vector<double> vx(n, 0);
     vector<double> vy(n, 0);
@@ -42,27 +42,33 @@ tuple<vector<double>, vector<double>, vector<double>> bane(float final_time, vec
     
     float b = 3.;
     float h = final_time/n;
+    double r;
+    
     
     for(int i = 1; i < n; i++){
-        double r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
-
+        r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
+      
         float ax = -4*pow(M_PI, 2.0)*rx[i-1]/pow(r, b);
+        float ay = -4*pow(M_PI, 2.0)*ry[i-1]/pow(r, b);
+        float az = -4*pow(M_PI, 2.0)*rz[i-1]/pow(r, b);
+     
 
         rx[i] = rx[i-1]+h*vx[i-1]+pow(h,2.0)/2.0*ax;
-        float ax1 = -4*pow(M_PI, 2.0)*rx[i]/pow(r, b);
-        vx[i] = vx[i-1]+h/2.0*(ax1+ax);
-
-        float ay = -4*pow(M_PI, 2.0)*ry[i-1]/pow(r, b);
-
-        ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
+	ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
+	rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
+	
+	//r = sqrt(pow(rx[i],2)+pow(ry[i],2)+pow(rz[i],2));
+	
+	float ax1 = -4*pow(M_PI, 2.0)*rx[i]/pow(r, b);
+        vx[i] = vx[i-1]+(h/2.0)*(ax1+ax);
+       
+        
         float ay1 = -4*pow(M_PI, 2.0)*ry[i]/pow(r, b);
-        vy[i] = vy[i-1]+h/2.0*(ay1+ay);
+        vy[i] = vy[i-1]+(h/2.0)*(ay1+ay);
 
-        float az = -4*pow(M_PI, 2.0)*rz[i-1]/pow(r, b);
-
-        rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
+        
         float az1 = -4*pow(M_PI, 2.0)*rz[i]/pow(r, b);
-        vz[i] = vz[i-1]+h/2.0*(az1+az);
+        vz[i] = vz[i-1]+(h/2.0)*(az1+az);
 
 
 }
@@ -76,7 +82,7 @@ int main(int argc,char* argv[]){
     earth.mass = 1;
     earth.DS = 1;
     earth.inv = {-1.1369, 6.172, 0.000365 , 0.987018, 0.1720378, -0.851238};
-    auto over = bane(3.0, earth.inv);
+    auto over = bane(2.625, earth.inv);
     earth.orbit = over;
     
 
