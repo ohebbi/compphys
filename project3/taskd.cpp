@@ -42,17 +42,20 @@ int bane(float final_time, Planet first, Planet second){
     
     double b = 3.0;
     double h = final_time/n;
+
+    double rej = pow((jrx-rx),2)+pow((jry-ry),2)+pow((jrz-rz),2);
+
     double r = sqrt(pow(rx,2)+pow(ry,2)+pow(rz,2));
-    double ax1 = -4*pow(M_PI, 2.0)*rx/pow(r, b);
-    double ay1 = -4*pow(M_PI, 2.0)*ry/pow(r, b);
-    double az1 = -4*pow(M_PI, 2.0)*rz/pow(r, b);
+    double ax1 = -4*pow(M_PI, 2.0)*(rx/pow(r, b)+second.mass/(rej*msun));
+    double ay1 = -4*pow(M_PI, 2.0)*(ry/pow(r, b)+second.mass/(rej*msun));
+    double az1 = -4*pow(M_PI, 2.0)*(rz/pow(r, b)+second.mass/(rej*msun));
 
     double jr = sqrt(pow(jrx, 2)+pow(jry,2)+pow(jrz,2));
-    double jax1 = -4*pow(M_PI, 2.0)*jrx/pow(jr, b);
-    double jay1 = -4*pow(M_PI, 2.0)*jry/pow(jr, b);
-    double jaz1 = -4*pow(M_PI, 2.0)*jrz/pow(jr, b);
+    double jax1 = -4*pow(M_PI, 2.0)*(jrx/pow(jr, b)+first.mass/(rej*msun));
+    double jay1 = -4*pow(M_PI, 2.0)*(jry/pow(jr, b)+first.mass/(rej*msun));
+    double jaz1 = -4*pow(M_PI, 2.0)*(jrz/pow(jr, b)+first.mass/(rej*msun));
 
-    double rej;
+    
 
     ofstream tmpfile;
     tmpfile.open("values3.txt");
@@ -71,13 +74,13 @@ int bane(float final_time, Planet first, Planet second){
 	
 	r = sqrt(pow(rx,2)+pow(ry,2)+pow(rz,2));
 	
-	ax1 = -4*pow(M_PI, 2.0)*(rx/pow(r, b)+first.mass/(rej*msun));
+	ax1 = -4*pow(M_PI, 2.0)*(rx/pow(r, b)+second.mass/(rej*msun));
         vx += (h/2.0)*(ax1+ax);    
         
-        ay1 = -4*pow(M_PI, 2.0)*(ry/pow(r, b)+first.mass/(rej*msun));
+        ay1 = -4*pow(M_PI, 2.0)*(ry/pow(r, b)+second.mass/(rej*msun));
         vy += (h/2.0)*(ay1+ay);
        
-        az1 = -4*pow(M_PI, 2.0)*(rz/pow(r, b)+first.mass/(rej*msun));
+        az1 = -4*pow(M_PI, 2.0)*(rz/pow(r, b)+second.mass/(rej*msun));
         vz += (h/2.0)*(az1+az);
 	
 	if( i%1000==0){
@@ -94,13 +97,13 @@ int bane(float final_time, Planet first, Planet second){
 	
 	jr = sqrt(pow(jrx,2)+pow(jry,2)+pow(jrz,2));
 	
-	jax1 = -4*pow(M_PI, 2.0)*(jrx/pow(jr, b)+second.mass/(rej*msun));
+	jax1 = -4*pow(M_PI, 2.0)*(jrx/pow(jr, b)+first.mass/(rej*msun));
         jvx += (h/2.0)*(jax1+jax);    
         
-        jay1 = -4*pow(M_PI, 2.0)*(jry/pow(jr, b)+second.mass/(rej*msun));
+        jay1 = -4*pow(M_PI, 2.0)*(jry/pow(jr, b)+first.mass/(rej*msun));
         jvy += (h/2.0)*(jay1+jay);
        
-        jaz1 = -4*pow(M_PI, 2.0)*(jrz/pow(jr, b)+second.mass/(rej*msun));
+        jaz1 = -4*pow(M_PI, 2.0)*(jrz/pow(jr, b)+first.mass/(rej*msun));
         jvz += (h/2.0)*(jaz1+jaz);
 	
 	if( i%1000==0){
