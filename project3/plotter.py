@@ -9,6 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 f = open("values3.txt", "r")
 x = []
 y = []
+
 z = []
 rx = []
 ry = []
@@ -16,6 +17,7 @@ rz = []
 jrx = []
 jry = []
 jrz = []
+
 
 
 f1 = f.readlines()
@@ -27,6 +29,7 @@ for i in f1:
 
 f.close()
 
+>>>>>>> 75df5a189f964847530308ebe29bd0f989af679f
 for i in range(0, len(x)):
     if(i%2==0):
         rx.append(x[i])
