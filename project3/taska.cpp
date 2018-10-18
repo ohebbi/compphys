@@ -56,27 +56,34 @@ int main(int argc,char* argv[]){
     else{
         cout << "Verlet bitches" << endl;
         clock_t start = clock();
-
+	double r;
+	double ax;
+	double ay;
+	double az;
+	double ax1;
+	double ay1;
+	double az1;
+	 
         for(int i = 1; i < n; i++){
-            double r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
+            r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
 
-            float ax = -4*pow(M_PI, 2.0)*rx[i-1]/pow(r, 3.0);
+            ax = -4*pow(M_PI, 2.0)*rx[i-1]/pow(r, 3.0);
+	    ay = -4*pow(M_PI, 2.0)*ry[i-1]/pow(r, 3.0);
+	    az = -4*pow(M_PI, 2.0)*rz[i-1]/pow(r, 3.0);
 
             rx[i] = rx[i-1]+h*vx[i-1]+pow(h,2.0)/2.0*ax;
-            float ax1 = -4*pow(M_PI, 2.0)*rx[i]/pow(r, 3.0);
+	    ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
+	    rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
+
+	    r = sqrt(pow(rx[i],2)+pow(ry[i],2)+pow(rz[i],2));
+	    
+            ax1 = -4*pow(M_PI, 2.0)*rx[i]/pow(r, 3.0);
             vx[i] = vx[i-1]+h/2.0*(ax1+ax);
-
-
-            float ay = -4*pow(M_PI, 2.0)*ry[i-1]/pow(r, 3.0);
-
-            ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
-            float ay1 = -4*pow(M_PI, 2.0)*ry[i]/pow(r, 3.0);
+            
+            ay1 = -4*pow(M_PI, 2.0)*ry[i]/pow(r, 3.0);
             vy[i] = vy[i-1]+h/2.0*(ay1+ay);
-
-            float az = -4*pow(M_PI, 2.0)*rz[i-1]/pow(r, 3.0);
-
-            rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
-            float az1 = -4*pow(M_PI, 2.0)*rz[i]/pow(r, 3.0);
+                      
+            az1 = -4*pow(M_PI, 2.0)*rz[i]/pow(r, 3.0);
             vz[i] = vz[i-1]+h/2.0*(az1+az);
 
     }
