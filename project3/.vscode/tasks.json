@@ -7,7 +7,7 @@
             "command": "C:/MinGW/bin/g++",
             "args": [
                 "-g",
-                "taska.cpp",
+                "taskd.cpp",
                 "-o",
                 "Project3"
             ],

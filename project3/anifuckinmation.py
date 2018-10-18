@@ -31,7 +31,7 @@ ion()
 fig = figure() # Create window
 ax = p3.Axes3D(fig)
 
-line, = ax.plot( rx[0], ry[0], rz[0],'bo') # Fetch the line object
+line, = ax.plot( rx[0], ry[0], rz[0]) # Fetch the line object
 
 
 # Add other properties to the plot to make it more elegant
