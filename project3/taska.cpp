@@ -4,13 +4,14 @@
 #include <string.h>
 #include <stdio.h>
 #include<fstream>
+#include <time.h>
 
 using namespace std;
 
 int main(int argc,char* argv[]){
     ofstream myfile;
 
-    int n = 10000;
+    int n = pow(10,6);
 
     vector<double> vx(n, 0);
     vector<double> vy(n, 0);
@@ -21,20 +22,26 @@ int main(int argc,char* argv[]){
     vector<double> ax(n, 0);
     vector<double> ay(n, 0);
 
-    vx[0]=(-1.24465);
-    vy[0]=(6.132);
-    vz[0]=(-0.00044);
+    //vx[0]=(-1.24465);
+    //vy[0]=(6.132);
+    //vz[0]=(-0.00044);
+
+    //Initial value for a circular orbit
+    vx[0]=(0);
+    vy[0]=(2*M_PI);
+    vz[0]=(0);
     rx[0]=(1.0);
     ry[0]=(0.0);
     rz[0]=(0.0);
-    
-    float h = 1./n;
 
+    float h = 1./n;
+    double start;
     if (strncmp(argv[1], "e", 2)==0){
       cout << "euler" << endl;
+      clock_t start = clock();
         for(int i = 1; i < n; i++){
             float r = sqrt(pow(rx[i-1], 2) + pow(ry[i-1], 2)+ pow(rz[i-1], 2));
-           
+
             vx[i] = vx[i-1] - h * 4.0*pow(M_PI, 2.0) * rx[i-1] / pow(r,3.0);
             rx[i] = rx[i-1] + h * vx[i-1];
 
@@ -48,6 +55,8 @@ int main(int argc,char* argv[]){
     }
     else{
         cout << "Verlet bitches" << endl;
+        clock_t start = clock();
+
         for(int i = 1; i < n; i++){
             double r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
 
@@ -71,9 +80,21 @@ int main(int argc,char* argv[]){
             vz[i] = vz[i-1]+h/2.0*(az1+az);
 
     }
+
     cout << "Verlet out" << endl;
-    
+
+
     }
+    clock_t end=clock();
+    double time = (double) (end-start)/ CLOCKS_PER_SEC;
+    cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
+    cout << '\n' << endl;
+    double start1 = pow(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2), 0.5);
+    double slutt = pow(pow(rx[n-1],2)+pow(ry[n-1],2)+pow(rz[n-1],2), 0.5);
+    double svar = start1 - slutt;
+    cout << "start = " << start1 << endl;
+    cout << "slutt = " << slutt << endl;
+    cout << "forskjell = " << svar << endl;
     /*
     cout << "vx" <<" " << "vy" <<" " << "rx"<<" " << "ry" << endl;
     for(int i = 0; i< vy.size(); i++){
@@ -81,7 +102,7 @@ int main(int argc,char* argv[]){
 
     }
 
-    
+
 */
     myfile.open("values3.txt");
 
