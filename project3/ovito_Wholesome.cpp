@@ -69,14 +69,14 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in){
         double msun = 2e30;
 
         p.pos[0] += h*p.pos[3]+(pow(h,2.0)/2.0)*p.pos[6];
-	p.pos[1] += h*p.pos[4]+(pow(h,2.0)/2.0)*p.pos[7];
-	p.pos[2] += h*p.pos[5]+(pow(h,2.0)/2.0)*p.pos[8];
+	      p.pos[1] += h*p.pos[4]+(pow(h,2.0)/2.0)*p.pos[7];
+	      p.pos[2] += h*p.pos[5]+(pow(h,2.0)/2.0)*p.pos[8];
 
         double f = force(planets, msun);
 
-	double r = sqrt(pow(p.pos[0],2)+pow(p.pos[1],2)+pow(p.pos[2],2));
+	      double r = sqrt(pow(p.pos[0],2)+pow(p.pos[1],2)+pow(p.pos[2],2));
 
-	double ax = -4*pow(M_PI, 2.0)*(p.pos[0]/pow(r, b)+f);
+	      double ax = -4*pow(M_PI, 2.0)*(p.pos[0]/pow(r, b)+f);
         p.pos[3] += (h/2.0)*(ax+p.pos[6]);
 
         double ay = -4*pow(M_PI, 2.0)*(p.pos[1]/pow(r, b)+f);
@@ -94,7 +94,7 @@ int bane(float final_time, double b, vector<Planet> planets){
     double h = final_time/n;
 
     for(int i = 0; i < planets.size(); i++){
-                planets[i].pos = instal(b, planets, i);
+          planets[i].pos = instal(b, planets, i);
 
         }
 
@@ -113,7 +113,7 @@ int bane(float final_time, double b, vector<Planet> planets){
 
         if(ii%1000==0){
           //for ordinary plotting; comment out the two next lines
-          tmpfile << "9" << "\n"; //number of planets
+          tmpfile << "10" << "\n"; //number of planets
           tmpfile << "commentline that needs to be here" << "balle" << "\n";
 
           for (int jj = 0; jj < planets.size(); jj++){
@@ -129,6 +129,12 @@ int main(int argc,char* argv[]){
 
     double final_time = 120;
     double b = 3.0;
+
+    Planet sun;
+    sun.name = "sun";
+    sun.mass = 1.989e30;
+    sun.DS = 0;
+    sun.inv={0,0,0, 1,0,0};
 
     Planet earth;
     earth.name = "earth";
@@ -185,7 +191,8 @@ int main(int argc,char* argv[]){
     pluto.DS = 39.53;
     pluto.inv = {1.0975, 0.1535, -0.331, 11.614, -31.58, 0.01979};
 
-    vector<Planet> planets = {mercury, venus, earth, mars, neptune, uranus, saturn, jupiter, pluto};
+    vector<Planet> planets = {sun, mercury, venus, earth, mars, neptune, uranus, saturn, jupiter, pluto};
+
 
     return bane(final_time, b, planets);
 }
