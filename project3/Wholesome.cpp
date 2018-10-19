@@ -99,7 +99,7 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in, doubl
 }
 
 int bane(float final_time, double b, vector<Planet> planets){
-    int n = 10000000;    
+    int n = 100000;    
     double h = final_time/n;    
     
     for(int i = 0; i < planets.size(); i++){
@@ -123,13 +123,14 @@ int bane(float final_time, double b, vector<Planet> planets){
                 tmpfile <<  planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";   	  
           }                
  	}
+	
 }
     tmpfile.close();
     return 0;
 }
 
 int main(int argc,char* argv[]){
-    double final_time = 250;
+    double final_time = 100;
     double b = 3.0;
         
     Planet earth;
@@ -194,7 +195,7 @@ int main(int argc,char* argv[]){
     vector<Planet> planets = {sola, earth, jupiter, mercury, mars, saturn, uranus, pluto, venus, neptune}; 
     sola.inv = find_center(planets);
     
-    planets = {sola, mercury, jupiter, mars, neptune, saturn, uranus, pluto, venus, earth};      
+    planets[0] = sola;    
 
    
     return bane(final_time, b, planets);
