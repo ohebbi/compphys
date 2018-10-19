@@ -38,7 +38,7 @@ yu = 0.8*np.outer(np.sin(u), np.sin(v))
 zu = 0.00008*np.outer(np.ones(np.size(u))*0.04, np.cos(v))
 
 
-ax.plot_surface(0.04*xu, 0.04*yu, zu, color='r')
+#ax.plot_surface(0.04*xu, 0.04*yu, zu, color='r')
 
 
 
@@ -64,4 +64,5 @@ ax.set_ylabel("ry[AU]")
 ax.set_zlabel("rz[AU]")
 
 
+plt.savefig("Relativity.eps")
 plt.show();

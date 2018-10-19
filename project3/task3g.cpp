@@ -105,14 +105,14 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in, doubl
 }
 
 int bane(float final_time, double b, vector<Planet> planets){
-    int n = 100000;
+    int n = 1000000;
     double h = final_time/n;
 
     for(int i = 0; i < planets.size(); i++){
                 planets[i].pos = instal(b, planets, i, 2e30);
 
         }
-/*
+
     ofstream tmpfile;
     tmpfile.open("values3.txt");
 
@@ -123,7 +123,7 @@ int bane(float final_time, double b, vector<Planet> planets){
                  planets[j].pos = get_pos(planets, h, b, j, 2e30);
         }
 
-        if(ii%1000==0){
+        if(ii%100==0){
           for (int jj = 0; jj < planets.size(); jj++){
 
                 tmpfile <<  planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";
@@ -131,7 +131,9 @@ int bane(float final_time, double b, vector<Planet> planets){
  	}
 }
     tmpfile.close();
-    */
+	return 0;
+}
+/*    
     ofstream tmpfile;
     tmpfile.open("values2.txt");
 
@@ -157,9 +159,9 @@ int bane(float final_time, double b, vector<Planet> planets){
     tmpfile.close();
     return 0;
 }
-
+*/
 int main(int argc,char* argv[]){
-    double final_time = 250;
+    double final_time = 100;
     double b = 3.0;
 
     Planet mercury;
