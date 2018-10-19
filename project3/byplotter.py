@@ -43,7 +43,7 @@ ax.plot_surface(0.04*xu, 0.04*yu, zu, color='r')
 
 
 
-plt.title("n=100000 for the general matrix")
+
 
 for j in range (0, (max(n)+1)):
     rx = []
@@ -56,7 +56,12 @@ for j in range (0, (max(n)+1)):
             ry.append(y[i])
             rz.append(z[i])
     
-    ax.plot(rx,ry, rz)  
-    print j      
+    ax.plot(rx,ry, rz) 
+    
+     
+ax.set_xlabel("rx[AU]")
+ax.set_ylabel("ry[AU]")
+ax.set_zlabel("rz[AU]")
+
 
 plt.show();
