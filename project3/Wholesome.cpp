@@ -99,7 +99,7 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in, doubl
 }
 
 int bane(float final_time, double b, vector<Planet> planets){
-    int n = 10000000;    
+    int n = 100000;    
     double h = final_time/n;    
     
     for(int i = 0; i < planets.size(); i++){
