@@ -11,7 +11,7 @@ class Planet {
     public:
         string name;
         double mass;
-        double DS;
+        
         vector<double> inv;
         vector<double> pos;
 
@@ -43,8 +43,6 @@ vector<double> find_center(vector<Planet> planets){
 vector<double> force(vector<Planet> planets, double msun){
         double rej;
         vector<double> f = {0,0,0};
-
-
         for(int i = 1; i < planets.size(); i++){
 
                 rej = pow(sqrt(pow((planets[i].pos[0]-planets[0].pos[0]),2)+pow((planets[i].pos[1]-planets[0].pos[1]),2)+pow((planets[i].pos[2]-planets[0].pos[2]),2)),3);
@@ -133,69 +131,39 @@ int main(int argc,char* argv[]){
     double b = 3.0;
 
     Planet earth;
-    earth.name = "earth";
     earth.mass = 6.0e24;
-    earth.DS = 1;
     earth.inv = {-1.3497, 6.1340, 0.00042945, 0.980205, 0.205756, -0.0000874989};
     //earth.inv = {0, 2*M_PI, 0, 1, 0, 0};
-
     Planet jupiter;
-    jupiter.name = "jupiter";
     jupiter.mass = 1.9e27;
-    jupiter.DS = 5.2;
     jupiter.inv = {2.342, -1.264, -0.04712, -2.71845, -4.6282558, 0.0800034};
-
     Planet mars;
-    mars.name = "mars";
     mars.mass = 6.6e23;
-    mars.DS = 1.52;
     mars.inv = {1.318, 5.420, 0.081, 1.3490045, -0.29756, -0.03956};
-
     Planet mercury;
-    mercury.name = "mercury";
     mercury.mass = 3.3e23;
-    mercury.DS = 0.39;
     mercury.inv = {4.82, -7.13, -1.025, -0.3294, -0.29288, 0.005618};
-
-    Planet venus;
-    venus.name = "venus";
-    venus.mass = 4.9e24;
-    venus.DS = 0.72;
+    Planet venus;   
+    venus.mass = 4.9e24;   
     venus.inv = {0.37, 7.34, 0.079, 0.7244, -0.03279, -0.042427};
-
     Planet saturn;
-    saturn.name = "saturn";
-    saturn.mass = 5.5e26;
-    saturn.DS = 9.54;
+    saturn.mass = 5.5e26;    
     saturn.inv = {1.901, 0.296, -0.0807, 1.497, -9.9435, 0.1133};
-
     Planet uranus;
-    uranus.name = "uranus";
     uranus.mass = 8.8e25;
-    uranus.DS = 19.19;
     uranus.inv = {-0.73, 1.175, 0.0139, 17.196, 0.9965, -0.1858};
-
     Planet neptune;
-    neptune.name = "neptune";
-    neptune.mass = 1.03e26;
-    neptune.DS = 30.06;
+    neptune.mass = 1.03e26;   
     neptune.inv = {0.289, 1.11, -0.0297, 28.91, -7.753, -0.5067};
-
     Planet pluto;
-    pluto.name = "pluto";
-    pluto.mass = 1.31e22;
-    pluto.DS = 39.53;
+    pluto.mass = 1.31e22;    
     pluto.inv = {1.0975, 0.1535, -0.331, 11.614, -31.58, 0.01979};
-
     Planet sola;
     sola.name = "soool";
     sola.mass = 2e30;
     sola.inv = {0,0,0,0,0,0};
+
     vector<Planet> planets = {sola, earth, jupiter, mercury, mars, saturn, uranus, pluto, venus, neptune};
-    sola.inv = find_center(planets);
-
-    planets[0] = sola;
-
-
+    planets[0].inv = find_center(planets);
     return bane(final_time, b, planets);
 }

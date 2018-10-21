@@ -91,60 +91,62 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in){
 }
 
 int bane(float final_time, double b, vector<Planet> planets){
-    int n = 10e6;
+    int n = 10e7;
 
     double h = final_time/n;
 
     planets[0].pos = instal(b, planets, 0);
-
-
-
 
     ofstream tmpfile;
     tmpfile.open("values2.txt"); //ordinary plotting
     //tmpfile.open("values2.xyz"); //for ovito
 
     double theta;
-    double tol = 10e-5;
+    double tol = 10e-11;
 
     double lollipopp;
     double farten;
+    double dis;
+
+    vector<double> peri = {1000, 1000};
 
     for(int ii = 1; ii < n; ii++){
 
         planets[0].pos = get_pos(planets, h, b, 0);
-
+        /*
+        for(int t = 0; t < peri.size(); t++){
+                if(peri[t] < planets[0].pos[t]){
+                        peri[t] = planets[0].pos[t];
+                }
+        }
+        if(ii % 100/0.2 == 0){
+                tmpfile << 3600*atan(peri[1]/peri[0]) << " " << h*ii <<  "\n";
+                peri = {1000, 1000};
+        }
+*/
+        /*
         if(ii%100==0){
           for (int jj = 0; jj < planets.size(); jj++){
 
                 tmpfile <<  planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";
           }
  	}
-}
-    tmpfile.close();
-	return 0;
-}
-/*
-    ofstream tmpfile;
-    tmpfile.open("values2.txt");
+        */ 
+       
 
-        farten = pow(pow(planets[0].pos[3]+planets[0].pos[4]+planets[0].pos[5],2),0.5);
-        if (planets[0].pos[0]>=0 and (planets[0].pos[1]>=0)){
-          if (farten < (12.44+tol)){
-            if (farten > (12.44-tol)){
-              theta = atan(planets[0].pos[1]/planets[0].pos[0]);
-              cout << farten << " " << theta*3600 << " " << h*ii << " " << endl;
-
-              tmpfile << planets[0].pos[0] << " " << planets[0].pos[1] << " " << planets[0].pos[2] << " " << "\n";
-
-            }
-          }
+        farten = sqrt(pow(planets[0].pos[3],2)+pow(planets[0].pos[4],2));
+        dis = sqrt(pow(planets[0].pos[0],2)+pow(planets[0].pos[1],2));
+        if (abs(dis-0.3075) <= tol){
+                theta = atan(planets[0].pos[1]/planets[0].pos[0]);
+                tmpfile << theta << " " << h*ii << " " << endl;
+         
+        }
         //if(ii%1000==0){
 
         //}
 
 
-        }
+        
 
           //for ordinary plotting; comment out the two next lines
           //tmpfile << "1" << "\n"; //number of planets
@@ -160,16 +162,15 @@ int bane(float final_time, double b, vector<Planet> planets){
 
 
 
+    }
 
-
-}
     tmpfile.close();
     return 0;
 }
-*/
+
 int main(int argc,char* argv[]){
 
-    double final_time = 150;
+    double final_time = 100;
     double b = 3.0;
 
     Planet sun;
@@ -201,10 +202,10 @@ int main(int argc,char* argv[]){
     mercury.name = "mercury";
     mercury.mass = 3.3e23;
     //mercury.DS = 0.39;
-    //mercury.inv = {4.82, -7.13, -1.025, -0.3294, -0.29288, 0.005618};
+    mercury.inv = {4.82, -7.13, -1.025, -0.3294, -0.29288, 0.005618};
     mercury.DS = 0.3075;
     //mercury.inv = {0.3075,0,0,0,12.44,0};
-    mercury.inv = {0,12.44,0,0.3075,0,0};
+    //mercury.inv = {12.440,0 ,0 ,0.3075,0,0};
 
 
     Planet venus;
