@@ -110,11 +110,23 @@ int bane(float final_time, double b, vector<Planet> planets){
     double lollipopp;
     double farten;
 
-
     for(int ii = 1; ii < n; ii++){
 
         planets[0].pos = get_pos(planets, h, b, 0);
 
+        if(ii%100==0){
+          for (int jj = 0; jj < planets.size(); jj++){
+
+                tmpfile <<  planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";
+          }
+ 	}
+}
+    tmpfile.close();
+	return 0;
+}
+/*
+    ofstream tmpfile;
+    tmpfile.open("values2.txt");
 
         farten = pow(pow(planets[0].pos[3]+planets[0].pos[4]+planets[0].pos[5],2),0.5);
         if (planets[0].pos[0]>=0 and (planets[0].pos[1]>=0)){
@@ -154,7 +166,7 @@ int bane(float final_time, double b, vector<Planet> planets){
     tmpfile.close();
     return 0;
 }
-
+*/
 int main(int argc,char* argv[]){
 
     double final_time = 150;
