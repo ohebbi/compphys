@@ -17,29 +17,22 @@ class Planet {
 
 }globalPlanet;
 
-
-double force(vector<Planet> planets, double msun){
-        double rej;
-        double f;
-
+vector<double> force(vector<Planet> planets, double msun, double b){
+        double rej; 
+        vector<double> f = {0,0,0};
+        
+        
         for(int i = 1; i < planets.size(); i++){
-
-                rej = pow((planets[i].pos[3]-planets[0].pos[3]),2)+pow((planets[i].pos[4]-planets[0].pos[4]),2)+pow((planets[i].pos[5]-planets[0].pos[5]),2);
-
-                if (planets[0].DS < planets[i].DS){
-
-                        f += planets[i].mass/(rej*msun);
-                }
-                else{
-
-                        f -= planets[i].mass/(rej*msun);
-                }
+                
+                rej = pow(sqrt(pow((planets[i].pos[0]-planets[0].pos[0]),2)+pow((planets[i].pos[1]-planets[0].pos[1]),2)+pow((planets[i].pos[2]-planets[0].pos[2]),2)),b);
+                
+                for(int j = 0; j<f.size(); j++){
+                        f[j] += (planets[0].pos[j]-planets[i].pos[j])*planets[i].mass/(rej*msun);
+                        
+                }         
         }
         return f;
-
-
 }
-
 vector<double> instal(double b, vector<Planet> planets, int in){
 
         swap(planets[0], planets[in]);
@@ -51,12 +44,12 @@ vector<double> instal(double b, vector<Planet> planets, int in){
                 planets[i].pos = planets[i].inv;
         }
 
-        double f = force(planets, msun);
+        vector<double> f = force(planets, msun, b);
 
         double r = sqrt(pow(first.inv[3],2)+pow(first.inv[4],2)+pow(first.inv[5],2));
-        double ax1 = -4*pow(M_PI, 2.0)*(first.inv[3]/pow(r, b)+f);
-        double ay1 = -4*pow(M_PI, 2.0)*(first.inv[4]/pow(r, b)+f);
-        double az1 = -4*pow(M_PI, 2.0)*(first.inv[5]/pow(r, b)+f);
+        double ax1 = -4*pow(M_PI, 2.0)*(first.inv[3]/pow(r, b)+f[0]);
+        double ay1 = -4*pow(M_PI, 2.0)*(first.inv[4]/pow(r, b)+f[1]);
+        double az1 = -4*pow(M_PI, 2.0)*(first.inv[5]/pow(r, b)+f[2]);
 
         return {first.inv[3], first.inv[4], first.inv[5], first.inv[0], first.inv[1], first.inv[2], ax1, ay1, az1};
 
@@ -68,21 +61,21 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in){
         Planet p = planets[0];
         double msun = 2e30;
 
-        p.pos[0] += h*p.pos[3]+(pow(h,2.0)/2.0)*p.pos[6];
-	p.pos[1] += h*p.pos[4]+(pow(h,2.0)/2.0)*p.pos[7];
-	p.pos[2] += h*p.pos[5]+(pow(h,2.0)/2.0)*p.pos[8];
+              p.pos[0] += h*p.pos[3]+(pow(h,2.0)/2.0)*p.pos[6];
+	      p.pos[1] += h*p.pos[4]+(pow(h,2.0)/2.0)*p.pos[7];
+	      p.pos[2] += h*p.pos[5]+(pow(h,2.0)/2.0)*p.pos[8];
 
-        double f = force(planets, msun);
+	      vector<double> f = force(planets, msun, b);
 
-	double r = sqrt(pow(p.pos[0],2)+pow(p.pos[1],2)+pow(p.pos[2],2));
+	      double r = sqrt(pow(p.pos[0],2)+pow(p.pos[1],2)+pow(p.pos[2],2));
 
-	double ax = -4*pow(M_PI, 2.0)*(p.pos[0]/pow(r, b)+f);
+	      double ax = -4*pow(M_PI, 2.0)*(p.pos[0]/pow(r, b)+f[0]);
         p.pos[3] += (h/2.0)*(ax+p.pos[6]);
 
-        double ay = -4*pow(M_PI, 2.0)*(p.pos[1]/pow(r, b)+f);
+        double ay = -4*pow(M_PI, 2.0)*(p.pos[1]/pow(r, b)+f[1]);
         p.pos[4] += (h/2.0)*(ay+p.pos[7]);
 
-        double az = -4*pow(M_PI, 2.0)*(p.pos[2]/pow(r, b)+f);
+        double az = -4*pow(M_PI, 2.0)*(p.pos[2]/pow(r, b)+f[2]);
         p.pos[5] += (h/2.0)*(az+p.pos[8]);
 
         return {p.pos[0], p.pos[1], p.pos[2], p.pos[3], p.pos[4], p.pos[5], ax, ay, az};
@@ -90,11 +83,11 @@ vector<double> get_pos(vector<Planet> planets, double h, double b, int in){
 }
 
 int bane(float final_time, double b, vector<Planet> planets){
-    int n = 100000;
+    int n = 10000000;
     double h = final_time/n;
 
     for(int i = 0; i < planets.size(); i++){
-                planets[i].pos = instal(b, planets, i);
+          planets[i].pos = instal(b, planets, i);
 
         }
 
@@ -111,13 +104,13 @@ int bane(float final_time, double b, vector<Planet> planets){
 
         }
 
-        if(ii%1000==0){
+        if(ii%10000==0){
           //for ordinary plotting; comment out the two next lines
-          tmpfile << "9" << "\n"; //number of planets
-          tmpfile << "commentline that needs to be here" << "balle" << "\n";
+          //tmpfile << "10" << "\n"; //number of planets
+          //tmpfile << "commentline that needs to be here" << "balle" << "\n";
 
           for (int jj = 0; jj < planets.size(); jj++){
-                tmpfile << jj <<" " << planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";
+                tmpfile << planets[jj].pos[0] << " " << planets[jj].pos[1] << " " << planets[jj].pos[2] << " " << jj << " " << "\n";
           }
  	}
 }
@@ -127,8 +120,14 @@ int bane(float final_time, double b, vector<Planet> planets){
 
 int main(int argc,char* argv[]){
 
-    double final_time = 120;
+    double final_time = 15;
     double b = 3.0;
+
+    Planet sun;
+    sun.name = "sun";
+    sun.mass = 1.989e30;
+    sun.DS = 0;
+    sun.inv={0,0,0, 1,0,0};
 
     Planet earth;
     earth.name = "earth";
@@ -178,14 +177,14 @@ int main(int argc,char* argv[]){
     neptune.mass = 1.03e26;
     neptune.DS = 30.06;
     neptune.inv = {0.289, 1.11, -0.0297, 28.91, -7.753, -0.5067};
-
+    
     Planet pluto;
     pluto.name = "pluto";
     pluto.mass = 1.31e22;
     pluto.DS = 39.53;
     pluto.inv = {1.0975, 0.1535, -0.331, 11.614, -31.58, 0.01979};
 
-    vector<Planet> planets = {mercury, venus, earth, mars, neptune, uranus, saturn, jupiter, pluto};
+    vector<Planet> planets =  {earth,jupiter};
 
     return bane(final_time, b, planets);
 }
