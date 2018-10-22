@@ -23,6 +23,8 @@ temp*
 *.idx
 *.nav
 *.out
+*.fls
+*.fdb_latexmk
 *.toc
 *.snm
 *.vrb

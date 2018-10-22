@@ -8,7 +8,7 @@
 
 
 \begin{document}
-\title{\textbf{FYS4150/FYS3150 - Project 2}}
+\title{\textbf{FYS4150/FYS3150 - Project 3}}
 \author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
 \date{October 24}
 
@@ -18,9 +18,12 @@
 \maketitle
 
 \section{Abstract}
-Mention that we choose to plot 3D
+In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily.
+
 
 \section{Introduction}
+
+
 
 \section{Theoretical Models and Technicalities}
 
@@ -140,6 +143,17 @@ $$F_{J,x}=F_{GJ,x}+F_{JE,x}=\frac{4\pi^2M_J}{r^3}r_x+\frac{GM_JM_E}{r_{JE}^3}(r_
 $$F_{J,y}=F_{GJ,y}+F_{JE,y}=\frac{4\pi^2M_J}{r^3}r_y+\frac{GM_JM_E}{r_{JE}^3}(r_{E,y}-r_{J,y})$$
 $$F_{J,z}=F_{GJ,z}+F_{JE,z}=\frac{4\pi^2M_J}{r^3}r_z+\frac{GM_JM_E}{r_{JE}^3}(r_{E,z}-r_{J,z})$$
 
+Now that we have all the forces that work on each object, we use the same algorithm as before to calculate the position and velocity of Earth and Jupiter.
+
+\subsection{Object Orientation and the Rest of the Solar System}
+The next step now is to implement more planets. To do so we choose to introduce a new class called "Planets". It is defined as an object that includes the different parameters of the planet that we use; mass, distance from the sun and initial position and velocity. By introducing a function that calculates the forces that work between all the planets, we are now able to add any celestial body in our solar system to our model. The forces between the planets are calculated in the same way as the force between Earth and Jupiter in the previous section, and by adding all the forces we get the total force on each planet. Another function calculates the position and velocity using the Verlet method and the force (or the acceleration).
+
+\subsection{Perihelion Precision of Mercury}
+The perihelion is the point on Mercury's orbit where the distance between Mercury and the Sun is shortest. On a perfect elliptical the perihelion will stay constant, but when taking the relativistic correction into account the point will gradually shift, although the distance remains constant. The given value for the rotation is 43 arc seconds per 100 years, which corresponds to about $0.0119^{\circ}$ or 0.0002085 radians. To implement the relativstic correction, we change the gravitational force to
+
+$$F_G=\frac{GM_{\mathrm{Sun}}M_{\mathrm{Mercury}}}{r^2}\bigg( 1+\frac{3l^2}{r^2c^2}\bigg)$$
+
+where $l$ is the angular momentum and $c$ is the speed of light in vacuum.
 
 
 \section{Results and Discussion}
@@ -168,13 +182,13 @@ It was found that the initial velocity that gives a circular orbit was $2\pi$, a
     \label{stability}
 \end{table}
 
-When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Verlet, we see that it is a small sacrifise for a much greater accuracy for our solar system.
+When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Euler, we see that it is a small sacrifice for a much greater accuracy for our solar system.
 
-We implemented a test in our program that checked if the length of the position-vector stayed within a known tolerance, because this should be the case if the potential energy is conserved.
+We implemented a test in our program that checked if the length of the position vector stayed within a known tolerance, because this should be the case if the potential energy is conserved.
 This is also true with the kinetic energy, but this time we tested if the length of the velocity-vector stayed constant. We found results that correlate with table \ref{stability}; if the number of integration points increase, the tolerance can be decreased. The precision for Verlet is very good, which means we could use a very small tolerance ($\epsilon = 10^{-6}$). For Euler's method - not so much ($\epsilon = 10^{-2}$).
 If both the kinetic and potential energy is conserved, so will the angular momentum. This is because angular momentum is given by the formula $\vec{L}=\vec{r} \times \vec{p} =m \vec{r} \times \vec{v}$.
 
-Thus we continued with Verlet's method as we further on explored the solar system using his algorithm. 
+Thus we continued with Verlet's method as we further on explored the solar system using his algorithm.
 \section{Conclusion}
 
 
