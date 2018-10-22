@@ -21,7 +21,7 @@ vector<double> force(Planet planets){
         double rej;
         vector<double> f = {0,0,0};
         double rej_2;
-        double c2 = 9.0e16; //(speed of light)^2
+        double c2 = pow(63284.9,2); //(speed of light)^2
        double r;
         double l;
         double v;
@@ -29,7 +29,7 @@ vector<double> force(Planet planets){
 	r = sqrt(pow(planets.pos[0], 2)+pow(planets.pos[1],2)+pow(planets.pos[2],2));
         v = sqrt(pow(planets.pos[3], 2) + pow(planets.pos[4],2)+pow(planets.pos[5],2));
         rej = pow(r,3);
-        l = pow((planets.pos[0]*planets.pos[4]-planets.pos[1]*planets.pos[3]),2); // l ^2 ; *sin \theta, but this is uno.
+	l = pow(0.3075*12.44,2); // l ^2 ; *sin \theta, but this is uno.
 	//l = v*v;
         for(int j = 0; j<f.size(); j++){
 	  f[j] = (planets.pos[j]/(rej))*(1+((3*l)/(r*r*c2)));
@@ -78,7 +78,7 @@ vector<double> get_pos(Planet p, double h, double b){
 }
 
 int bane(float final_time, double b, Planet p){
-  int n = 1e7;
+  int n = 1e8;
     
     double h = final_time/n;
 
@@ -96,20 +96,25 @@ int bane(float final_time, double b, Planet p){
     double dis;
 
     vector<double> peri = {1000, 1000};
-    
+    double dager = 0;
     
     for(int ii = 1; ii < n; ii++){
-
+      
       p.pos = get_pos(p, h, b);
-      /*
+      /*     
+ dager += h*365;
         for(int t = 0; t < peri.size(); t++){
                 if(peri[t] < p.pos[t]){
                         peri[t] = p.pos[t];
                 }
         }
-        if(ii % 100/0.2 == 0){
-                tmpfile << atan(peri[1]/peri[0]) << " " << h*ii <<  "\n";
-                peri = {1000, 1000};
+        if((dager-88) <= 0.01){
+	        dager = 0;
+                if(ii % 1000 == 0){
+		  tmpfile << atan(peri[1]/peri[0]) << " " << h*ii <<   "\n";
+                      peri = {1000, 1000};
+	}
+		
         }
       */
 	/*
@@ -123,15 +128,16 @@ int bane(float final_time, double b, Planet p){
 	       
 	*/
 	//tmpfile << 180*(theta)/M_PI << " " << h*ii << " " << p.pos[1] << " " << p.pos[0] <<"\n";
+      
       	
       farten = sqrt(pow(p.pos[3],2)+pow(p.pos[4],2)+pow(p.pos[5],2));
       dis = sqrt(pow(p.pos[0],2)+pow(p.pos[1],2)+pow(p.pos[2],2));
         if ((fabs(dis-0.3075000) <= tol) and (fabs(farten-12.44) <= tol)){
 	        theta =  atan(p.pos[1]/p.pos[0]);
-		tmpfile << (theta) << " " << h*ii << " " << p.pos[1] << " " << p.pos[0] <<"\n";
+		tmpfile << 206265*(theta) << " " << h*ii << " " << p.pos[1] << " " << p.pos[0] <<"\n";
          
         }
-	
+      
         //if(ii%1000==0){
 
         //}
