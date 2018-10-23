@@ -22,7 +22,7 @@ vector<double> force(Planet planets){
         vector<double> f = {0,0,0};
         double rej_2;
         double c2 = pow(63284.9,2); //(speed of light)^2
-       double r;
+        double r;
         double l;
         double v;
         

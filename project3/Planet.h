@@ -7,20 +7,23 @@
 
 using namespace std;
 
+//parent class
 class Planet {
     public:
-        double mass;
-        vector<double> inv;
-        vector<double> pos;
+        double mass; //mass of the planet
+        vector<double> inv; //initial values for position and velocity
+        vector<double> pos; //values for position, velocity and acceleration
         Planet(double mass1, vector<double> inv1){
             mass = mass1;
             inv = inv1;
         }
 };
 
+
+//all the planets with inital values gets created here ass subclasses of the parent class Planet
+
 class Sun : public Planet{ //you may think that we believe the sun to be a planet. This is however not the case; for we are on a mission to save time. Therefore, we use the sun as a planet only for practicle purposes. Yours truly; Erlend, Ingvild and Oliver.
-    public: 
-             
+    public:            
         Sun():Planet(2e30, {0,0,0,0,0,0}){           
         };   
 };
@@ -49,7 +52,6 @@ class Mars : public Planet{
                    
         };
 };
-
 
 class Jupiter : public Planet{
     public:            

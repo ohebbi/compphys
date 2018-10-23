@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//this function finds the center off mass of the system, and then returns the initial values for the sun
 vector<double> find_center(vector<Planet*> planets){
         
         vector<double> center {0,0,0,0,0,0};
@@ -28,6 +29,7 @@ vector<double> find_center(vector<Planet*> planets){
         return center;
 }
 
+//here the decomposed force on a planet is calculated
 vector<double> force(vector<Planet*> planets, double msun){
         double rej;
         vector<double> f = {0,0,0};
@@ -41,9 +43,10 @@ vector<double> force(vector<Planet*> planets, double msun){
         return f;
 }
 
+//instal creates the initial acceleration needed for the Verlet method
 vector<double> instal(vector<double> C, vector<Planet*> planets, int in){
 
-        swap(planets[0], planets[in]);
+        swap(planets[0], planets[in]);//this is important to include all the planets
         
         Planet* first = planets[0];
 
@@ -59,15 +62,16 @@ vector<double> instal(vector<double> C, vector<Planet*> planets, int in){
         return {first->pos[0], first->pos[1], first->pos[2], first->pos[3], first->pos[4], first->pos[5], ax1, ay1, az1};
 }
 
+//this function returns both position, velocity and acceleration for the given planet
 vector<double> get_pos(vector<Planet*> planets, int in, vector<double> C){
-        swap(planets[0], planets[in]);
+        swap(planets[0], planets[in]);//this is important to include all the planets
 
         Planet* p = planets[0];
-
-        p->pos[0] += C[1]*p->pos[3]+C[3]*p->pos[6];
-	p->pos[1] += C[1]*p->pos[4]+C[3]*p->pos[7];
-	p->pos[2] += C[1]*p->pos[5]+C[3]*p->pos[8];
-
+        
+        for(int i = 0; i < 3; i++){
+                p->pos[i] += C[1]*p->pos[i+3]+C[3]*p->pos[i+6];
+        }
+        
         vector<double> f = force(planets, C[5]);
 
 	double ax = C[2]*f[0];
@@ -82,39 +86,39 @@ vector<double> get_pos(vector<Planet*> planets, int in, vector<double> C){
         return {p->pos[0], p->pos[1], p->pos[2], p->pos[3], p->pos[4], p->pos[5], ax, ay, az};
 }
 
+//this the class that will solve our differential equation
 class Solver{
     
     public:
-            int bane(float final_time, double b, vector<Planet*> planets, int n){
-            planets[0]->inv = find_center(planets);    
+            int solution(float final_time, double b, vector<Planet*> planets, int n){
+                planets[0]->inv = find_center(planets);//giving the sun initial values    
             
-            double h = final_time/n;     
+                double h = final_time/n;     
+                double hpo = pow(h,2.0)/2.0;
+                double hdiv = (h/2.0);
+                double fpow = -4*pow(M_PI, 2); 
     
-            double hpo = pow(h,2.0)/2.0;
-            double hdiv = (h/2.0);
-            double fpow = -4*pow(M_PI, 2); 
-    
-            vector<double> C = {b, h, fpow, hpo, hdiv, 2e30};
+                vector<double> C = {b, h, fpow, hpo, hdiv, 2e30};//a vector with all our constants to save ourselves from many a flop
 
-            for(int i = 0; i < planets.size(); i++){
-                planets[i]->pos = instal(C, planets, i);
-            }
+                for(int i = 0; i < planets.size(); i++){
+                        planets[i]->pos = instal(C, planets, i);
+                }
     
-            ofstream tmpfile;
-            tmpfile.open("values3.txt");
+                ofstream tmpfile;
+                tmpfile.open("values3.txt");
        
-            for(int ii = 0; ii < n; ii++){
-            for (int j = 0; j < planets.size(); j++){
-                planets[j]->pos = get_pos(planets, j, C);
-            }
-            if(ii%1000==0){  
-                for (int jj = 0; jj < planets.size(); jj++){
-                tmpfile <<  planets[jj]->pos[0] << " " << planets[jj]->pos[1] << " " << planets[jj]->pos[2] << " " << jj << " " << "\n";
-            }
- 	    }
-}
-    tmpfile.close();
-    return 0;
-}  
+                for(int ii = 0; ii < n; ii++){
+                        for (int j = 0; j < planets.size(); j++){
+                                planets[j]->pos = get_pos(planets, j, C);
+                        }
+                        if(ii%1000==0){  
+                                for (int jj = 0; jj < planets.size(); jj++){
+                                        tmpfile <<  planets[jj]->pos[0] << " " << planets[jj]->pos[1] << " " << planets[jj]->pos[2] << " " << jj << " " << "\n";//printing the position of all the planets to a text file that shall be read by a python program
+                                }
+ 	                }
+                }
+                tmpfile.close();
+                return 0;//if the program runs succesfully, return 0
+        }                        
 };
 
