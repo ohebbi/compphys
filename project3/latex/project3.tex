@@ -2,7 +2,7 @@
 \usepackage{amsmath}
 \usepackage[]{algorithm2e}
 \usepackage{float}
-\usepackage{float}
+\usepackage{url}
 \usepackage{graphicx}
 
 
@@ -17,11 +17,11 @@
 \maketitle
 
 \section{Abstract}
-In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily.
+In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. We used the values from October 5, 2018.
 
 
 \section{Introduction}
-
+Differential equations is an important part of most fields within physics, and consequently being able to solve them efficiently is an advantage. One of the most basic methods to solve differential equations numerically is the Euler method, and we will be using that and the slightly more advanced Verlet method to model the solar system. The planets of the solar system is a classical differential equation where the gravitational forces give a very good model for the orbits of all the planets. We will use the model to look at the strengths of the different methods.
 
 
 \section{Theoretical Models and Technicalities}
@@ -187,6 +187,7 @@ We implemented a test in our program that checked if the length of the position 
 This is also true with the kinetic energy, but this time we tested if the length of the velocity-vector stayed constant. We found results that correlate with table \ref{stability}; if the number of integration points increase, the tolerance can be decreased. The precision for Verlet is very good, which means we could use a very small tolerance ($\epsilon = 10^{-6}$). For Euler's method - not so much ($\epsilon = 10^{-2}$).
 If both the kinetic and potential energy is conserved, so will the angular momentum. This is because angular momentum is given by the formula $\vec{L}=\vec{r} \times \vec{p} =m \vec{r} \times \vec{v}$.
 
+
 Thus we continued with Verlet's method as we further on explored the solar system using his algorithm.
 
 \section{Conclusion}
@@ -197,6 +198,19 @@ last task 3g)
 
 This was actually one of Einstein's strongest motivation for his theory of general relativity.
 It is explained by the general theory of relativity by "gravitation being mediated by the curvature of spacetime".
+
+
+\section{Appendix}
+Link to the GitHub repository:\\
+
+https://github.com/ohebbi/compphys.git
+
+\begin{thebibliography}{}
+\bibitem{NASA}
+NASA Jet Propulsion Laboratory, California Institute of Technology\\
+\url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
+
+\end{thebibliography}
 
 
 
