@@ -7,9 +7,9 @@
             "command": "C:/MinGW/bin/g++",
             "args": [
                 "-g",
-                "taskd.cpp",
+                "wholesome.cpp",
                 "-o",
-                "Project3"
+                "wholesome.exe"
             ],
             "group": {
                 "kind": "build",

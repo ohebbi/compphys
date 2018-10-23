@@ -31,14 +31,6 @@ fig = plt.figure()
 
 ax = fig.gca(projection = '3d')
 
-u = np.linspace(0, 2 * np.pi, 1000)
-v = np.linspace(0, np.pi, 1000)
-xu = 0.8*np.outer(np.cos(u), np.sin(v))
-yu = 0.8*np.outer(np.sin(u), np.sin(v))
-zu = 0.00008*np.outer(np.ones(np.size(u))*0.04, np.cos(v))
-
-
-#ax.plot_surface(0.04*xu, 0.04*yu, zu, color='r')
 
 
 
