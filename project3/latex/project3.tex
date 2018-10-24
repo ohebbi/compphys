@@ -181,22 +181,17 @@ It was found that the initial velocity that gives a circular orbit was $2\pi$, a
     \label{stability}
 \end{table}
 
-When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Euler, we see that it is a small sacrifice for a much greater accuracy for our solar system.
+When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Euler (naturally, because Euler's method scales as 15n flops while Verlet's method scales like 27n flops), we see that it is a small sacrifice for a much greater accuracy for our solar system.
 
 We implemented a test in our program that checked if the length of the position vector stayed within a known tolerance, because this should be the case if the potential energy is conserved.
-This is also true with the kinetic energy, but this time we tested if the length of the velocity-vector stayed constant. We found results that correlate with table \ref{stability}; if the number of integration points increase, the tolerance can be decreased. The precision for Verlet is very good, which means we could use a very small tolerance ($\epsilon = 10^{-6}$). For Euler's method - not so much ($\epsilon = 10^{-2}$).
+
+This is also true with the kinetic energy, but this time we tested if the length of the velocity-vector stayed constant. We found results that correlate with table \ref{stability}; if the number of integration points increase, the tolerance can be decreased. The precision for Verlet is very good, which means we could use a very small tolerance ($\epsilon = 10^{-10}$). For Euler's method - not so much ($\epsilon = 10^{-2}$), which means we can draw the conclusion that Verlet's method conserves the energy while Euler's method does not.
+
 If both the kinetic and potential energy is conserved, so will the angular momentum. This is because angular momentum is given by the formula $\vec{L}=\vec{r} \times \vec{p} =m \vec{r} \times \vec{v}$.
 
 
 Thus we continued with Verlet's method as we further on explored the solar system using his algorithm.
 
-
-The exact value for the escape velocity can be calculated from the equation
-$$v_{\mathrm{escape}}=\sqrt{\frac{2GM_{\odot}}{r}}$$
-Inserting for the gravitational constant, sun mass and assuming the distance $r$ is 1 AU, we get an exact answer for the escape velocity, $v_{\mathrm{escape}}\approx 8.861$ AU/yr. We find with our model by trial and error that Earth escapes the Sun with a velocity of about $8.88$ AU/yr, which is fairly close to the exact value.
-
-\vskip0.5cm
-As for the question about whether Mercury's perihelion precision can be described by the general theory of relativity, the answer is yes. When Einstein developed his theory, he used the rotation of Mercury's elliptical orbit as an argument for why his theory was so strong. \cite{wiki_rel}
 
 \section{Conclusion}
 
@@ -215,19 +210,14 @@ https://github.com/ohebbi/compphys.git
 
 \begin{thebibliography}{}
 \bibitem{NASA}
-California Institute of Technology, \textit{NASA Jet Propulsion Laboratory}, downloaded 05.10.18\\
+NASA Jet Propulsion Laboratory, California Institute of Technology\\
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
-
-\bibitem{wiki_rel}
-Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
-\url{https://en.wikipedia.org/wiki/General_relativity}
 
 \end{thebibliography}
 
 
 
 \end{document}
-
 
 \begin{equation*}
 \begin{split}
