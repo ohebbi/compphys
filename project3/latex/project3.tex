@@ -190,6 +190,14 @@ If both the kinetic and potential energy is conserved, so will the angular momen
 
 Thus we continued with Verlet's method as we further on explored the solar system using his algorithm.
 
+
+The exact value for the escape velocity can be calculated from the equation
+$$v_{\mathrm{escape}}=\sqrt{\frac{2GM_{\odot}}{r}}$$
+Inserting for the gravitational constant, sun mass and assuming the distance $r$ is 1 AU, we get an exact answer for the escape velocity, $v_{\mathrm{escape}}\approx 8.861$ AU/yr. We find with our model by trial and error that Earth escapes the Sun with a velocity of about $8.88$ AU/yr, which is fairly close to the exact value.
+
+\vskip0.5cm
+As for the question about whether Mercury's perihelion precision can be described by the general theory of relativity, the answer is yes. When Einstein developed his theory, he used the rotation of Mercury's elliptical orbit as an argument for why his theory was so strong. \cite{wiki_rel}
+
 \section{Conclusion}
 
 
@@ -207,14 +215,19 @@ https://github.com/ohebbi/compphys.git
 
 \begin{thebibliography}{}
 \bibitem{NASA}
-NASA Jet Propulsion Laboratory, California Institute of Technology\\
+California Institute of Technology, \textit{NASA Jet Propulsion Laboratory}, downloaded 05.10.18\\
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
+
+\bibitem{wiki_rel}
+Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
+\url{https://en.wikipedia.org/wiki/General_relativity}
 
 \end{thebibliography}
 
 
 
 \end{document}
+
 
 \begin{equation*}
 \begin{split}
