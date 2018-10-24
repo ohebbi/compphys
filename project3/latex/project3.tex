@@ -21,16 +21,13 @@
   \centering
 \end{figure}
 
-<<<<<<< HEAD
-\newpage
-\section{Abstract}
-In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. Further on we found that fixing the sun as the center of mass in the solar system is a very good approximation, because if not it would be orbiting within its own radius. As a treat at the end, the perihelion precession of Mercury, when all classical effects were subtracted, was confirmed to be 43 arcseconds as Einstein predicted.
 
-=======
+\newpage
+
 \begin{abstract}
 In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. We used the values from October 5, 2018.
 \end{abstract}
->>>>>>> eda6fbb085af8865ad248beb2cc4cc921e0a1472
+
 
 \section{Introduction}
 Differential equations are an important part of most fields within physics, and consequently being able to solve them efficiently is an advantage. One of the most basic methods to solve differential equations numerically is the Euler method, and we will be using that and the slightly more advanced Verlet method to model the solar system. The planets of the solar system is a classical differential equation where the gravitational forces give a very good model for the orbits of all the planets. We will use the model to look at the strengths of the different methods.
@@ -328,6 +325,13 @@ When adding all planets in the solar system (including Pluto), and in addition g
 
 \subsection{Perihelion Precision}
 
+\begin{figure}[H]
+  \includegraphics[scale=0.7]{plots/Perihilion.eps}
+  \caption{Plot of the shift in the perihelion angle.}
+  \label{perihelion}
+\end{figure}
+
+Figure \ref{perihelion} shows that the perihelion shifts about 43 arc seconds over the course of a century, and that corresponds to the exact value. 
 
 \vskip0.5cm
 As for the question about whether Mercury's perihelion precision can be described by the general theory of relativity, the answer is yes. When Einstein developed his theory, he used the rotation of Mercury's elliptical orbit as an argument for why his theory was so strong. \cite{wiki_rel}
@@ -348,11 +352,7 @@ https://github.com/ohebbi/compphys.git
 
 \begin{thebibliography}{}
 \bibitem{NASA}
-<<<<<<< HEAD
-NASA Jet Propulsion Laboratory, California Institute of Technology, downloaded 05.10.18\\
-=======
 California Institute of Technology, \textit{NASA Jet Propulsion Laboratory}, downloaded 05.10.18\\
->>>>>>> eda6fbb085af8865ad248beb2cc4cc921e0a1472
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
 \bibitem{wiki_rel}
 Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
