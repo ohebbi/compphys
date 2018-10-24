@@ -192,7 +192,72 @@ If both the kinetic and potential energy is conserved, so will the angular momen
 
 Thus we continued with Verlet's method as we further on explored the solar system using his algorithm.
 
+\subsection{Escape Velocity}
+The exact value for the escape velocity can be calculated from the equation
+$$v_{\mathrm{escape}}=\sqrt{\frac{2GM_{\odot}}{r}}$$
+Inserting for the gravitational constant, sun mass and assuming the distance $r$ is 1 AU, we get an exact answer for the escape velocity, $v_{\mathrm{escape}}\approx 8.861$ AU/yr. We find with our model by trial and error that Earth escapes the Sun with a velocity of about $8.88$ AU/yr, which is fairly close to the exact value.
 
+By changing the gravitational force to
+\begin{align*}
+  F_G = \frac{GM_{\odot}M_{Earth}}{r^{\beta}}
+\end{align*}
+where $\beta$ is approaching the number $3$, one can observe a change in circular orbit velocity, potential energy and escape velocity. The circular orbit velocity results in
+\begin{align*}
+  v_{circular}=\sqrt{\frac{GM_{\odot}}{r^{\beta-1}}}
+\end{align*}
+
+Integrating the force results in the potential as
+\begin{align*}
+  U = \int_0^r \vec{F} d\vec{r} =  \frac{GM_{\odot}M_{Earth}}{(\beta-1)} \frac{1}{r^{\beta-1}}
+\end{align*}
+If we set $\beta$ as $3$, we find the escape velocity as
+\begin{align*}
+  v_{escape} = \sqrt{\frac{GM_{\odot}}{2}} \frac{1}{r}
+\end{align*}
+Oh'man this system is unstable, because
+\begin{align*}
+  v_{escape} = \frac{1}{\sqrt{2}}\cdot v_{circular}
+\end{align*}
+which tells us that whatever initial velocity the earth starts with the system would go insanely bananas (unstabile). This is also accurate according to figures \ref{beta25} and \ref{beta35}.
+
+\begin{figure}[H]
+  \includegraphics[scale=0.6]{plots/b35.eps}
+  \caption{Earth-sun system with Beta $= \beta - 1 = 2.5$, where the earth is having a tendency to not move in a closed circular orbit}
+  \label{beta25}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[scale=0.6]{plots/b40.eps}
+  \caption{Earth-sun system with Beta $= \beta - 1 = 3$, where the earth cleary is not moving in a closed circular orbit}
+  \label{beta35}
+\end{figure}
+
+\subsection{The three body problem}
+When increasing the mass of Jupiter in a system with the Earth in a circular orbit around around a fixed center of mass (the Sun), one finds that the earth will also orbit around Jupiter when the mass gets comparable (and bigger).
+
+\begin{figure}[H]
+  \includegraphics[scale=0.5]{plots/Mass1.eps}
+  \caption{The sun (as the center of mass), Jupiter (with its original mass) and the earth in the solar system. Number of time steps is ten million}
+  \label{jupitermass1}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[scale=0.5]{plots/Mass10.eps}
+  \caption{The sun (as the center of mass), Jupiter (with ten times its original mass) and the Earth in the solar system. Number of timesteps is ten million.}
+  \label{jupitermass10}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[scale=0.5]{plots/Mass1000.eps}
+  \caption{The sun (as the center of mass), Jupiter (with a thousand times its original mass) and the Earth in the solar system. Number of timesteps is one hundred billion for better precision.}
+  \label{jupitermass1000}
+\end{figure}
+
+From figure \ref{jupitermass1000} the earth will move in an epicycle \cite{epicycle}, which means Jupiter will alter the Earth's motion around the Sun and make it orbit around Jupiter as well.
+
+\subsection{Perihelion Precision}
+\vskip0.5cm
+As for the question about whether Mercury's perihelion precision can be described by the general theory of relativity, the answer is yes. When Einstein developed his theory, he used the rotation of Mercury's elliptical orbit as an argument for why his theory was so strong. \cite{wiki_rel}
 \section{Conclusion}
 
 
@@ -201,7 +266,6 @@ last task 3g)
 
 This was actually one of Einstein's strongest motivation for his theory of general relativity.
 It is explained by the general theory of relativity by "gravitation being mediated by the curvature of spacetime".
-
 
 \section{Appendix}
 Link to the GitHub repository:\\
@@ -212,7 +276,11 @@ https://github.com/ohebbi/compphys.git
 \bibitem{NASA}
 NASA Jet Propulsion Laboratory, California Institute of Technology\\
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
-
+\bibitem{wiki_rel}
+Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
+\url{https://en.wikipedia.org/wiki/General_relativity}
+\bibitem{epicycle}
+Store Norske leksikon, \textit{Episykel}, downloaded 24.10.18\\
 \end{thebibliography}
 
 
