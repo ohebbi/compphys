@@ -10,116 +10,148 @@ using namespace std;
 
 int main(int argc,char* argv[]){
     ofstream myfile;
-    double final_time = 1.;
-    int n = 1e7;
+    myfile.open("values3.txt");
+
+    double final_time = 2.; //gives the number of years the simulation shall run over
+    int n = 1e9; //number of time steps
+    double h = final_time/n; //time step
 
     //creating vectors to keep all information of the position, velocity and acceleration for earth
-    vector<double> vx(n, 0);
-    vector<double> vy(n, 0);
-    vector<double> vz(n, 0);
-    vector<double> rx(n, 0);
-    vector<double> ry(n, 0);
-    vector<double> rz(n, 0);
-    vector<double> ax(n, 0);
-    vector<double> ay(n, 0);
+    vector<double> vx(2, 0);
+    vector<double> vy(2, 0);
+    vector<double> vz(2, 0);
+    vector<double> rx(2, 0);
+    vector<double> ry(2, 0);
+    vector<double> rz(2, 0);
+    vector<double> ax(2, 0);
+    vector<double> ay(2, 0);
+    vector<double> az(2, 0);
     double r;
 
-    //vx[0]=(-1.24465);
-    //vy[0]=(6.132);
-    //vz[0]=(-0.00044);
-
-    //Initial value for a circular orbit
-    vx[0]=(0);
-    vy[0]=(2*M_PI);
-    vz[0]=(0);
+    //initial values
     rx[0]=(1.0);
     ry[0]=(0.0);
     rz[0]=(0.0);
+    vx[0]=(-1.24465);
+    vy[0]=(6.132);
+    vz[0]=(-0.00044);
 
-    double h = final_time/n;
+    //Initial value for a circular orbit
+    //vx[0]=(0);
+    //vy[0]=(2*M_PI);
+    //vz[0]=(0);
+   
+    
     double start;
 
+    //creating constants outside the loop to reduce the number of flops
     double hfopow = h * 4.0*pow(M_PI, 2.0);
+    double rhfopow;
 
     //to test the euler vs verlet, you can either run the program with "euler" in the command line, to run the euler method, or something else to run verlet
     if (strncmp(argv[1], "euler", 2)==0){ 
       
         cout << "euler" << endl;
         clock_t start = clock();//this starts the clock if you chose the euler method.
-        for(int i = 1; i < n; i++){
-            r = sqrt(pow(rx[i-1], 2) + pow(ry[i-1], 2)+ pow(rz[i-1], 2));
+        
+        for(int i = 1; i < n; i++){//runs the Euler method
+            
+            rhfopow = hfopow/pow(sqrt(pow(rx[0], 2)+ pow(ry[0], 2)+ pow(rz[0], 2)),3);
 
-            vx[i] = vx[i-1] - hfopow * rx[i-1] / pow(r,3.0);
-            rx[i] = rx[i-1] + h * vx[i-1];
+            vx[1] = vx[0]-rhfopow*rx[0];
+            rx[1] = rx[0]+h*vx[0];
+            vx[0] = vx[1];
+            rx[0] = rx[1];
 
-            vy[i] = vy[i-1] - hfopow * ry[i-1] / pow(r,3.0);
-            ry[i] = ry[i-1] + h * vy[i-1];
+            vy[1] = vy[0]-rhfopow*ry[0];
+            ry[1] = ry[0]+h*vy[0];
+            vy[0] = vy[1];
+            ry[0] = ry[1];
 
-            vz[i] = vz[i-1] - hfopow * rz[i-1] / pow(r,3.0);
-            rz[i] = rz[i-1] + h * vz[i-1];
+            vz[1] = vz[0]-rhfopow*rz[0];
+            rz[1] = rz[0]+h*vz[0];
+            vz[0] = vz[1];
+            rz[0] = rz[1];
 
+            if(i % 10000 == 0){
+                myfile << rx[0] << " " << ry[0] << " " << rz[0] << " \n";//coordinates shall be read from a python program
+            }     
+
+        }
+    myfile.close();
     }
-    }
+
+
     else{
         cout << "Verlet" << endl;
 
-	
-	    double ax;
-	    double ay;
-	    double az;
-	    double ax1;
-	    double ay1;
-	    double az1;
+        //initial values installed from the vectors. We don't want to use vectors for position and velocity in this case.
+        double rxv = rx[0];
+        double ryv = ry[0];
+        double rzv = rz[0];
+        double vxv =vx[0];
+        double vyv = vy[0];
+        double vzv = vz[0];
+
+        //defining constants outside the loop to reduce the number of flops
         double h2 = h/2.0;
+        double hpow2 = pow(h,2.0)/2.0;
+        r = pow(sqrt(pow(rxv,2)+pow(ryv,2)+pow(rzv,2)),3);
+        double fopow = -4*pow(M_PI, 2.0);
+        double rfopow = fopow/r;
+
+        ax[0] = rfopow*rxv;
+	    ay[0] = rfopow*ryv;
+	    az[0] = rfopow*rzv;
 	    clock_t start = clock(); //this starts the clock if you chose the verlet method
     
-        double fopow = -4*pow(M_PI, 2.0);
-            for(int i = 1; i < n; i++){
-            r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
+       
+        for(int i = 1; i < n; i++){//runs the Verlet method      
 
-            ax = fopow*rx[i-1]/pow(r, 3.0);
-	        ay = fopow*ry[i-1]/pow(r, 3.0);
-	        az = fopow*rz[i-1]/pow(r, 3.0);
+            rxv += h*vxv+hpow2*ax[0];
+	        ryv += h*vyv+hpow2*ay[0];
+	        rzv += h*vzv+hpow2*az[0];            
+                       
+	        rfopow = fopow/pow(sqrt(pow(rxv,2)+pow(ryv,2)+pow(rzv,2)),3);
 
-            rx[i] = rx[i-1]+h*vx[i-1]+pow(h,2.0)/2.0*ax;
-	        ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
-	        rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
+            ax[1] = rfopow*rxv;
+            vxv += h2*(ax[1]+ax[0]);            
+            ax[0] = ax[1];
+            
+            ay[1] = rfopow*ryv;
+            vyv += h2*(ay[1]+ay[0]);
+            ay[0] = ay[1];
 
-	        r = sqrt(pow(rx[i],2)+pow(ry[i],2)+pow(rz[i],2));
-
-            ax1 = fopow*rx[i]/pow(r, 3.0);
-            vx[i] = vx[i-1]+h*(ax1+ax);
-
-            ay1 = fopow*ry[i]/pow(r, 3.0);
-            vy[i] = vy[i-1]+h2*(ay1+ay);
-
-            az1 = fopow*rz[i]/pow(r, 3.0);
-            vz[i] = vz[i-1]+h2*(az1+az);
-
+            az[1] = rfopow*rzv;
+            vzv += h2*(az[1]+az[0]);
+            az[0] = az[1];
+            
+            if(i % 10000 == 0){                
+                myfile << rxv << " " << ryv << " " << rzv << " \n";//coordinates shall be read from a python program
+            }          
         }
-
-        cout << "Verlet out" << endl;
-
-
+        myfile.close();            
     }
     clock_t end=clock();
+
+    //prints the time used
     double time = (double) (end-start)/CLOCKS_PER_SEC;
     cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
     cout << '\n' << endl;
+
+
+    /*
     double start1 = pow(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2), 0.5);
     double slutt = pow(pow(rx[n-1],2)+pow(ry[n-1],2)+pow(rz[n-1],2), 0.5);
     double svar = start1 - slutt;
     cout << "start = " << start1 << endl;
     cout << "slutt = " << slutt << endl;
     cout << "forskjell = " << svar << endl;
+    */
 
-    myfile.open("values3.txt");
+    
+    
 
-    for (int i = 0; i < rx.size(); i++){
-        if(i % 10000 == 0){
-            myfile << rx[i] << " " << ry[i] << " " << rz[i] << " \n";
-        }
-        
-    }
-    myfile.close();
+    
+   
 }
