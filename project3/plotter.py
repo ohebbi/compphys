@@ -45,14 +45,12 @@ ax = fig.gca(projection = '3d')
 
 ax.plot(rx,ry, rz)
 
-
-
 ax.set_xlabel("rx")
 ax.set_ylabel("ry")
 ax.set_zlabel("rz")
-plt.title("n=100000 for the general matrix")
+plt.title("Ten years of the earths orbit with n = 1e9 - With Verlet")
+
+
+plt.savefig("Verlet9.eps")
 plt.show();
-
-#plt.savefig("Banejorda.jpg")
-
 

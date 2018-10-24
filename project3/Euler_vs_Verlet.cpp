@@ -12,7 +12,7 @@ int main(int argc,char* argv[]){
     ofstream myfile;
     myfile.open("values3.txt");
 
-    double final_time = 2.; //gives the number of years the simulation shall run over
+    double final_time = 10.; //gives the number of years the simulation shall run over
     int n = 1e9; //number of time steps
     double h = final_time/n; //time step
 
