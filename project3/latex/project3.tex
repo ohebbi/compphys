@@ -21,13 +21,19 @@
   \centering
 \end{figure}
 
+<<<<<<< HEAD
 \newpage
 \section{Abstract}
 In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. Further on we found that fixing the sun as the center of mass in the solar system is a very good approximation, because if not it would be orbiting within its own radius. As a treat at the end, the perihelion precession of Mercury, when all classical effects were subtracted, was confirmed to be 43 arcseconds as Einstein predicted.
 
+=======
+\begin{abstract}
+In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. We used the values from October 5, 2018.
+\end{abstract}
+>>>>>>> eda6fbb085af8865ad248beb2cc4cc921e0a1472
 
 \section{Introduction}
-Differential equations is an important part of most fields within physics, and consequently being able to solve them efficiently is an advantage. One of the most basic methods to solve differential equations numerically is the Euler method, and we will be using that and the slightly more advanced Verlet method to model the solar system. The planets of the solar system is a classical differential equation where the gravitational forces give a very good model for the orbits of all the planets. We will use the model to look at the strengths of the different methods.
+Differential equations are an important part of most fields within physics, and consequently being able to solve them efficiently is an advantage. One of the most basic methods to solve differential equations numerically is the Euler method, and we will be using that and the slightly more advanced Verlet method to model the solar system. The planets of the solar system is a classical differential equation where the gravitational forces give a very good model for the orbits of all the planets. We will use the model to look at the strengths of the different methods.
 
 
 \section{Theoretical Models and Technicalities}
@@ -330,12 +336,10 @@ As for the question about whether Mercury's perihelion precision can be describe
 
 \section{Conclusion}
 
+We have have found that the Verlet method shows superior stability over Euler, and even though Euler is faster, the numerical precision of Verlet proves a huge advantage when dealing with problems of this magnitude; Rome wasn't built in a day, and neither was our solar system. The art of object oriented programming, OOP for short, though only at our apprentice level, shows great potential for future computational physics challenges. It has been exciting to be able to model our solar system as accurately as we have, using nothing more than simple ordinary differential equations. 
 
-\subsection{Perihelion}
-last task 3g)
+As an evaluation of our work throughout the project, we should have been better at saving our results as we produced them instead of having to go back to reproduce them before delivery.
 
-This was actually one of Einstein's strongest motivation for his theory of general relativity.
-It is explained by the general theory of relativity by "gravitation being mediated by the curvature of spacetime".
 
 \section{Appendix}
 Link to the GitHub repository:\\
@@ -344,7 +348,11 @@ https://github.com/ohebbi/compphys.git
 
 \begin{thebibliography}{}
 \bibitem{NASA}
+<<<<<<< HEAD
 NASA Jet Propulsion Laboratory, California Institute of Technology, downloaded 05.10.18\\
+=======
+California Institute of Technology, \textit{NASA Jet Propulsion Laboratory}, downloaded 05.10.18\\
+>>>>>>> eda6fbb085af8865ad248beb2cc4cc921e0a1472
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
 \bibitem{wiki_rel}
 Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
@@ -356,8 +364,3 @@ Store Norske leksikon, \textit{Episykel}, downloaded 24.10.18\\
 
 
 \end{document}
-
-\begin{equation*}
-\begin{split}
-\end{split}
-\end{equation*}
