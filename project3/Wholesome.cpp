@@ -5,7 +5,7 @@ int main(int argc,char* argv[]){
     
     double final_time = 250; //in years
     double betta = 3.0; //for varying the gravitational force in task D
-    int n = 1e7; //number of integration points
+    int n = 1e8; //number of integration points
     
     //creating the planets from Planet.h
     Sun* sol = new Sun(); 

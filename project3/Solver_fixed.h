@@ -77,14 +77,18 @@ class Solver{
                 double h = final_time/n;     
                 double hpo = pow(h,2.0)/2.0;
                 double hdiv = (h/2.0);
-                double fpow = -4*pow(M_PI, 2); 
+                double fpow = -4*pow(M_PI, 2);
+		
     
                 vector<double> C = {b, h, fpow, hpo, hdiv, 2e30};//a vector with all our constants to save ourselves from many a flop
 
                 for(int i = 0; i < planets.size(); i++){
                         planets[i]->pos = instal(C, planets, i);
                 }
-    
+
+		double l0 = sqrt(pow(planets[0]->pos[0],2)+pow(planets[0]->pos[1],2)+pow(planets[0]->pos[2],2))*sqrt(pow(planets[0]->pos[3],2)+pow(planets[0]->pos[4],2)+pow(planets[0]->pos[5],2));
+		double l;
+		double lc = l0;
                 ofstream tmpfile;
                 tmpfile.open("values3.txt");
        
@@ -92,12 +96,18 @@ class Solver{
                         for (int j = 0; j < planets.size(); j++){
                                 planets[j]->pos = get_pos(planets, j, C);
                         }
+			l = sqrt(pow(planets[0]->pos[0],2)+pow(planets[0]->pos[1],2)+pow(planets[0]->pos[2],2))*sqrt(pow(planets[0]->pos[3],2)+pow(planets[0]->pos[4],2)+pow(planets[0]->pos[5],2));
+			
+			if(l>l0){
+			  l0=l;
+			}  
                         if(ii%1000==0){  
                                 for (int jj = 0; jj < planets.size(); jj++){
                                         tmpfile <<  planets[jj]->pos[0] << " " << planets[jj]->pos[1] << " " << planets[jj]->pos[2] << " " << jj << " " << "\n";//printing the position of all the planets to a text file that shall be read by a python program
                                 }
  	                }
                 }
+		cout << l0-lc;
                 tmpfile.close();
                 return 0;//if the program runs succesfully, return 0
         }                        

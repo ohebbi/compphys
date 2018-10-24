@@ -48,7 +48,7 @@ for j in range (0, (max(n)+1)):
 ax.set_xlabel("rx[AU]")
 ax.set_ylabel("ry[AU]")
 ax.set_zlabel("rz[AU]")
-ax.set_title("Mass of jupiter = 1.9e30 for n = 1e8")
+ax.set_title("Solar system with fixed sun, n = 1e8")
 
-plt.savefig("Mass1000.eps")
+plt.savefig("FixedSolarSystem.eps")
 plt.show();

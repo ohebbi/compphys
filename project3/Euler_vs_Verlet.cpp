@@ -32,16 +32,18 @@ int main(int argc,char* argv[]){
     rx[0]=(1.0);
     ry[0]=(0.0);
     rz[0]=(0.0);
-    vx[0]=(-1.24465);
-    vy[0]=(6.132);
-    vz[0]=(-0.00044);
+    //vx[0]=(-1.24465);
+    //vy[0]=(6.132);
+    //vz[0]=(-0.00044);
 
     //Initial value for a circular orbit
-    //vx[0]=(0);
-    //vy[0]=(2*M_PI);
-    //vz[0]=(0);
+    vx[0]=(0);
+    vy[0]=(2*M_PI);
+    vz[0]=(0);
 
-
+    double start1 = sqrt(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2));
+    double slutt;
+    
     double start;
 
     //creating constants outside the loop to reduce the number of flops
@@ -78,7 +80,8 @@ int main(int argc,char* argv[]){
             }
 
         }
-    myfile.close();
+	slutt = sqrt(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2));
+	myfile.close();
     }
 
 
@@ -108,7 +111,7 @@ int main(int argc,char* argv[]){
 
         for(int i = 1; i < n; i++){//runs the Verlet method
 
-            rxv += h*vxv+hpow2*ax[0];
+	  rxv += h*vxv+hpow2*ax[0];
 	        ryv += h*vyv+hpow2*ay[0];
 	        rzv += h*vzv+hpow2*az[0];
 
@@ -130,6 +133,7 @@ int main(int argc,char* argv[]){
                 myfile << rxv << " " << ryv << " " << rzv << " \n";//coordinates shall be read from a python program
             }
         }
+	slutt = sqrt(pow(rxv,2)+pow(ryv,2)+pow(rzv,2));
         myfile.close();
     }
     clock_t end=clock();
@@ -138,16 +142,13 @@ int main(int argc,char* argv[]){
     double time = (double) (end-start)/CLOCKS_PER_SEC;
     cout << "Calculating time for n="<< n << ':'<< time << "s"<< '\n';
     cout << '\n' << endl;
-
-
-    /*
-    double start1 = pow(pow(rx[0],2)+pow(ry[0],2)+pow(rz[0],2), 0.5);
-    double slutt = pow(pow(rx[n-1],2)+pow(ry[n-1],2)+pow(rz[n-1],2), 0.5);
+    
+    
     double svar = start1 - slutt;
     cout << "start = " << start1 << endl;
     cout << "slutt = " << slutt << endl;
     cout << "forskjell = " << svar << endl;
-    */
+    
 
     
 

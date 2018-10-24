@@ -4,7 +4,7 @@
 
 int main(int argc,char* argv[]){
     
-    double final_time = 30; //in years
+    double final_time = 250; //in years
     double betta = 3.0; //for varying the gravitational force in task D
     int n = 1e8; //number of integration points
     
@@ -20,7 +20,7 @@ int main(int argc,char* argv[]){
     Neptune* neptune = new Neptune();
     Pluto* pluto = new Pluto();    
     
-    vector<Planet*> planets = {earth, jupiter}; //vector containing all the objects you want to use in the simulation
+    vector<Planet*> planets = {mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto}; //vector containing all the objects you want to use in the simulation
            
     Solver* solver = new Solver(); //creates a solver
     solver->solution(final_time, betta, planets, n);//solves the differential equations for the given system
