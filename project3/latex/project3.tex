@@ -9,15 +9,21 @@
 \begin{document}
 \title{\textbf{FYS4150/FYS3150 - Project 3}}
 \author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
-\date{October 24}
+\date{October 24, 2018}
 
 
 
 
 \maketitle
+\begin{figure}[H]
+  \includegraphics[scale=0.15]{plots/group_pic.jpg}
+  \label{}
+  \centering
+\end{figure}
 
+\newpage
 \section{Abstract}
-In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. We used the values from October 5, 2018.
+In this project we look at the solar system to compare two different ways to solve differential equations numerically, the Euler and Verlet methods. We found that the Verlet method was more precise than Euler because Verlet conserves the energy. We used object orientation for the planets to make it easy to expand the solar system, and we were able to add and subtract planets and other extra terrestrial objects very easily. We used NASA's webpage \cite{NASA} for the initial conditions. Further on we found that fixing the sun as the center of mass in the solar system is a very good approximation, because if not it would be orbiting within its own radius. As a treat at the end, the perihelion precession of Mercury, when all classical effects were subtracted, was confirmed to be 43 arcseconds as Einstein predicted.
 
 
 \section{Introduction}
@@ -169,7 +175,7 @@ It was found that the initial velocity that gives a circular orbit was $2\pi$, a
     \centering
     \begin{tabular}{|l|c|c|c|r|}
     \hline
-     $n$ & Verlet error  & Euler error & Time Verlet / [s] & Time Euler / [s]\\
+     $n$ & Verlet error / AU & Euler error & Time Verlet / [s] & Time Euler / [s]\\
      \hline
       $10^5$  & $3.1\cdot10^{-14}$  & $7.3\cdot10^{-2}$ & $ 2.0 (30) \cdot 10^{-2}$ & $ 2.1 (3) \cdot 10^{-2}$\\
       $10^6$  & $2.1\cdot10^{-13}$  & $7.9\cdot10^{-3}$ & $ 9.22 (27) \cdot 10^{-2}$ & $ 5.40 (40)\cdot 10^{-2}$\\
@@ -182,7 +188,7 @@ It was found that the initial velocity that gives a circular orbit was $2\pi$, a
     \label{stability}
 \end{table}
 
-When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Euler (naturally, because Euler's method scales as 15n flops while Verlet's method scales like 27n flops), we see that it is a small sacrifice for a much greater accuracy for our solar system.
+When comparing Euler's forward algorithm with Verlet's algorithm, it is clear that Verlet is a very accurate method compared to Euler's forward algorithm. The error for Euler scales as $\frac{1}{N}$, while the error for Verlet's method is so small that the machine precision is having trouble managing the numbers. Even if Verlet uses a bit more time than Euler (naturally, because Euler's method scales as 12n flops while Verlet's method scales like 18n flops), we see that it is a small sacrifice for a much greater accuracy for our solar system.
 
 We implemented a test in our program that checked if the length of the position vector stayed within a known tolerance, because this should be the case if the potential energy is conserved.
 
@@ -242,8 +248,24 @@ When increasing the mass of Jupiter in a system with the Earth in a circular orb
   \label{jupitermass1}
 \end{figure}
 
-The stability of figure \ref{jupitermass1} is tested as a function of position and velocity, and should not be changed for conservation of energy.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|r|}
+    \hline
+     $n$ & Max difference in angular momentum in ${\textnormal{ AU}}^2\textnormal{/yr}$ & Time Verlet / [s] \\
+     \hline
+      $10^4$  & $4.91\cdot10^{-4}$  & $3.0\cdot10^{-2}$\\
+      $10^5$  & $4.91\cdot10^{-4}$  & $2.0\cdot10^{-1}$ \\
+      $10^6$  & $4.91\cdot10^{-4}$  & $1.71\cdot10^{0}$\\
+      $10^7$  & $4.91\cdot10^{-4}$  & $2.1\cdot10^{1}$\\
+      $10^8$  & $4.91\cdot10^{-4}$  & $1.56\cdot10^{2}$\\
+      \hline
+    \end{tabular}
+    \caption{Test of the stability of the three-body problem with Jupiter having its original mass.}
+    \label{Three-body-problem}
+\end{table}
 
+The stability of figure \ref{jupitermass1} is tested as a function of position and velocity in table \ref{Three-body-problem}. The stability is pretty neat when Jupiter is at its original mass, resulting in the same difference in angular momentum for each simulation with different time steps.
 
 
 \begin{figure}[H]
@@ -260,33 +282,50 @@ The stability of figure \ref{jupitermass1} is tested as a function of position a
 
 From figure \ref{jupitermass1000} the earth will move in an epicycle \cite{epicycle}, which means Jupiter will alter the Earth's motion around the Sun and make it orbit around Jupiter as well.
 
-This will induce a difference in angular momentum, but the position makes up for, resulting in energy conservation in this simulation as well.
 
 
 \begin{table}[H]
     \centering
     \begin{tabular}{|l|c|r|}
     \hline
-     $n$ & Max difference in angular momentum  & Time Verlet / [s] \\
+     $n$ & Max difference in angular momentum in ${\textnormal{ AU}}^2\textnormal{/yr}$ & Time Verlet / [s] \\
      \hline
-      $10^4$  & $4.91\cdot10^{-4}$  & $3.0\cdot10^{-2}$\\
-      $10^5$  & $4.91\cdot10^{-4}$  & $2.0\cdot10^{-1}$ \\
-      $10^6$  & $4.91\cdot10^{-4}$  & $1.71\cdot10^{0}$\\
-      $10^7$  & $4.91\cdot10^{-4}$  & $2.1\cdot10^{1}$\\
-      $10^8$  & $4.91\cdot10^{-4}$  & $1.56\cdot10^{2}$\\
+      $10^4$  & $1.0\cdot10^{3}$  & $2.7\cdot10^{-2}$\\
+      $10^5$  & $7.0\cdot10^{1}$  & $1.9\cdot10^{-1}$ \\
+      $10^6$  & $6.7\cdot10^{1}$  & $1.7\cdot10^{0}$\\
+      $10^7$  & $6.7\cdot10^{1}$  & $1.6\cdot10^{1}$\\
+      $10^8$  & $6.7\cdot10^{1}$  & $1.6\cdot10^{2}$\\
       \hline
     \end{tabular}
-    \caption{Testing the stability of the three-body problem}
-    \label{Three-body-problem}
+    \caption{Test of the stability of the three-body problem with Jupiter having a thousand times its original mass}
+    \label{Three-body-problem-jupiter}
 \end{table}
 
+For the case when Jupiter has ten thousand times its own mass, the difference in angular momentum converges towards $67 {\textnormal{ AU}}^2\textnormal{/yr}$.
 
-\subsection{All planets of the solar system}
-When adding all planets in the solar system (including Pluto), and in addition giving the sun a initial velocity while not being in the center of mass, results in a git which is included in our github. This shows that even though the sun is not at our fixed position of center of mass, the deviation the sun has from the origin is of smaller dimensions than its own radius. This means that the mass of the sun is of a tremendous character compared to the other planets of the solar system.
+
+\subsection{Final model of all planets of the solar system}
+When adding all planets in the solar system (including Pluto), and in addition giving the sun a initial velocity while not being in the center of mass, results in figure \ref{solarsystem}. When comparing this with to the sun fixed at the center of mass at figure \ref{fixedsolarsystem}, it shows that even though the sun is not at our fixed position of center of mass, the deviation the sun has from the origin is very low. This means that the mass of the sun is of a tremendous character compared to the other planets of the solar system.
+
+\begin{figure}[H]
+  \includegraphics[scale=0.7]{plots/FixedSolarSystem.eps}
+  \caption{The solar system with the sun fixed at the center of mass.}
+  \label{fixedsolarsystem}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[scale=0.7]{plots/SolarSystem.eps}
+  \caption{The solar system without the sun at the center of mass.}
+  \label{solarsystem}
+\end{figure}
+
 
 \subsection{Perihelion Precision}
+
+
 \vskip0.5cm
 As for the question about whether Mercury's perihelion precision can be described by the general theory of relativity, the answer is yes. When Einstein developed his theory, he used the rotation of Mercury's elliptical orbit as an argument for why his theory was so strong. \cite{wiki_rel}
+
 
 
 \section{Conclusion}
@@ -305,7 +344,7 @@ https://github.com/ohebbi/compphys.git
 
 \begin{thebibliography}{}
 \bibitem{NASA}
-NASA Jet Propulsion Laboratory, California Institute of Technology\\
+NASA Jet Propulsion Laboratory, California Institute of Technology, downloaded 05.10.18\\
 \url{http://ssd.jpl.nasa.gov/horizons.cgi# top}
 \bibitem{wiki_rel}
 Wikipedia, \textit{General Relativity}, downloaded 24.10.18\\
