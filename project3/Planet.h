@@ -61,7 +61,7 @@ class Mars : public Planet{
 
 class Jupiter : public Planet{
     public:            
-        Jupiter():Planet(1.9e27, {-2.71845, -4.6282558, 0.0800034, 2.342, -1.264, -0.04712}){           
+        Jupiter():Planet(1.9e30, {-2.71845, -4.6282558, 0.0800034, 2.342, -1.264, -0.04712}){           
         };
 };
 
