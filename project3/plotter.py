@@ -29,32 +29,22 @@ for i in f1:
 
 f.close()
 
->>>>>>> 75df5a189f964847530308ebe29bd0f989af679f
+
 for i in range(0, len(x)):
-    if(i%2==0):
-        rx.append(x[i])
-        ry.append(y[i])
-        rz.append(z[i])
-    else:
-        jrx.append(x[i])
-        jry.append(y[i])
-        jrz.append(z[i])
-        
+    rx.append(x[i])
+    ry.append(y[i])
+    rz.append(z[i])
+   
         
 fig = plt.figure()
 ax = fig.gca(projection = '3d')
 
-u = np.linspace(0, 2 * np.pi, 1000)
-v = np.linspace(0, np.pi, 1000)
-x = 0.8*np.outer(np.cos(u), np.sin(v))
-y = 0.8*np.outer(np.sin(u), np.sin(v))
-z = 0.00008*np.outer(np.ones(np.size(u))*0.04, np.cos(v))
 
 # Plot the surface
-ax.plot_surface(0.04*x, 0.04*y, z, color='r')
+
 
 ax.plot(rx,ry, rz)
-ax.plot(jrx, jry, jrz)
+
 
 
 ax.set_xlabel("rx")

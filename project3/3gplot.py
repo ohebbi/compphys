@@ -14,7 +14,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 
-f = open("values2.txt", "r")
+f = open("values3.txt", "r")
 x = []
 y = []
 z = []
@@ -32,5 +32,5 @@ for i in f1:
 
 f.close()
 
-plt.plot(x,y)
+plt.scatter(x,y)
 

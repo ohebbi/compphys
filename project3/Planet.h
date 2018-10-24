@@ -30,8 +30,14 @@ class Sun : public Planet{ //you may think that we believe the sun to be a plane
 
 class Mercury : public Planet{
     public:            
-        Mercury():Planet(3.3e23,{-0.3294, -0.29288, 0.005618, 4.82, -7.13, -1.025}){           
-        };    
+        /*
+        Mercury():Planet(3.3e23,{-0.3294, -0.29288, 0.005618, 4.82, -7.13, -1.025}){  //standard         
+        };
+        */
+        Mercury():Planet(3.3e23,{0.30750000, 0,0,0,12.44000,0}){ //for perhilion          
+        };
+        
+            
 };
 
 class Venus : public Planet{
