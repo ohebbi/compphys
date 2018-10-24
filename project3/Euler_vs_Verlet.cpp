@@ -42,20 +42,21 @@ int main(int argc,char* argv[]){
     double hfopow = h * 4.0*pow(M_PI, 2.0);
 
     //to test the euler vs verlet, you can either run the program with "euler" in the command line, to run the euler method, or something else to run verlet
-    if (strncmp(argv[1], "euler", 2)==0){ 
-      
+    if (strncmp(argv[1], "euler", 2)==0){
+
         cout << "euler" << endl;
         clock_t start = clock();//this starts the clock if you chose the euler method.
         for(int i = 1; i < n; i++){
-            r = sqrt(pow(rx[i-1], 2) + pow(ry[i-1], 2)+ pow(rz[i-1], 2));
 
-            vx[i] = vx[i-1] - hfopow * rx[i-1] / pow(r,3.0);
+            r = pow(pow(rx[i-1], 2) + pow(ry[i-1], 2)+ pow(rz[i-1], 2), 1.5);
+
+            vx[i] = vx[i-1] - hfopow * rx[i-1] / r;
             rx[i] = rx[i-1] + h * vx[i-1];
 
-            vy[i] = vy[i-1] - hfopow * ry[i-1] / pow(r,3.0);
+            vy[i] = vy[i-1] - hfopow * ry[i-1] / r;
             ry[i] = ry[i-1] + h * vy[i-1];
 
-            vz[i] = vz[i-1] - hfopow * rz[i-1] / pow(r,3.0);
+            vz[i] = vz[i-1] - hfopow * rz[i-1] / r;
             rz[i] = rz[i-1] + h * vz[i-1];
 
     }
@@ -63,42 +64,44 @@ int main(int argc,char* argv[]){
     else{
         cout << "Verlet" << endl;
 
-	
+
 	    double ax;
 	    double ay;
 	    double az;
 	    double ax1;
 	    double ay1;
 	    double az1;
-        double h2 = h/2.0;
+      double h2 = h/2.0;
+      double h_2 = pow(h,2.0);
 	    clock_t start = clock(); //this starts the clock if you chose the verlet method
-    
-        double fopow = -4*pow(M_PI, 2.0);
-            for(int i = 1; i < n; i++){
-            r = sqrt(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2));
 
-            ax = fopow*rx[i-1]/pow(r, 3.0);
-	        ay = fopow*ry[i-1]/pow(r, 3.0);
-	        az = fopow*rz[i-1]/pow(r, 3.0);
+      double fopow = -4*pow(M_PI, 2.0);
+      for(int i = 1; i < n; i++){
 
-            rx[i] = rx[i-1]+h*vx[i-1]+pow(h,2.0)/2.0*ax;
-	        ry[i] = ry[i-1]+h*vy[i-1]+pow(h,2.0)/2.0*ay;
-	        rz[i] = rz[i-1]+h*vz[i-1]+(pow(h,2.0)/2.0)*az;
+          r = pow(pow(rx[i-1],2)+pow(ry[i-1],2)+pow(rz[i-1],2),1.5);
 
-	        r = sqrt(pow(rx[i],2)+pow(ry[i],2)+pow(rz[i],2));
+          ax = fopow*rx[i-1]/r;
+	        ay = fopow*ry[i-1]/r;
+	        az = fopow*rz[i-1]/r;
 
-            ax1 = fopow*rx[i]/pow(r, 3.0);
-            vx[i] = vx[i-1]+h*(ax1+ax);
+          rx[i] = rx[i-1]+h*vx[i-1]+h_2/2.0*ax;
+	        ry[i] = ry[i-1]+h*vy[i-1]+h_2/2.0*ay;
+	        rz[i] = rz[i-1]+h*vz[i-1]+h_2/2.0*az;
 
-            ay1 = fopow*ry[i]/pow(r, 3.0);
-            vy[i] = vy[i-1]+h2*(ay1+ay);
+	        r = pow(pow(rx[i],2)+pow(ry[i],2)+pow(rz[i],2),1.5);
 
-            az1 = fopow*rz[i]/pow(r, 3.0);
-            vz[i] = vz[i-1]+h2*(az1+az);
+          ax1 = fopow*rx[i]/r;
+          vx[i] = vx[i-1]+h*(ax1+ax);
 
-        }
+          ay1 = fopow*ry[i]/r;
+          vy[i] = vy[i-1]+h2*(ay1+ay);
 
-        cout << "Verlet out" << endl;
+          az1 = fopow*rz[i]/r;
+          vz[i] = vz[i-1]+h2*(az1+az);
+
+      }
+
+      cout << "Verlet out" << endl;
 
 
     }
@@ -119,7 +122,7 @@ int main(int argc,char* argv[]){
         if(i % 10000 == 0){
             myfile << rx[i] << " " << ry[i] << " " << rz[i] << " \n";
         }
-        
+
     }
     myfile.close();
 }
