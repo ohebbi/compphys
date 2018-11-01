@@ -2,6 +2,8 @@
 #include<random>
 #include<math.h>
 #include<vector>
+#include<fstream>
+
 
 using namespace std;
 
@@ -30,10 +32,13 @@ double mean_E(double Z, double sum_E){
 }
 
 int main(){
+  ofstream myfile;
+  myfile.open("plot.txt");
+  
   int L = 2;
   vector<int> x(L, 0);
   vector<int> y(L, 0);
-  vector<int>spin={-1, 1, -1, 1, 1, -1};
+  vector<int>spin={-1, 1, -1, 1, -1, -1};
   for(int i=0; i<x.size(); i++){
     x[i]=spin[rand()%spin.size()];
     y[i]=spin[rand()%spin.size()];
@@ -42,15 +47,18 @@ int main(){
   double E_b = E_i(x, y);
   double sum_E = E_b*exp(-E_b);
   double Z = exp(-E_b);
+  double r;
   cout << mean_E(Z, sum_E)<< endl;
-  for(int i=0; i<10000; i++){
-    vector<int> x1 = x;
-    vector<int> y1 = y;
+  myfile << 0 << " " << mean_E(Z, sum_E) << " \n";
+  
+  
+
+for(int i=1; i<1000; i++){
+    vector<int> x1 = x;    vector<int> y1 = y;
     int a = rand()%2;
     if(spin[rand()%spin.size()]==1){
       x1[a] = -x1[a];
-    }
-    else{
+    }    else{
       y1[a] = -y1[a];
     }
     double E_new = E_i(x1, y1);
@@ -60,18 +68,22 @@ int main(){
       y=y1;
       sum_E += E_new*exp(-E_new);
       Z += exp(-E_new);
+      E_b = E_new;
       cout << mean_E(Z, sum_E)<< endl;
     }
     else{
+      r = (rand()%11)/10;
       double w = exp(-delta_E);
-      if(w<=rand()%2){
+      if(w<=r){
 	x=x1;
 	y=y1;
 	sum_E += E_new*exp(-E_new);
 	Z += exp(-E_new);
+	E_b = E_new;
 	cout << mean_E(Z, sum_E)<< "yyyyyygh" << endl;
       }
     }
+    myfile << i << " " << mean_E(Z, sum_E) << " \n";
   }
   
   return 0;
