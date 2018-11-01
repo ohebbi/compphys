@@ -11,15 +11,31 @@ const int L = 2;
 
 double E_i(int m[L][L]){
   double  s = 0;
-  for(int i =0; i < L; i++){
+  for(int j = 0; j < L; j++){
+    for(int i = 0; i < L; i++){
+      if((i+2) <= L){
+	s += m[j][i]*m[j][i+1];
+      }
+      else{
+	s += m[j][i]*m[j][0];
+      }
+    }
+  }
+  for(int i = 0; i < L; i++){
     for(int j = 0; j < L; j++){
-      
+      if((j+2) <= L){
+	s = m[j][i]*m[j+1][i];
+      }
+      else{
+	s += m[j][i]*m[0][i];
+      }
     }
   }
   return s;
 }
 
 double mean_E(double Z, double sum_E){
+  
   return (1/Z)*sum_E;
 }
 
@@ -30,7 +46,7 @@ int main(){
   for(int i=0; i<L; i++){
     for(int j=0; j<L; j++){
 	m[i][j]=spin[rand()%spin.size()];
-	cout << m[i][j];
+        
      }
 
   }
@@ -43,15 +59,14 @@ int main(){
   
   
   
-for(int i=1; i<100; i++){
+for(int i=1; i<1000; i++){
     int (*m1)[L] = m;
-    int a = rand()%2;
-    if(spin[rand()%spin.size()]==1){
-      m1[0][a] = -m1[0][a];
-    }   
-    else{
-      m1[1][a] = -m1[1][a];
-    }
+    int a = rand()%L;
+    int b = rand()%L;
+   
+    m1[b][a] = -m1[b][a];
+   
+    
     double E_new = E_i(m1);
     double delta_E = E_new - E_b;
     if(delta_E<=0){
