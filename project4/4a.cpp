@@ -6,11 +6,10 @@
     
 
 using namespace std;
-random_device rd;
-mt19937_64 gen(rd());
-const int L = 2;
+
+
+const int L = 20;
 const int nspins = L*L;
-uniform_real_distribution<double> dist(0.0, nspins);
 
 const double temp = 1.0; //temperature
 
@@ -27,7 +26,7 @@ double M_i(int m[L][L]){
 }
 
 double E_i(int m[L][L]){
- double  s = 0;
+  double  s = 0;
 
   for(int j = 0; j < L; j++){
     for(int i = 0; i < L; i++){
@@ -64,7 +63,7 @@ vector<double> mean_E_M(double Z, double sum_E, double sum_M, double sum_E_heatc
 }
 
 int spin(double ixx){
-  if(ixx<0.5*nspins){
+  if(ixx>=0.5){
     return 1;
   }
   else{
@@ -73,15 +72,21 @@ int spin(double ixx){
   }
 
 int main(){
-  int high_tech=0;
-  int ix;
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_real_distribution<double> dis(0.0, 1.0);
+  uniform_real_distribution<double> dist(0.0, L);
+  
+  double ix;
+  int a;
+  int b;
+  double E_new;
   ofstream myfile;
   myfile.open("plot.txt");
   int m[L][L];
   for(int i=0; i<L; i++){
     for(int j=0; j<L; j++){
-      ix = (double) (dist(gen));
-      //cout << spin(ix) << endl;
+      ix = dis(gen);          
       m[i][j]=spin(ix);
       
     }
@@ -103,22 +108,25 @@ int main(){
   myfile << 0 << " " << mean[0] << " " << mean[1] << " " << mean[2] << " " << mean[3] <<  " \n"; 
 
 
-  for(int i=1; i<1e6; i++){
+  for(int i=1; i<1e8; i++){
 
     int (*m1)[L] = m;
-    int a = (int) (dist(gen)/L);
-    int b = (int) (dist(gen)/L);
-
+    a = (int)dist(gen);
+    b = (int)dist(gen);
+   
     m1[b][a] = -m1[b][a];
 
-    double E_new = -E_i(m1);
+    E_new = -E_i(m1);
+   
     double delta_E = E_new - E_b;
     if(delta_E<=0){
-      teller+=1;
+       teller+=1;
        B=exp(-E_new/temp);
        int (*m)[L] = m1;
+       
        sum_E += E_new*B;
-       Z     += B;
+      
+       Z  += B;
        sum_M += M_i(m)*B;
        sum_E_heatcap += pow(E_new,2) *B;
        sum_E_suscept += pow(M_i(m1),2)*B;
@@ -127,35 +135,29 @@ int main(){
 
     }
     else{
-       r = ( (double) (dist(gen))/nspins);
-       cout << r << endl;
+       r = dis(gen);
+       
        double w = exp(-delta_E);
        B=exp(-E_new/temp);
        if(w<=r){
-	 teller+=1;
-	 int (*m)[L]  = m1 ;
-	 sum_E += E_new*B;
-	 Z     += B;
-	 sum_M += M_i(m)*B;
-	 sum_E_heatcap += pow(E_new,2) *B;
-       	 sum_E_suscept += pow(M_i(m1),2)*B;
-	 E_b    = E_new;
-	 mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
+	        teller+=1;
+	        int (*m)[L]  = m1 ;
+	        sum_E += E_new*B;
+	        Z     += B;
+	        sum_M += M_i(m)*B;
+	        sum_E_heatcap += pow(E_new,2) *B;
+       	  sum_E_suscept += pow(M_i(m1),2)*B;
+	        E_b    = E_new;
+	        mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
        }
     }
-    if(i%1==0){
-      myfile << i << " " << mean[0] << " " << mean[1] <<" "<< mean[2] << " "<< mean[3] << " \n";
+    if(i%100==0){
+      myfile << i << " " << mean[0]/nspins << " " << mean[1]/nspins <<" "<< mean[2]/nspins << " "<< mean[3]/nspins << " \n";
     }
-    if(i>6e8){
-      myfile << mean[1] <<" \n";
-    }
-    if(i>1e8 and i%10000000==0){
-      cout << high_tech << "%"<< endl;
-      high_tech+=1;
-    }
-
+    
+    
  }
-  cout << mean[0] << " " << mean[1] << " "<< teller << " \n";
+  cout << mean[0]/nspins << " " << mean[1]/nspins  <<" "<< mean[2]/nspins << " "<< mean[3]/nspins << " "<< teller << " \n";
  myfile.close();
  return 0;
 }
