@@ -128,7 +128,7 @@ int main(){
     }
     else{
        r = ( (double) (dist(gen))/nspins);
-       cout << r << endl;
+       //cout << r << endl;
        double w = exp(-delta_E);
        B=exp(-E_new/temp);
        if(w<=r){
