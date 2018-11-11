@@ -12,13 +12,12 @@ using namespace std;
 const int L = 40;
 const int nspins = L*L;
 
-const int N = 1e6;
+const int N = 1e7;
 
 
-double E;
-double T_init=2.0;
-double T_final=2.3;
-double delta_T=0.05;
+const double T_init=2.0;
+const double T_final=2.3;
+const double delta_T=0.02;
 
 
 
@@ -91,8 +90,10 @@ int main(int nargs, char* args[]){
   int numprocs, my_rank;
   double  time_start, time_end, total_time;
 
-  ofstream myfile;
-  myfile.open("plot1.txt");
+  ofstream myfile1;
+  myfile1.open("L40-1.txt");
+  ofstream myfile2;
+  myfile2.open("L40-2.txt");
 
   MPI_Init (&nargs, &args);
   MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
@@ -124,7 +125,7 @@ int main(int nargs, char* args[]){
   double Z = exp(-E_b/T_0);
   double r;
   vector<double> mean = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, T_0);
-  myfile << T_0 << " " << i << " " << mean[0] << " " << mean[1]  << " " << mean[2] << " " << mean[3] <<  " \n";
+  //myfile << T_0 << " " << i << " " << mean[0] << " " << mean[1]  << " " << mean[2] << " " << mean[3] <<  " \n";
 
 
   for(int i=1; i<N; i++){
@@ -154,26 +155,31 @@ int main(int nargs, char* args[]){
        double w = exp(-delta_E);
        B=exp(-E_new/T_0);
        if(w<=r){
-	        int (*m)[L]  = m1 ;
-	        sum_E += E_new*B;
-	        Z     += B;
-	        sum_M += M_i(m)*B;
-	        sum_E_heatcap += pow(E_new,2) *B;
-          sum_E_suscept += pow(M_i(m1),2)*B;
-	        E_b    = E_new;
-	        mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, T_0);
+	 int (*m)[L]  = m1 ;
+	 sum_E += E_new*B;
+	 Z     += B;
+	 sum_M += M_i(m)*B;
+	 sum_E_heatcap += pow(E_new,2) *B;
+	 sum_E_suscept += pow(M_i(m1),2)*B;
+	 E_b    = E_new;
+	 mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, T_0);
        }
     }
-    if(float(i)==(N)){
-      myfile << T_0 << " " << i << " " << mean[0]/nspins << " " << mean[1]/nspins << " " << mean[2]/nspins << " " << mean[3]/nspins <<" \n";
-
-    }
-
   }
+  //cout << T_0 << mean[0] << " " << mean[1] << i << " " << mean[2] << " " << mean[3] << my_rank << " \n";
+  if(my_rank==0){
+   myfile1 << T_0 << " " << i << " " << mean[0]/nspins << " " << mean[1]/nspins << " " << mean[2]/nspins << " " << mean[3]/nspins <<" \n";
+  }
+  else{
+    myfile2 << T_0 << " " << i << " " << mean[0]/nspins << " " << mean[1]/nspins << " " << mean[2]/nspins << " " << mean[3]/nspins <<" \n";
+  }
+  cout<< T_0<<"\n";
   T_0+=delta_T;
+  
  }
  //cout << T_0 << mean[0] << " " << mean[1] << i << " " << mean[2] << " " << mean[3] << my_rank << " \n";
- myfile.close();
+ myfile1.close();
+ myfile2.close();
 
 
 
@@ -181,6 +187,7 @@ int main(int nargs, char* args[]){
   total_time = time_end-time_start;
 
   MPI_Finalize ();
+  cout << '\a';
   return 0;
 
 }
