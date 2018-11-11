@@ -54,5 +54,6 @@ plt.legend(["$\chi$"])
 plt.xlabel("Temperature")
 plt.ylabel("Susceptibility")
 
+plt.savefig("4eL40.pdf")
 plt.show()
 
