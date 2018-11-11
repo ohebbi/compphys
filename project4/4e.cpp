@@ -12,7 +12,7 @@ using namespace std;
 const int L = 40;
 const int nspins = L*L;
 
-const int N = 5e8;
+const int N = 1e8;
 
 
 const double T_init=2.0;
