@@ -12,12 +12,12 @@ using namespace std;
 const int L = 40;
 const int nspins = L*L;
 
-const int N = 1e8;
+const int N = 1e7;
 
 
 const double T_init=2.0;
 const double T_final=2.3;
-const double delta_T=0.05;
+const double delta_T=0.02;
 
 
 
