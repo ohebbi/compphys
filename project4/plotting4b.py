@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-
 f = open("plot.txt", "r")
 a = []
 b = []
@@ -10,12 +8,12 @@ c = []
 d = []
 n = []
 
-E=-7.9836
-Cv=0.1283
-X=15.973
+E=-7.9836/4
+Cv=0.1283/4
+X=15.973/4
 
-f1 = f.readlines()
-for i in f1:
+while len(a)<0.8e5:
+    i = f.readline()
     allah = i.split(" ")
     n.append(float(allah[0]))
     a.append(float(allah[1]))
@@ -23,28 +21,30 @@ for i in f1:
     c.append(float(allah[3]))
     d.append(float(allah[4]))
 
+
 f.close()
 
 plt.subplot(2, 2, 1)
-plt.plot(n[:10000],a[:10000])
+plt.plot(n[:1000],a[:1000])
 plt.legend(["<E>"])
 plt.xlabel("Number of Monte Carlo cycles")
 plt.ylabel("Mean energy")
 
+
 plt.subplot(2, 2, 2)
-plt.plot(n[:100000],b[:100000])
-plt.legend(["$C_V$"])
+plt.plot(n[:1000],b[:1000])
+#plt.legend(["$C_V$"])
 plt.xlabel("Number of Monte Carlo cycles")
-plt.ylabel("Specific heat")
+plt.ylabel("Heat capacity")
 
 plt.subplot(2, 2, 3)
-plt.plot(n[:100000],c[:100000])
+plt.plot(n[:1000],c[:1000])
 plt.legend(["<M>"])
 plt.xlabel("Number of Monte Carlo cycles")
 plt.ylabel("Mean magnetization")
 
 plt.subplot(2, 2, 4)
-plt.plot(n[:2000],d[:2000])
+plt.plot(n[:1000],d[:1000])
 plt.legend(["$\chi$"])
 plt.xlabel("Number of Monte Carlo cycles")
 plt.ylabel("Susceptibility")
@@ -63,6 +63,12 @@ plt.plot(n[-50000:-1],a[-50000:-1])
 #plt.plot(n,d)
 plt.plot()
 plt.legend(["Mean energy", "Heat capacity", "Magnetization", "Susceptibility"])
+
+print b[-1]
+plt.hist(a, normed=True, bins=65)
+plt.xlabel("Energy (J)")
+plt.ylabel("Normalized probability")
+plt.savefig("paral.pdf")
 """
-plt.savefig("convL2.eps")
+#plt.savefig("allup.pdf")
 plt.show()
