@@ -10,7 +10,7 @@ using namespace std;
 
 const int L = 20;
 const int nspins = L*L;
-
+const int n = 1e7;
 const double temp = 1.0; //temperature
 
 
@@ -56,7 +56,7 @@ vector<double> mean_E_M(double Z, double sum_E, double sum_M, double sum_E_heatc
   vector<double> mean;
   mean.push_back((1/Z)*sum_E); // mean[0]
   mean.push_back((1/(pow(temp,2))*((1/Z)*sum_E_heatcap-pow((1/Z)*sum_E,2)))); // C_v : mean[1]
-  
+  //mean.push_back(((1/Z)*sum_E_heatcap-pow((1/Z)*sum_E,2))); //variance E
   mean.push_back((1/Z)*sum_M); // mean[2]
   mean.push_back((1/temp)*((((1/Z)*sum_E_suscept)-pow(mean[2],2)))); // susceptibility : mean[3]
   return mean;
@@ -99,7 +99,7 @@ int main(){
   double sum_M = M_i(m)*B;
   double sum_E_heatcap = pow(E_b,2)*B;
   double sum_E_suscept = pow(M_i(m),2)*B;
-  int teller=0;
+  double teller=0;
 
   double Z = exp(-E_b/temp);
   
@@ -107,9 +107,9 @@ int main(){
   vector<double> mean = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
   myfile << 0 << " " << mean[0] << " " << mean[1] << " " << mean[2] << " " << mean[3] <<  " \n"; 
 
-
-  for(int i=1; i<1e8; i++){
-
+  double num_MC=0;
+  for(int i=1; i<n; i++){
+    num_MC += 1;
     int (*m1)[L] = m;
     a = (int)dist(gen);
     b = (int)dist(gen);
@@ -137,26 +137,28 @@ int main(){
     else{
        r = dis(gen);
        double w = exp(-delta_E);
-       B=exp(-E_new/temp);
+       
        if(w<=r){
+	        B=exp(-E_new/temp);
 	        teller+=1;
 	        int (*m)[L]  = m1 ;
 	        sum_E += E_new*B;
 	        Z     += B;
 	        sum_M += M_i(m)*B;
 	        sum_E_heatcap += pow(E_new,2) *B;
-       	  sum_E_suscept += pow(M_i(m1),2)*B;
+		sum_E_suscept += pow(M_i(m1),2)*B;
 	        E_b    = E_new;
 	        mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
        }
     }
     if(i%100==0){
-      myfile << i << " " << mean[0]/nspins << " " << mean[1]/nspins <<" "<< mean[2]/nspins << " "<< mean[3]/nspins << " \n";
+      double c=teller/num_MC;
+      myfile << i << " " << mean[0]*c/nspins << " " << mean[1]*c/nspins<< " " << mean[2]*c/nspins<< " " << mean[3]*c/nspins<< " \n";
     }
     
-    
  }
-  cout << mean[0]/nspins << " " << mean[1]/nspins  <<" "<< mean[2]/nspins << " "<< mean[3]/nspins << " "<< teller << " \n";
+ double c=teller/num_MC;
+ cout << mean[0]*c/nspins << " " << mean[1]*c/nspins  <<" "<< mean[2]*c/nspins << " "<< mean[3]*c/nspins << " "<< c << " \n";
  myfile.close();
  return 0;
 }
