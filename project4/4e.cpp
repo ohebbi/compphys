@@ -9,10 +9,10 @@
 using namespace std;
 
 
-const int L = 20;
+const int L = 40;
 const int nspins = L*L;
 
-const int N = 1e7;
+const int N = 1e6;
 
 
 const double T_init=2.0;
@@ -159,8 +159,9 @@ int main(int nargs, char* args[]){
   Maverage = mean[2];
   M2average = mean[3];
   Mabsaverage = mean[4];
-  //myfile << 1 << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
-
+  if(my_rank==0){
+  myfile1 << 1 << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
+  }
 
   for(int j=0; j<=n; j++){
 
@@ -186,10 +187,11 @@ if (i%10000 == 0){
   M2average = mean[3]/i;
   Mabsaverage = mean[4]/i;
   if(my_rank==0){
-   myfile1 << T_0 << " " << t << " " << mean[0]/nspins << " " << mean[1]/nspins << " " << mean[2]/nspins << " " << mean[3]/nspins <<" \n";
+   myfile1 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
+
   }
   else{
-    myfile2 << T_0 << " " << t << " " << mean[0]/nspins << " " << mean[1]/nspins << " " << mean[2]/nspins << " " << mean[3]/nspins <<" \n";
+    myfile2 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
   }
 }
 }
