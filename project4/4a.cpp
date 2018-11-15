@@ -8,12 +8,20 @@
 using namespace std;
 
 
-const int L = 20;
+const int L = 40;
 const int nspins = L*L;
-const int n = 1e7;
+const int n = 1.0e8;
 const double temp = 1.0; //temperature
 
 
+random_device rd;
+mt19937 gen(rd());
+uniform_real_distribution<double> dis(0.0, 1.0);
+uniform_real_distribution<double> dist(0.0, L);
+
+inline int per_bound(int i, int limit, int add){
+  return(i+limit+add) % (limit);
+}
 
 double M_i(int m[L][L]){
   double M = 0;
@@ -39,6 +47,7 @@ double E_i(int m[L][L]){
     }
   }
 
+
   for(int i = 0; i < L; i++){
     for(int j = 0; j < L; j++){
       if((j+1) < L){
@@ -52,17 +61,28 @@ double E_i(int m[L][L]){
   return s;
 }
 
-vector<double> mean_E_M(double Z, double sum_E, double sum_M, double sum_E_heatcap, double sum_E_suscept, double temp){
-  vector<double> mean;
-  mean.push_back((1/Z)*sum_E); // mean[0]
-  mean.push_back((1/(pow(temp,2))*((1/Z)*sum_E_heatcap-pow((1/Z)*sum_E,2)))); // C_v : mean[1]
-  //mean.push_back(((1/Z)*sum_E_heatcap-pow((1/Z)*sum_E,2))); //variance E
-  mean.push_back((1/Z)*sum_M); // mean[2]
-  mean.push_back((1/temp)*((((1/Z)*sum_E_suscept)-pow(mean[2],2)))); // susceptibility : mean[3]
-  return mean;
+vector<double> Metropolis(int l, int m[L][L], double E, double M, double *w){
+  for(int x = 0; x < l; x++){
+    for(int y = 0; y < l; y++){
+      int rx = dist(gen);
+      int ry = dist(gen);
+      int dE = 2*m[rx][ry]*(m[rx][per_bound(ry, l, -1)]+m[per_bound(rx,l,-1)][ry]+m[rx][per_bound(ry,l,1)]+m[per_bound(rx,l,1)][ry]);
+      
+      if(dis(gen) <= w[dE+8]){
+        m[rx][ry] *= -1;
+        M += (double)2*m[rx][ry];
+        E += (double)dE;
+
+      }
+      
+    }
+  }
+  return {E, M};
 }
 
+
 int spin(double ixx){
+  
   if(ixx>=0.5){
     return 1;
   }
@@ -72,93 +92,87 @@ int spin(double ixx){
   }
 
 int main(){
-  random_device rd;
-  mt19937 gen(rd());
-  uniform_real_distribution<double> dis(0.0, 1.0);
-  uniform_real_distribution<double> dist(0.0, L);
-  
+ofstream myfile;
+myfile.open("plot.txt");
+//for(double temp = 2.0; temp <= 2.3; temp += 0.05){
+  double Eaverage;
+  double E2average;
+  double Maverage;
+  double M2average;
+  double Mabsaverage;
   double ix;
-  int a;
-  int b;
-  double E_new;
-  ofstream myfile;
-  myfile.open("plot.txt");
+
+  vector<double> prob;
+ 
+  double w[17];
+  double mean[5]; 
+  
+
+  
   int m[L][L];
   for(int i=0; i<L; i++){
     for(int j=0; j<L; j++){
       ix = dis(gen);          
       m[i][j]=spin(ix);
-      
+      cout << m[i][j] << endl;
+     
     }
   }
 
+  for(int dE = -8; dE <= 8; dE++) w[dE+8] = 0;
+  for(int dE = -8; dE <= 8; dE+=4) w[dE+8] = exp(-dE/temp);
+  float E = -E_i(m);
+  double M = M_i(m);
   
-  double E_b = -E_i(m);
-  double B = exp(-E_b/temp);
-  double sum_E = E_b*B;
-  double sum_M = M_i(m)*B;
-  double sum_E_heatcap = pow(E_b,2)*B;
-  double sum_E_suscept = pow(M_i(m),2)*B;
-  double teller=0;
-
-  double Z = exp(-E_b/temp);
+  vector<double> EM;
   
-  double r;
-  vector<double> mean = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
-  myfile << 0 << " " << mean[0] << " " << mean[1] << " " << mean[2] << " " << mean[3] <<  " \n"; 
+  mean[0] = E;
+  mean[1] = E*E;
+  mean[2] = M;
+  mean[3] = M*M;
+  mean[4] = fabs(M);
 
-  double num_MC=0;
-  for(int i=1; i<n; i++){
-    num_MC += 1;
-    int (*m1)[L] = m;
-    a = (int)dist(gen);
-    b = (int)dist(gen);
+Eaverage = mean[0];
+E2average = mean[1];
+Maverage = mean[2];
+M2average = mean[3];
+Mabsaverage = mean[4];
+myfile << 1 << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(temp*temp*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(temp*nspins) <<   " \n";
+     
    
-    m1[b][a] = -m1[b][a];
+  for(int i=2; i<n; i++){
 
-    E_new = -E_i(m1);
+    EM = Metropolis(L, m, E, M, w); 
+    float Echeck = E;
+    E = EM[0];
    
-    double delta_E = E_new - E_b;
-    if(delta_E<=0){
-       teller+=1;
-       B=exp(-E_new/temp);
-       int (*m)[L] = m1;
-       
-       sum_E += E_new*B;
-      
-       Z  += B;
-       sum_M += M_i(m)*B;
-       sum_E_heatcap += pow(E_new,2) *B;
-       sum_E_suscept += pow(M_i(m1),2)*B;
-       E_b    = E_new;
-       mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
+    M = EM[1]; 
 
-    }
-    else{
-       r = dis(gen);
-       double w = exp(-delta_E);
+    mean[0] += E;    
+    mean[1] += E*E;
+    mean[2] += M;
+    mean[3] += M*M;
+    mean[4] += fabs(M);
        
-       if(w<=r){
-	        B=exp(-E_new/temp);
-	        teller+=1;
-	        int (*m)[L]  = m1 ;
-	        sum_E += E_new*B;
-	        Z     += B;
-	        sum_M += M_i(m)*B;
-	        sum_E_heatcap += pow(E_new,2) *B;
-		sum_E_suscept += pow(M_i(m1),2)*B;
-	        E_b    = E_new;
-	        mean   = mean_E_M(Z, sum_E, sum_M, sum_E_heatcap, sum_E_suscept, temp);
-       }
-    }
-    if(i%100==0){
-      double c=teller/num_MC;
-      myfile << i << " " << mean[0]*c/nspins << " " << mean[1]*c/nspins<< " " << mean[2]*c/nspins<< " " << mean[3]*c/nspins<< " \n";
-    }
-    
- }
- double c=teller/num_MC;
- cout << mean[0]*c/nspins << " " << mean[1]*c/nspins  <<" "<< mean[2]*c/nspins << " "<< mean[3]*c/nspins << " "<< c << " \n";
+  
+if (i%10000 == 0){
+  Eaverage = mean[0]/i;
+  E2average = mean[1]/i;
+  Maverage = mean[2]/i;
+  M2average = mean[3]/i;
+  Mabsaverage = mean[4]/i;
+  myfile << i << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(temp*nspins) <<  "\n";
+}
+}
+/*
+Eaverage = mean[0]/n;
+E2average = mean[1]/n;
+Maverage = mean[2]/n;
+M2average = mean[3]/n;
+Mabsaverage = mean[4]/n;
+myfile << temp << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(temp*temp*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Mabsaverage)/(temp*nspins) << " \n";
+}*/
+
  myfile.close();
  return 0;
 }
