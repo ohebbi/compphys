@@ -9,12 +9,12 @@
 using namespace std;
 
 //BYTT L I KODEN OGSÅ
-const int L = 60;
+const int L = 40;
 
 
 const int nspins = L*L;
 
-const int N = 1e5;
+const int N = 1e6;
 
 
 const double T_init=2.15;
@@ -175,8 +175,8 @@ int main(int nargs, char* args[]){
           mean[2] += M;
           mean[3] += M*M;
           mean[4] += fabs(M);
-
       }
+
       Eaverage = mean[0]/N;
       E2average = mean[1]/N;
       Maverage = mean[2]/N;
