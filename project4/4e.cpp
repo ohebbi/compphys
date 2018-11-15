@@ -8,8 +8,10 @@
 
 using namespace std;
 
+//BYTT L I KODEN OGSÅ
+const int L = 80;
 
-const int L = 40;
+
 const int nspins = L*L;
 
 const int N = 1e6;
@@ -118,9 +120,9 @@ int main(int nargs, char* args[]){
   double  time_start, time_end, total_time;
 
   ofstream myfile1;
-  myfile1.open("L100-1.txt");
+  myfile1.open("L80-1.txt");
   ofstream myfile2;
-  myfile2.open("L100-2.txt");
+  myfile2.open("L80-2.txt");
 
   int m[L][L];
   for(int i=0; i<L; i++){
@@ -159,10 +161,11 @@ int main(int nargs, char* args[]){
   Maverage = mean[2];
   M2average = mean[3];
   Mabsaverage = mean[4];
+  /*
   if(my_rank==0){
   myfile1 << 1 << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
   }
-
+*/
   for(int j=0; j<=n; j++){
 
   for(int i=2; i<N; i++){
@@ -186,14 +189,14 @@ if (i%10000 == 0){
   Maverage = mean[2]/i;
   M2average = mean[3]/i;
   Mabsaverage = mean[4]/i;
-  if(my_rank==0){
-   myfile1 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
-
-  }
-  else{
-    myfile2 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
-  }
 }
+}
+if(my_rank==0){
+ myfile1 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
+
+}
+else{
+  myfile2 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
 }
   //cout << T_0 << mean[0] << " " << mean[1] << i << " " << mean[2] << " " << mean[3] << my_rank << " \n";
 
