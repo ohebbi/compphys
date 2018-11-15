@@ -153,20 +153,21 @@ int main(int nargs, char* args[]){
 
   cout << my_rank << "\n";
   for(int j=0; j<=n; j++){
-
+      /*
       E = 0.0;
       M = 0.0;
-      /*
+      */
+      
       mean[0]=0;
       mean[1]=0;
       mean[2]=0;
       mean[3]=0;
       mean[4]=0;
-      */
+
 
 
       for(int dE = -8; dE <= 8; dE++) w[dE+8] = 0;
-      cout << mean[0] << "\n";
+
       for(int dE = -8; dE <= 8; dE+=4) w[dE+8] = exp(-dE/T_0);
 
       for(int i=2; i<(N/numprocs); i++){
@@ -175,7 +176,7 @@ int main(int nargs, char* args[]){
           E = EM[0];
           M = EM[1];
           //kan ikke sample alt, herregud #grovt_estimat
-          if (i>1e3){
+          if (i>1e2){
               mean[0] += E;
               mean[1] += E*E;
               mean[2] += M;
@@ -183,7 +184,7 @@ int main(int nargs, char* args[]){
               mean[4] += fabs(M);
           }
       }
-      /*
+
       local_E = mean[0]/N;
       E2average = mean[1]/N;
       Maverage = mean[2]/N;
@@ -197,11 +198,12 @@ int main(int nargs, char* args[]){
       double total_Cv = 0;
       double total_Chi = 0;
       double total_Mabs = 0;
-      */
+
+      /*
       vector<double>total_average(5,0.0);
 
       for (int i=0;i<5;i++){
-      MPI_Reduce(&mean[i], &total_average[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+            MPI_Reduce(&mean[i], &total_average[i], 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
       }
       double Eaverage = total_average[0]/N;
       double E2average = total_average[1]/N;
@@ -212,16 +214,18 @@ int main(int nargs, char* args[]){
       double Evariance = (E2average- Eaverage*Eaverage)/nspins;
       double Mvariance = (M2average - Maverage*Maverage)/nspins;
       double M2variance = (M2average - Mabsaverage*Mabsaverage)/nspins;
+      */
 
 
-      /*
       MPI_Reduce(&local_E, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
       MPI_Reduce(&local_Cv, &total_Cv, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
       MPI_Reduce(&local_Mabs, &total_Mabs, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
       MPI_Reduce(&local_Chi, &total_Chi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      */
+
       if(my_rank==0){
-          myfile1 << T_0 << " " << Eaverage/(nspins)  << " " << Evariance/(T_0*T_0) << " " << M2variance/(T_0) << " " << Mabsaverage <<   " \n";
+          //myfile1 << T_0 << " " << Eaverage/(nspins)  << " " << Evariance/(T_0*T_0) << " " << M2variance/(T_0) << " " << Mabsaverage/nspins <<   " \n";
+          myfile1 << T_0 << " " << total_E/(nspins)  << " " << total_Cv/nspins << " " << total_Mabs/nspins << " " << total_Chi/nspins <<   " \n";
+
       }
 
       cout<< T_0<<"\n";
