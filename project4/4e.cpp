@@ -10,16 +10,12 @@ using namespace std;
 
 //BYTT L I KODEN OGSÅ
 const int L = 40;
-
-
 const int nspins = L*L;
-
 const int N = 1e6;
-
 
 const double T_init=2.15;
 const double T_final=2.3;
-const double delta_T=0.02;
+const double delta_T=0.01;
 
 random_device rd;
 mt19937 gen(rd());
@@ -67,7 +63,7 @@ double E_i(int m[L][L]){
   return s;
 }
 
-vector<double> Metropolis(int l, int m[L][L], double E, double M, double *w){
+vector<double> Metropolis(int l, int m[L][L], double E, double M, double w[17]){
   for(int x = 0; x < l; x++){
     for(int y = 0; y < l; y++){
       int rx = dist(gen);
@@ -78,9 +74,7 @@ vector<double> Metropolis(int l, int m[L][L], double E, double M, double *w){
         m[rx][ry] *= -1;
         M += (double)2*m[rx][ry];
         E += (double)dE;
-
       }
-
     }
   }
   return {E, M};
@@ -104,11 +98,11 @@ int main(int nargs, char* args[]){
   int b;
   int t;
   double E_new;
-  double Eaverage;
+  double local_E;
   double E2average;
   double Maverage;
   double M2average;
-  double Mabsaverage;
+  double local_Mabs;
 
   vector<double> prob;
 
@@ -138,11 +132,11 @@ int main(int nargs, char* args[]){
   double n=(T_final-T_init)/(delta_T);
 
   ofstream myfile1;
-  myfile1.open("L60.txt");
+  myfile1.open("L40.txt");
 
   for(int dE = -8; dE <= 8; dE++) w[dE+8] = 0;
 
-  float E = -E_i(m);
+  double E = -E_i(m);
   double M = M_i(m);
 
   vector<double> EM;
@@ -153,20 +147,27 @@ int main(int nargs, char* args[]){
   mean[3] = M*M;
   mean[4] = fabs(M);
 
-  Eaverage = mean[0];
+  local_E = mean[0];
   E2average = mean[1];
   Maverage = mean[2];
   M2average = mean[3];
-  Mabsaverage = mean[4];
+  local_Mabs = mean[4];
 
   cout << my_rank << "\n";
   for(int j=0; j<=n; j++){
+
+    mean[0] = 0;
+    mean[1] = 0;
+    mean[2] = 0;
+    mean[3] = 0;
+    mean[4] = 0;
+
       for(int dE = -8; dE <= 8; dE+=4) w[dE+8] = exp(-dE/T_0);
 
-      for(int i=2; i<N; i++){
+      for(int i=2; i<(N/numprocs); i++){
 
           EM = Metropolis(L, m, E, M, w);
-          float Echeck = E;
+          double Echeck = E;
           E = EM[0];
           M = EM[1];
 
@@ -177,26 +178,27 @@ int main(int nargs, char* args[]){
           mean[4] += fabs(M);
       }
 
-      Eaverage = mean[0]/N;
+      local_E = mean[0]/N;
       E2average = mean[1]/N;
       Maverage = mean[2]/N;
       M2average = mean[3]/N;
-      Mabsaverage = mean[4]/N;
+      local_Mabs = mean[4]/N;
+
+      double local_Cv = (E2average-local_E*local_E)/(T_0*T_0);
+      double local_Chi = (M2average-Maverage*Maverage)/(T_0);
 
       double total_E = 0;
-      double total_E2 = 0;
-      double total_M = 0;
-      double total_M2 = 0;
+      double total_Cv = 0;
+      double total_Chi = 0;
       double total_Mabs = 0;
 
-      MPI_Reduce(&Eaverage, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(&E2average, &total_E2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(&Maverage, &total_M, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(&M2average, &total_M2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-      MPI_Reduce(&Mabsaverage, &total_Mabs, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&local_E, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&local_Cv, &total_Cv, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&local_Mabs, &total_Mabs, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&local_Chi, &total_Chi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
       if(my_rank==0){
-          myfile1 << T_0 << " " << total_E/numprocs  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins*numprocs) << " " << Mabsaverage/(nspins*numprocs) << " " << (M2average-Maverage*Maverage)/(T_0*nspins*numprocs) <<   " \n";
+          myfile1 << T_0 << " " << total_E/(nspins)  << " " << total_Cv/(nspins) << " " << total_Mabs/(nspins) << " " << total_Chi/(nspins) <<   " \n";
       }
 
       cout<< T_0<<"\n";
