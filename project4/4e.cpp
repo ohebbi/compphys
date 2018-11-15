@@ -9,15 +9,15 @@
 using namespace std;
 
 //BYTT L I KODEN OGSÅ
-const int L = 80;
+const int L = 60;
 
 
 const int nspins = L*L;
 
-const int N = 1e6;
+const int N = 1e5;
 
 
-const double T_init=2.0;
+const double T_init=2.15;
 const double T_final=2.3;
 const double delta_T=0.02;
 
@@ -115,14 +115,9 @@ int main(int nargs, char* args[]){
   double w[17];
   double mean[5];
 
-
   int numprocs, my_rank;
   double  time_start, time_end, total_time;
 
-  ofstream myfile1;
-  myfile1.open("L80-1.txt");
-  ofstream myfile2;
-  myfile2.open("L80-2.txt");
 
   int m[L][L];
   for(int i=0; i<L; i++){
@@ -137,13 +132,15 @@ int main(int nargs, char* args[]){
   MPI_Comm_rank (MPI_COMM_WORLD, &my_rank);
   time_start = MPI_Wtime();
 
-  double interval = (T_final-T_init)/numprocs;
-  double T_0=T_init+my_rank*interval;
-  double T_1=T_final-(numprocs-my_rank-1)*interval;
-  double n=(T_final-T_init)/(delta_T*numprocs);
+  //double interval = (T_final-T_init)/numprocs;
+  double T_0=T_init;
+  double T_1=T_final;
+  double n=(T_final-T_init)/(delta_T);
+
+  ofstream myfile1;
+  myfile1.open("L60.txt");
 
   for(int dE = -8; dE <= 8; dE++) w[dE+8] = 0;
-  for(int dE = -8; dE <= 8; dE+=4) w[dE+8] = exp(-dE/T_0);
 
   float E = -E_i(m);
   double M = M_i(m);
@@ -161,52 +158,53 @@ int main(int nargs, char* args[]){
   Maverage = mean[2];
   M2average = mean[3];
   Mabsaverage = mean[4];
-  /*
-  if(my_rank==0){
-  myfile1 << 1 << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
-  }
-*/
+
+  cout << my_rank << "\n";
   for(int j=0; j<=n; j++){
+      for(int dE = -8; dE <= 8; dE+=4) w[dE+8] = exp(-dE/T_0);
 
-  for(int i=2; i<N; i++){
+      for(int i=2; i<N; i++){
 
-    EM = Metropolis(L, m, E, M, w);
-    float Echeck = E;
-    E = EM[0];
+          EM = Metropolis(L, m, E, M, w);
+          float Echeck = E;
+          E = EM[0];
+          M = EM[1];
 
-    M = EM[1];
+          mean[0] += E;
+          mean[1] += E*E;
+          mean[2] += M;
+          mean[3] += M*M;
+          mean[4] += fabs(M);
 
-    mean[0] += E;
-    mean[1] += E*E;
-    mean[2] += M;
-    mean[3] += M*M;
-    mean[4] += fabs(M);
+      }
+      Eaverage = mean[0]/N;
+      E2average = mean[1]/N;
+      Maverage = mean[2]/N;
+      M2average = mean[3]/N;
+      Mabsaverage = mean[4]/N;
 
+      double total_E = 0;
+      double total_E2 = 0;
+      double total_M = 0;
+      double total_M2 = 0;
+      double total_Mabs = 0;
 
-if (i%10000 == 0){
-  Eaverage = mean[0]/i;
-  E2average = mean[1]/i;
-  Maverage = mean[2]/i;
-  M2average = mean[3]/i;
-  Mabsaverage = mean[4]/i;
-}
-}
-if(my_rank==0){
- myfile1 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
+      MPI_Reduce(&Eaverage, &total_E, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&E2average, &total_E2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&Maverage, &total_M, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&M2average, &total_M2, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&Mabsaverage, &total_Mabs, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-}
-else{
-  myfile2 << T_0  << " " << Eaverage/nspins  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins) << " " << Mabsaverage/nspins << " " << (M2average-Maverage*Maverage)/(T_0*nspins) <<   " \n";
-}
-  //cout << T_0 << mean[0] << " " << mean[1] << i << " " << mean[2] << " " << mean[3] << my_rank << " \n";
+      if(my_rank==0){
+          myfile1 << T_0 << " " << total_E/numprocs  << " " << (E2average-Eaverage*Eaverage)/(T_0*T_0*nspins*numprocs) << " " << Mabsaverage/(nspins*numprocs) << " " << (M2average-Maverage*Maverage)/(T_0*nspins*numprocs) <<   " \n";
+      }
 
-  cout<< T_0<<"\n";
-  T_0+=delta_T;
+      cout<< T_0<<"\n";
+      T_0+=delta_T;
 
  }
  //cout << T_0 << mean[0] << " " << mean[1] << i << " " << mean[2] << " " << mean[3] << my_rank << " \n";
   myfile1.close();
-  myfile2.close();
 
   time_end = MPI_Wtime();
   total_time = time_end-time_start;
