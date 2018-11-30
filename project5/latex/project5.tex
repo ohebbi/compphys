@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage[]{algorithm2e}
+\usepackage[a4paper, total={5.8in, 8in}]{geometry}
+\usepackage{float}
+\usepackage{url}
+\usepackage{graphicx}
+
+
+\begin{document}
+\title{\textbf{FYS4150/FYS3150 - Project 5}}
+\author{Ingvild Bergsbak, Oliver Hebnes and Erlend Ousdal}
+\date{October 24, 2018}
+
+
+\maketitle
+\begin{abstract}
+\end{abstract}
+\section{Introduction}
+
+
+
+
+\section{Theoretical Methods and Thechnicalities}
+\subsection{Molecular Dynamics}
+Molecular dynamics is a very useful method for predicting the movement of molecules or atoms in relation to each other. It uses the Coloumb forces between the molecules and numerical integration to calculate the movement of the particles. Modelling a solid, for example, this method produces a prediction of the most likely lattice configuration. 
+
+\subsection{Periodic Boundary Conditions}
+This far we have simply let the particles move with their initial velocity with no restrictions as if it was a dense gas expanding in a vacuum. However, this is not the scenario we would like to study. We want to look at a part of an infinite lattice, and to do so we need to implement periodic boundary conditions (PBC). Obviously, we cannot model an infinite lattice, but we model a small part, for instance a few unit cells, and make the assumption that the system consists of repeating units identical to the one we are looking at. In this case, PBC mean that a particle that moves outside of our defined "box", instead of continuing to move away from the box, it moves to the opposite side of the box as if it enters the box from an adjacent, identical box. In addition, the PBC need to compensate for the fact that the shortest distance between particles might be between different cells, not necessarily between particles in the same cell. To implement these conditions we added a few restrictions to the position and the distance between atoms, and the algorithm for the $x$ direction is shown below.
+
+\begin{algorithm}[h]
+\For{$atom_i$}{
+	\If{rx $<$ 0}{
+		rx = rx + size\;
+	}
+	\If{rx $\geq$ size}{ 
+		rx = rx-size\;
+	}
+	\For{$atom_j$}{
+		\If{$atom_i$ $\neq$ $atom_j$}{
+			dx = rx$_j$-rx$_i$\;
+			\If{dx $>$ 0.5size}{
+				dx = dx - size\;	
+			}
+			\If{dx $\leq$ -0.5size}{
+				dx = dx + size\;	
+			}
+		}
+	}
+}
+\end{algorithm}
+To implement the PBC for three dimensions, the algorithm simply needs to be repeated for the $y$ and $z$ directions. These conditions will make sure the particles stay within the constant volume of our box.
+
+
+\subsection{Maxwell-Boltzmann Distribution and Mean Velocity}
+From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities, and the greater the speed the greater the number of possible velocities. From the derivative of the probability distribution the average speed is determined to be
+$$\bar{v}=\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{8}{\pi}}\sigma$$
+Considering we are calculating speed, not the velocity,  the total momentum for the system will not be equal to zero. To correct this we need to subtract evenly from the momentum of all the particles.
+
+kap 6.4 i termoboka \cite{termoboka}
+
+probablility of molecule having velocity $\vec{v}$ is proportional to $e^{-mv^2/2kT}$ (Boltzmann factor for E=0.5$mv^2$), not taking into account position or internal motion, but we dont need to worry about that for an ideal gas (and Ar is very close to ideal), in 3D a factor $4\pi v^2$ needs to be included (accounting for the fact that for larger $v$ there are more possible corresponding velocity vectors)
+
+$$D(v)=\bigg(\frac{m}{2\pi kT}\bigg)^{3/2}4\pi v^2 e^{-mv^2/2kT}$$
+
+$D(v)$ integrated between $v_1$ and $v_2$ gives probability for particle to have speed between $v_1$ and $v_2$. Mean speed $\bar{v}=\sqrt{\frac{8kT}{\pi m}}$. $v_{max}=\sqrt{2kT/m}$, max speed depends on $T$, mors probable, however, is shifted to the right of the maximum because of the shape of $D(v)$.
+
+
+
+\section{Results and Discussion}
+
+
+
+
+
+\section{Conclusion}
+
+
+\section{Appendix}
+Link to the GitHub repository:\\
+
+https://github.com/ohebbi/compphys.git
+
+\begin{thebibliography}{}
+\bibitem{termoboka}
+Schroeder, Daniel V., \textit{An Introduction to Thermal Physics},Pearson, 2014\\
+\end{thebibliography}
+
+\end{document}

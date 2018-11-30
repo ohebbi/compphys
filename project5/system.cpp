@@ -22,14 +22,15 @@ void System::applyPeriodicBoundaryConditions() {
   for (Atom *atomi : m_atoms){
     if (atomi->position.x()< -1e-2){ //tolerance for numerical precision
       atomi->position.components[0]+=m_systemSize.x();
-      }
+    }
     if (atomi->position.x()>= m_systemSize.x()){
       atomi->position.components[0]-=m_systemSize.x();
-	}
+	  }
 
     if (atomi->position.y()<-1e-2){
       atomi->position.components[1]+=m_systemSize.y();
     }
+
     if (atomi->position.y()>= m_systemSize.y()){
       atomi->position.components[1]-=m_systemSize.y();
     }
@@ -37,37 +38,15 @@ void System::applyPeriodicBoundaryConditions() {
     if (atomi->position.z()<-1e-2){
       atomi->position.components[2]+=m_systemSize.z();
     }
+
     if (atomi->position.z()>= m_systemSize.z()){
       atomi->position.components[2]-=m_systemSize.z();
     }
 
-    for(Atom *atomj : m_atoms){
-      if(atomi!=atomj){
-      double dx=atomj->position.x()-atomi->position.x();
-      if (dx>m_systemSize.x()*0.5){
-	       dx-=m_systemSize.x();
-      }
-      if (dx<= -m_systemSize.x()*0.5){
-	       dx+=m_systemSize.x();
-      }
-      double dy=atomj->position.y()-atomi->position.y();
-      if (dy>m_systemSize.y()*0.5){
-	       dy-=m_systemSize.y();
-      }
-      if (dy<= -m_systemSize.y()*0.5){
-	       dy+=m_systemSize.y();
-      }
-      double dz=atomj->position.z()-atomi->position.z();
-      if (dz>m_systemSize.z()*0.5){
-	       dz-=m_systemSize.z();
-      }
-      if (dz<= -m_systemSize.z()*0.5){
-	       dz+=m_systemSize.z();
-      }
-      }
-    }
+
   }
 }
+
 
 void System::removeTotalMomentum() {
     // Find the total momentum and remove momentum equally on each atom so the total momentum becomes zero.
@@ -116,7 +95,7 @@ void System::removeTotalMomentum() {
 void System::createFCCLattice(int numberOfUnitCellsEachDimension, double b, double temperature) {
     // You should implement this function properly. Right now, 100 atoms are created uniformly placed in the system of size (10, 10, 10).
     double b_half = b*0.5;
-    double numberOfUnitCells1 = pow(numberOfUnitCellsEachDimension,3);
+
     //Atom*atom;
     for(int i=0; i<numberOfUnitCellsEachDimension; i++) {
         for(int j=0; j<numberOfUnitCellsEachDimension; j++) {

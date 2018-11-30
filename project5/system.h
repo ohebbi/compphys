@@ -30,6 +30,7 @@ public:
     double volume() { return m_systemSize[0]*m_systemSize[1]*m_systemSize[2]; }
     vec3 systemSize() { return m_systemSize; }
     void setSystemSize(vec3 systemSize) { m_systemSize = systemSize; }
+    vec3 getSystemSize() const {return m_systemSize;}
     LennardJones &potential() { return m_potential; }
     double time() { return m_time; }
     void setTime(double time) { m_time = time; }

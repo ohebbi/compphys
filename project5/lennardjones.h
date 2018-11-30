@@ -5,7 +5,7 @@ class LennardJones
 {
 private:
     double m_sigma = 1.0;
-    double m_epsilon = 1.0;
+    double m_epsilon = 1.0*1.38*1e-23;
     double m_potentialEnergy = 0;
 
 public:
