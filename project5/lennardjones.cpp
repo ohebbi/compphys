@@ -2,6 +2,8 @@
 #include "system.h"
 #include<math.h>
 #include<algorithm>
+#include<iostream>
+
 
 double LennardJones::potentialEnergy() const
 {
@@ -34,19 +36,22 @@ void LennardJones::calculateForces(System &system)
     vec3 systemSize = system.getSystemSize();
     double systemSize_saveflops = 0.5*systemSize.x(); //ikke generell
     int i=0;
-    int j=0;
+
     for (Atom*atomi:system.atoms()){
-      atomi->force.set(0,0,0);
+      atomi->resetForce();
     }
+    m_potentialEnergy=0;
     for (Atom*atomi:system.atoms()){
+
       double fx =0;
       double fy =0;
       double fz =0;
+      int j = 0;
         for (Atom*atomj:system.atoms()){
 
-            if (atomi != atomj and j>i){
+            if (j>i){
                   double rij = 0;
-                  double dr = 0;
+
                   //Check if the distance between two atoms at different lattices is less
                   //than the distance inside the lattice for the same atoms.
                   double dx=atomj->position.x()-atomi->position.x();
@@ -73,18 +78,15 @@ void LennardJones::calculateForces(System &system)
                   }
 
 
-                  dr = sqrt(dx*dx+dy*dy+dz*dz);
+                  rij = sqrt(dx*dx+dy*dy+dz*dz);
                   //std::cout << "dr "<< dr << "\n";
-                  rij = sqrt(pow( (atomi-> position.x() - atomj->position.x()), 2) + pow( (atomi-> position.y() - atomj->position.y() ),2) + pow( (atomi-> position.z() - atomj->position.z() ),2));
-                  //std::cout << "rij "<< rij << "\n";
 
-                  if (dr < rij) (rij = dr);
                   //std::cout << rij << "da ble det denne" << "\n";
 
                   double rij8 = pow(rij,8); //kan utbedres
                   double rij14 = pow(rij,14);
 
-                  double dudr = (96/rij14 - 48/rij8);
+                  double dudr = (48.0/rij14 - 24.0/rij8);
 
                   double dfx = dudr*(atomi-> position.x() - atomj->position.x());
                   double dfy = dudr*(atomi-> position.y() - atomj->position.y());
@@ -100,14 +102,14 @@ void LennardJones::calculateForces(System &system)
 
 
                   if (std::find(checked.begin(), checked.end(), atomj) == checked.end()){
-                    m_potentialEnergy += 4*((rij14/(rij*rij)) - (rij8/(rij*rij)));
+                    m_potentialEnergy += 4*(((rij*rij)/rij14) - ((rij*rij)/rij8));
                   }
 
           }
-      j += 1;
+          j += 1;
       checked.push_back(atomi);
       }
-    atomi->force.set(fx,fy,fz);
+    atomi->force.set(atomi->force[0]+fx,atomi->force[1]+fy,atomi->force[2]+fz);
     i +=1;
     }
 }

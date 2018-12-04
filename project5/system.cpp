@@ -86,10 +86,10 @@ void System::removeTotalMomentum() {
     p_y+=atomi->momentum.y();
     p_z+=atomi->momentum.z();
   }
+
+
+  std::cout <<  "momentum: "<<p_x << " "<< p_y << " " <<p_z << "\n";
 */
-
-//  std::cout <<  "momentum: "<< m_atoms[i]->momentum << "\n";
-
 }
 
 void System::createFCCLattice(int numberOfUnitCellsEachDimension, double b, double temperature) {

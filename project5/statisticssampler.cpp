@@ -40,7 +40,7 @@ void StatisticsSampler::sampleKineticEnergy(System &system)
 {
     m_kineticEnergy = 0; // Remember to reset the value from the previous timestep
     for(Atom *atom : system.atoms()) {
-
+      m_kineticEnergy += 0.5*atom->mass()*atom->velocity.lengthSquared();
     }
 }
 
@@ -51,6 +51,10 @@ void StatisticsSampler::samplePotentialEnergy(System &system)
 
 void StatisticsSampler::sampleTemperature(System &system)
 {
+    //vec3 systemSize = system.getSystemSize();
+    //double N_atoms = 4*systemSize(0)*systemSize(1)*systemSize(2)/latticeConstant;
+    m_temperature = (2.0/3.0)*(m_kineticEnergy)/(system.atoms().size());
+
     // Hint: reuse the kinetic energy that we already calculated
 }
 
