@@ -71,13 +71,8 @@ To calculate the force between two atoms we use the Lennard-Jones potential
 \begin{align}
 	U(r_{ij})=4\epsilon\Big[\Big(\frac{\sigma}{r_{ij}}\Big)^{12}-\Big(\frac{\sigma}{r_{ij}}\Big)^{6}\Big]
 \end{align}
-where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero. The units that the system is using are
-\begin{align}
-	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
-	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
-	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
-	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}
-\end{align}
+where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero.
+
 The force can be calculated by taking the negative gradient of the Lennard Jones potential, thus the corresponding force in the $x$-axis is
 \begin{align}
 	F_x(r_{ij}) = - \frac{dU(r_{ij})}{dr_{ij}}\frac{dr_{ij}}{dx_{ij}}
@@ -100,6 +95,29 @@ Putting this into equation \ref{forcex} will result in
 	F_x(r_{ij})= \epsilon \Big[48\frac{\sigma^{12}}{r_{ij}^{13}} - 24 \frac{\sigma^6}{r_{ij}^7}\Big]\frac{1}{r_{ij}}x_{ij}
 \end{align}
 This is completely similar in the two other dimensions.
+
+\subsection{Units of the system}
+
+The SI-units are heavy to deal with on atomic level, and thus we chose to rescale them. Lattice size is usually measured in Ångstrøm, and mass is usually measured in atomic mass.
+\begin{align}
+	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
+	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
+	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
+	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}\\
+	1 \textnormal{ unit of time} &= 1.00224\cdot 10^{-13} \textnormal{s}
+\end{align}
+From this we can calculate the boltzmann constant as
+\begin{align}
+	K_B = 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{length}^{-2}\cdot\textnormal{mass}^{-1}}{\textnormal{time}^{-2}\cdot\textnormal{temperature}^{-1}}=1
+\end{align}
+Thus, $\frac{\epsilon}{k_B}=119.8K=1$ and $\sigma = 3.405 \textnormal{Å}= 3.405$.
+
+Similar, it is possible to calculate the units of the force and the pressure;
+\begin{align}
+	\textnormal{1 unit of force} &= \textnormal{mass}\cdot\frac{\textnormal{length}}{\textnormal{time}^2} = k_B \cdot \textnormal{ temperature}\cdot\textnormal{length}\\
+	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{temperature}}{\textnormal{length}^3}
+\end{align}
+
 \section{Results and Discussion}
 
 
