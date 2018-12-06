@@ -16,8 +16,8 @@ int main(int numberOfArguments, char **argumentList)
     ofstream m_file;
     m_file.open("statistics.txt");
     m_file.close();
-    int numberOfUnitCells = 5;
-    double initialTemperature = UnitConverter::temperatureFromSI(100); // measured in Kelvin
+    int numberOfUnitCells =5;
+    double initialTemperature = UnitConverter::temperatureFromSI(50); // measured in Kelvin
     double latticeConstant = UnitConverter::lengthFromAngstroms(5.26); // measured in angstroms
 
     // If a first argument is provided, it is the number of unit cells
@@ -37,8 +37,9 @@ int main(int numberOfArguments, char **argumentList)
 
     System system;
     system.createFCCLattice(numberOfUnitCells, latticeConstant, initialTemperature);
-    system.potential().setEpsilon(119.8);
+    system.potential().setEpsilon(1/8.62e-5);
     system.potential().setSigma(1.0);
+
 
     system.removeTotalMomentum();
 
@@ -51,7 +52,7 @@ int main(int numberOfArguments, char **argumentList)
             setw(20) << "KineticEnergy" <<
             setw(20) << "PotentialEnergy" <<
             setw(20) << "TotalEnergy" << endl;
-    for(int timestep=1; timestep<1000000; timestep++) {
+    for(int timestep=1; timestep<6000; timestep++) {
         statisticsSampler.sample(system);
         if(system.steps() % 10000 == 0 ) {
             // Print the timestep every 100 timesteps

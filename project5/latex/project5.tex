@@ -53,9 +53,8 @@ To implement the PBC for three dimensions, the algorithm simply needs to be repe
 
 
 \subsection{Maxwell-Boltzmann Distribution and Mean Velocity}
-From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities, and the greater the speed the greater the number of possible velocities. From the derivative of the probability distribution the average speed is determined to be
-$$\bar{v}=\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{8}{\pi}}\sigma$$
-Considering we are calculating speed, not the velocity,  the total momentum for the system will not be equal to zero. To correct this we need to subtract evenly from the momentum of all the particles.
+From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities. 
+
 
 
 
@@ -65,6 +64,7 @@ To calculate the force between two atoms we use the Lennard-Jones potential
 \begin{align}
 	U(r_{ij})=4\epsilon\Big[\Big(\frac{\sigma}{r_{ij}}\Big)^{12}-\Big(\frac{\sigma}{r_{ij}}\Big)^{6}\Big]
 \end{align}
+
 where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero. The units that the system is using are
 \begin{align*}
 	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
@@ -76,6 +76,9 @@ The definition of force is the negative derivative of the potential.
 $$\mathbf{F}=-\nabla \mathbf{U}$$
 where $\nabla$ is the Laplace operator.
 The force is calculated by deriving the Lennard Jones potential. The force along the $x$-axis is
+
+where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero.
+
 \begin{align}
 	F_x(r_{ij}) = - \frac{dU(r_{ij})}{dr_{ij}}\frac{dr_{ij}}{dx_{ij}}
 	\label{forcex}
@@ -97,6 +100,31 @@ Inserting into equation \ref{forcex} will result in
 	F_x(r_{ij})= \epsilon \Big[48\frac{\sigma^{12}}{r_{ij}^{13}} - 24 \frac{\sigma^6}{r_{ij}^7}\Big]\frac{1}{r_{ij}}x_{ij}
 \end{align}
 The calculation of force is analogous in the $y$ and $z$ direction.
+
+
+\subsection{Units of the system}
+
+The SI-units are heavy to deal with on atomic level, and thus we chose to rescale them. Lattice size is usually measured in Ångstrøm, and mass is usually measured in atomic mass.
+\begin{align}
+	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
+	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
+	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
+	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}\\
+	1 \textnormal{ unit of time} &= 1.00224\cdot 10^{-13} \textnormal{s}
+\end{align}
+From this we can calculate the boltzmann constant as
+\begin{align}
+	K_B = 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{length}^{-2}\cdot\textnormal{mass}^{-1}}{\textnormal{time}^{-2}\cdot\textnormal{temperature}^{-1}}=1
+\end{align}
+Thus, $\frac{\epsilon}{k_B}=119.8K=1$ and $\sigma = 3.405 \textnormal{Å}= 3.405$.
+
+Similar, it is possible to calculate the units of the force and the pressure;
+\begin{align}
+	\textnormal{1 unit of force} &= \textnormal{mass}\cdot\frac{\textnormal{length}}{\textnormal{time}^2} = k_B \cdot \textnormal{ temperature}\cdot\textnormal{length}\\
+	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{temperature}}{\textnormal{length}^3}
+\end{align}
+
+>>>>>>> f8e9f87d137b2749e68b8c9caa50fd39f6262b9a
 \section{Results and Discussion}
 
 

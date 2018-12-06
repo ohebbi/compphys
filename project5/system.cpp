@@ -5,6 +5,7 @@
 #include "unitconverter.h"
 #include "math/random.h"
 #include "math.h"
+#include <iostream>
 
 System::System()
 {
@@ -21,27 +22,47 @@ System::~System()
 
 void System::applyPeriodicBoundaryConditions() {
   for (Atom *atomi : m_atoms){
-    if (atomi->position.x()< -m_systemSize.x()*0.5){ //tolerance for numerical precision
-      
-      atomi->position.components[0] += m_systemSize.x();
+    if (atomi->position.x()<= 0){ //tolerance for numerical precision
+      std::cout << atomi->position.x() << std::endl;
+      atomi->position.set(m_systemSize.x()-fabs(atomi->position.components[0]/m_systemSize.x()-nearbyint(atomi->position.components[0]/m_systemSize.x()))*m_systemSize.x(),atomi->position.y(),atomi->position.z());
+    std::cout << atomi->position.x() << std::endl;
+    
     }
-    if (atomi->position.x()>= 0.5*m_systemSize.x()){
-      atomi->position.components[0] -= m_systemSize.x();
+
+    if (atomi->position.x()>= m_systemSize.x()){
+      atomi->position.set(fabs(atomi->position.components[0]/m_systemSize.x()-nearbyint(atomi->position.components[0]/m_systemSize.x()))*m_systemSize.x(),atomi->position.y(),atomi->position.z());
+	  }
+    if (atomi->position.y()<= 0){ //tolerance for numerical precision
+            
+      atomi->position.set(atomi->position.x(),m_systemSize.y()-fabs(atomi->position.components[1]/m_systemSize.y()-nearbyint(atomi->position.components[1]/m_systemSize.y()))*m_systemSize.y(),atomi->position.z());
+   
+    }
+
+    if (atomi->position.y()>= m_systemSize.y()){
+      atomi->position.set(atomi->position.x(),fabs(atomi->position.components[1]/m_systemSize.y()-nearbyint(atomi->position.components[1]/m_systemSize.y()))*m_systemSize.y(),atomi->position.z());
 	  }
 
-     if (atomi->position.y()< -m_systemSize.y()*0.5){ //tolerance for numerical precision
+    if (atomi->position.z()<= 0){ //tolerance for numerical precision
+   
+      atomi->position.set(atomi->position.x(), atomi->position.y(), m_systemSize.z()-fabs(atomi->position.components[2]/m_systemSize.z()-nearbyint(atomi->position.components[2]/m_systemSize.z()))*m_systemSize.z());
       
-      atomi->position.components[0] += m_systemSize.x();
     }
-    if (atomi->position.y()>= 0.5*m_systemSize.y()){
-      atomi->position.components[0] -= m_systemSize.y();
-	  } 
-    if (atomi->position.z()< -m_systemSize.z()*0.5){ //tolerance for numerical precision
-        atomi->position.components[0] += m_systemSize.z();
-    }
-    if (atomi->position.z()>= 0.5*m_systemSize.z()){
-      atomi->position.components[0] -= m_systemSize.z();
+
+    if (atomi->position.z()>= m_systemSize.z()){
+      atomi->position.set(atomi->position.x(),atomi->position.y(), fabs(atomi->position.components[2]/m_systemSize.z()-nearbyint(atomi->position.components[2]/m_systemSize.z()))*m_systemSize.z());
 	  }
+ 
+    if(atomi->position.x()>100 or atomi->position.x()<-100){
+      std::cout << 'x' << std::endl;
+    }
+ if(atomi->position.x()>100 or atomi->position.x()<-100){
+      std::cout << 'y' << std::endl;
+    }
+ if(atomi->position.x()>100 or atomi->position.x()<-100){
+      std::cout << 'z' << std::endl;
+    }
+      
+
 
 
   }
@@ -75,7 +96,7 @@ void System::removeTotalMomentum() {
   double z_momentum = p_z/m_atoms.size();
   for (Atom*atomi:m_atoms){
     atomi->momentum.set(atomi->momentum.x()-x_momentum,atomi->momentum.y()-y_momentum,atomi->momentum.z()-z_momentum);
-    atomi->velocity.set(atomi->momentum.x()/atomi->mass(),atomi->momentum.y()/atomi->mass(),atomi->momentum.z()/atomi->mass());
+    //atomi->velocity.set(atomi->momentum.x()/atomi->mass(),atomi->momentum.y()/atomi->mass(),atomi->momentum.z()/atomi->mass());
     
   }
 /*
