@@ -1,5 +1,5 @@
 CXX = c++
-CXXFLAGS = -Wall -O3 -std=c++17
+CXXFLAGS = -Wall -O3 -std=c++11
 sources = $(wildcard *.cpp)
 
 $(info $(sources))
