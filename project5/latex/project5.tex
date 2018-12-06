@@ -57,13 +57,7 @@ From statistical mechanics we know that the mean velocity of a particle depends 
 $$\bar{v}=\sqrt{\frac{8kT}{\pi m}}=\sqrt{\frac{8}{\pi}}\sigma$$
 Considering we are calculating speed, not the velocity,  the total momentum for the system will not be equal to zero. To correct this we need to subtract evenly from the momentum of all the particles.
 
-kap 6.4 i termoboka \cite{termoboka}
 
-probablility of molecule having velocity $\vec{v}$ is proportional to $e^{-mv^2/2kT}$ (Boltzmann factor for E=0.5$mv^2$), not taking into account position or internal motion, but we dont need to worry about that for an ideal gas (and Ar is very close to ideal), in 3D a factor $4\pi v^2$ needs to be included (accounting for the fact that for larger $v$ there are more possible corresponding velocity vectors)
-
-$$D(v)=\bigg(\frac{m}{2\pi kT}\bigg)^{3/2}4\pi v^2 e^{-mv^2/2kT}$$
-
-$D(v)$ integrated between $v_1$ and $v_2$ gives probability for particle to have speed between $v_1$ and $v_2$. Mean speed $\bar{v}=\sqrt{\frac{8kT}{\pi m}}$. $v_{max}=\sqrt{2kT/m}$, max speed depends on $T$, mors probable, however, is shifted to the right of the maximum because of the shape of $D(v)$.
 
 \subsection{The Lennard Jones potential}
 
@@ -72,20 +66,23 @@ To calculate the force between two atoms we use the Lennard-Jones potential
 	U(r_{ij})=4\epsilon\Big[\Big(\frac{\sigma}{r_{ij}}\Big)^{12}-\Big(\frac{\sigma}{r_{ij}}\Big)^{6}\Big]
 \end{align}
 where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero. The units that the system is using are
-\begin{align}
+\begin{align*}
 	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
 	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
 	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
 	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}
-\end{align}
-The force can be calculated by taking the negative gradient of the Lennard Jones potential, thus the corresponding force in the $x$-axis is
+\end{align*}
+The definition of force is the negative derivative of the potential.
+$$\mathbf{F}=-\nabla \mathbf{U}$$
+where $\nabla$ is the Laplace operator.
+The force is calculated by deriving the Lennard Jones potential. The force along the $x$-axis is
 \begin{align}
 	F_x(r_{ij}) = - \frac{dU(r_{ij})}{dr_{ij}}\frac{dr_{ij}}{dx_{ij}}
 	\label{forcex}
 \end{align}
 where the derivative of the potential is
 \begin{align}
-	\frac{dU}{dr_{ij}}=-12\frac{\sigma^12}{r_{ij}^{13}} + 6 \frac{\sigma^6}{r_{ij}^7}
+	\frac{dU}{dr_{ij}}=-12\frac{\sigma^{12}}{r_{ij}^{13}} + 6 \frac{\sigma^6}{r_{ij}^7}
 \end{align}
 and the derivative of the distance vector is
 \begin{align}
@@ -95,11 +92,11 @@ where $x_{ij}=x_j-x_i$ is the distance between atom $i$ and atom $j$ in $x$-dire
 \begin{align}
 	\frac{dr_{ij}}{dx_{ij}}&=\frac{1}{r_{ij}}x_{ij}.
 \end{align}
-Putting this into equation \ref{forcex} will result in
+Inserting into equation \ref{forcex} will result in
 \begin{align}
 	F_x(r_{ij})= \epsilon \Big[48\frac{\sigma^{12}}{r_{ij}^{13}} - 24 \frac{\sigma^6}{r_{ij}^7}\Big]\frac{1}{r_{ij}}x_{ij}
 \end{align}
-This is completely similar in the two other dimensions.
+The calculation of force is analogous in the $y$ and $z$ direction.
 \section{Results and Discussion}
 
 
