@@ -23,7 +23,7 @@
 
 \section{Theoretical Methods and Thechnicalities}
 \subsection{Molecular Dynamics}
-Molecular dynamics is a very useful method for predicting the movement of molecules or atoms in relation to each other. It uses the Coloumb forces between the molecules and numerical integration to calculate the movement of the particles. Modelling a solid, for example, this method produces a prediction of the most likely lattice configuration. 
+Molecular dynamics is a very useful method for predicting the movement of molecules or atoms in relation to each other. It uses the Coloumb forces between the molecules and numerical integration to calculate the movement of the particles. Modelling a solid, for example, this method produces a prediction of the most likely lattice configuration.
 
 \subsection{Periodic Boundary Conditions}
 This far we have simply let the particles move with their initial velocity with no restrictions as if it was a dense gas expanding in a vacuum. However, this is not the scenario we would like to study. We want to look at a part of an infinite lattice, and to do so we need to implement periodic boundary conditions (PBC). Obviously, we cannot model an infinite lattice, but we model a small part, for instance a few unit cells, and make the assumption that the system consists of repeating units identical to the one we are looking at. In this case, PBC mean that a particle that moves outside of our defined "box", instead of continuing to move away from the box, it moves to the opposite side of the box as if it enters the box from an adjacent, identical box. In addition, the PBC need to compensate for the fact that the shortest distance between particles might be between different cells, not necessarily between particles in the same cell. To implement these conditions we added a few restrictions to the position and the distance between atoms, and the algorithm for the $x$ direction is shown below.
@@ -33,17 +33,17 @@ This far we have simply let the particles move with their initial velocity with 
 	\If{rx $<$ 0}{
 		rx = rx + size\;
 	}
-	\If{rx $\geq$ size}{ 
+	\If{rx $\geq$ size}{
 		rx = rx-size\;
 	}
 	\For{$atom_j$}{
 		\If{$atom_i$ $\neq$ $atom_j$}{
 			dx = rx$_j$-rx$_i$\;
 			\If{dx $>$ 0.5size}{
-				dx = dx - size\;	
+				dx = dx - size\;
 			}
 			\If{dx $\leq$ -0.5size}{
-				dx = dx + size\;	
+				dx = dx + size\;
 			}
 		}
 	}
@@ -65,8 +65,41 @@ $$D(v)=\bigg(\frac{m}{2\pi kT}\bigg)^{3/2}4\pi v^2 e^{-mv^2/2kT}$$
 
 $D(v)$ integrated between $v_1$ and $v_2$ gives probability for particle to have speed between $v_1$ and $v_2$. Mean speed $\bar{v}=\sqrt{\frac{8kT}{\pi m}}$. $v_{max}=\sqrt{2kT/m}$, max speed depends on $T$, mors probable, however, is shifted to the right of the maximum because of the shape of $D(v)$.
 
+\subsection{The Lennard Jones potential}
 
-
+To calculate the force between two atoms we use the Lennard-Jones potential
+\begin{align}
+	U(r_{ij})=4\epsilon\Big[\Big(\frac{\sigma}{r_{ij}}\Big)^{12}-\Big(\frac{\sigma}{r_{ij}}\Big)^{6}\Big]
+\end{align}
+where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero. The units that the system is using are
+\begin{align}
+	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
+	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
+	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
+	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}
+\end{align}
+The force can be calculated by taking the negative gradient of the Lennard Jones potential, thus the corresponding force in the $x$-axis is
+\begin{align}
+	F_x(r_{ij}) = - \frac{dU(r_{ij})}{dr_{ij}}\frac{dr_{ij}}{dx_{ij}}
+	\label{forcex}
+\end{align}
+where the derivative of the potential is
+\begin{align}
+	\frac{dU}{dr_{ij}}=-12\frac{\sigma^12}{r_{ij}^{13}} + 6 \frac{\sigma^6}{r_{ij}^7}
+\end{align}
+and the derivative of the distance vector is
+\begin{align}
+	\frac{dr_{ij}}{dx_{ij}}&=\frac{d}{dx_{ij}}\sqrt{(x_j-x_i)^2+(y_j-y_i)^2+(z_j-z_i)^2}.
+\end{align}
+where $x_{ij}=x_j-x_i$ is the distance between atom $i$ and atom $j$ in $x$-direction.
+\begin{align}
+	\frac{dr_{ij}}{dx_{ij}}&=\frac{1}{r_{ij}}x_{ij}.
+\end{align}
+Putting this into equation \ref{forcex} will result in
+\begin{align}
+	F_x(r_{ij})= \epsilon \Big[48\frac{\sigma^{12}}{r_{ij}^{13}} - 24 \frac{\sigma^6}{r_{ij}^7}\Big]\frac{1}{r_{ij}}x_{ij}
+\end{align}
+This is completely similar in the two other dimensions.
 \section{Results and Discussion}
 
 
