@@ -14,16 +14,11 @@ void StatisticsSampler::saveToFile(System &system)
 {
     // Save the statistical properties for each timestep for plotting etc.
     // First, open the file if it's not open already
-    if(!m_file.good()) {
-        m_file.open("statistics.txt", ofstream::out);
-        // If it's still not open, something bad happened...
-        if(!m_file.good()) {
-            cout << "Error, could not open statistics.txt" << endl;
-            exit(1);
-        }
-    }
-
+  
+    m_file.open("statistics.txt", ofstream::app);
+    m_file << m_temperature << " " << m_kineticEnergy << " " << m_potentialEnergy << " " << m_kineticEnergy+m_potentialEnergy << " \n";
     // Print out values here
+    m_file.close();
 }
 
 void StatisticsSampler::sample(System &system)
