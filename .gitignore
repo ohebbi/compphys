@@ -32,4 +32,6 @@ temp*
 *.cproject
 *.project
 # misc:
-.DS_Store
+*.DS_Store
+*.git
+*.xyz
