@@ -1,12 +1,13 @@
 #include "atom.h"
 #include "math/random.h"
 #include <cmath>
-
+#include <iostream>
 Atom::Atom(double mass) :
     m_mass(mass)
 {
     
 }
+
 
 void Atom::resetForce()
 {

@@ -32,16 +32,16 @@ void LennardJones::setEpsilon(double epsilon)
 
 void LennardJones::calculateForces(System &system)
 {
-    
- 
-  system.applyPeriodicBoundaryConditions();
+
+
+
    std::vector<Atom*> checked;
-    
+
     vec3 systemSize = system.getSystemSize();
-    
-    
-   
-    int i = 0;
+    double halfSizex = systemSize.x()*0.5;
+    double halfSizey = systemSize.y()*0.5;
+    double halfSizez = systemSize.z()*0.5;
+
     double dfx;
     double dfy;
     double dfz;
@@ -52,104 +52,103 @@ void LennardJones::calculateForces(System &system)
       double fx =0;
       double fy =0;
       double fz =0;
-     
-      int j = 0;
 
-        for (Atom*atomj:system.atoms()){
-	  double dx =0;
-	  double dy =0;
-	  double dz =0;            
-                
-	  if (atomi!= atomj){
+
+
+      for (Atom*atomj:system.atoms()){
+	    double dx =0;
+	    double dy =0;
+	    double dz =0;
+
+	    if (atomi!= atomj){
                 double rij = 0;
 
                 //Check if the distance between two atoms at different lattices is less
                 //than the distance inside the lattice for the same atoms.
-                  
+
+
                 dx = (atomj-> position.x() - atomi->position.x());
-		dy = (atomj-> position.y() - atomi->position.y());
-		dz = (atomj-> position.z() - atomi->position.z());
-		/*
-		dx = fabs(dx);
-		dx -= static_cast<int>(dx*(1.0/systemSize.x()+0.5)*systemSize.x());
-		*/
+		            dy = (atomj-> position.y() - atomi->position.y());
+		            dz = (atomj-> position.z() - atomi->position.z());
                 
-		
-		if(dx > systemSize.x()*0.5){
+                dx -= systemSize.x()*nearbyint(dx/systemSize.x());
+                dy -= systemSize.y()*nearbyint(dy/systemSize.y());
+                dz -= systemSize.z()*nearbyint(dz/systemSize.z());
+
+
+		            /*
+		            dx = fabs(dx);
+		            dx -= static_cast<int>(dx*(1.0/systemSize.x()+0.5)*systemSize.x());
+		            */
+
+                /* //comment out for PBC task e
+		            if(dx > halfSizex){
                     dx -= systemSize.x();
                 }
-                 if(dx <= -systemSize.x()*0.5){
+                 if(dx <= -halfSizex){
                     dx += systemSize.x();
                 }
-          
-                if(dy > systemSize.y()*0.5){
+
+                if(dy > halfSizey){
                     dy -= systemSize.y();
                 }
-                 if(dy <= -systemSize.y()*0.5){
+                 if(dy <= -halfSizey){
                     dy += systemSize.y();
                 }
-                
-                if(dz > systemSize.z()*0.5){
+
+                if(dz > halfSizez){
                     dz -= systemSize.z();
                 }
-                 if(dz <= -systemSize.z()*0.5){
+                 if(dz <= -halfSizez){
                     dz += systemSize.z();
                 }
-		
-                                
+
+                */
                 rij = sqrt(dx*dx+dy*dy+dz*dz);
-                
+
                 double rij8 = pow(rij,8); //kan utbedres
-                double rij14 = pow(rij,14); 
-        
-                
-                
-                          
-                      
+                double rij14 = pow(rij,14);
+
                 double dudr = (48.0/rij14-24.0/rij8);
-                if(rij < 5.0){
-                  dfx = dudr*dx;
-                    }
+
+                if(rij < 9.0){
+                    dfx = dudr*dx;
+                }
+
                 else{
                     //std::cout << dudr*dx << std::endl;
                     dfx = 0;
-
                 }
-                if(rij < 5.0){
+
+                if(rij < 9.0){
                    dfy = dudr*dy;
-                    }
+                }
+
                 else{
                     //std::cout << dudr*dy << std::endl;
                     dfy = 0;
-                    
                 }
-                if(rij < 5.0){
-                 dfz =dudr*dz;                          
-                    }
+
+                if(rij < 9.0){
+                    dfz =dudr*dz;
+                }
                 else{
                     //std::cout << dudr*dz << std::endl;
                     dfz = 0;
                 }
 
-                
+
                 fx+=dfx;
                 fy+=dfy;
                 fz+=dfz;
                 //atomj->force.set(atomj->force.components[0]-dfx,atomj->force.components[1]-dfy,atomj->force.components[2]-dfz);
-                           
-                  if (std::find(checked.begin(), checked.end(), atomj) == checked.end()){
-                    m_potentialEnergy += 4*(((rij*rij)/rij14) - ((rij*rij)/rij8));
-                  }
-                
 
-
-                        
-            } 
-     
-      
-        j += 1;
+                if (std::find(checked.begin(), checked.end(), atomj) == checked.end()){
+                    m_potentialEnergy += 4*m_epsilon*(((rij*rij)/rij14) - ((rij*rij)/rij8));
+                }
+            }
         }
-        i += 1; 
+
     checked.push_back(atomi);
    vec3 allForces = {fx,fy,fz};
 

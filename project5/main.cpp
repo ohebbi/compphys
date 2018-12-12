@@ -13,12 +13,17 @@ using namespace std;
 
 int main(int numberOfArguments, char **argumentList)
 {
+
+    for(int temp = 500; temp <= 3000; temp+=25)
+    {
+    cout << temp << endl;
     ofstream m_file;
     m_file.open("statistics.txt");
     m_file.close();
     int numberOfUnitCells =5;
-    double initialTemperature = UnitConverter::temperatureFromSI(50); // measured in Kelvin
+    double initialTemperature = UnitConverter::temperatureFromSI(temp); // measured in Kelvin
     double latticeConstant = UnitConverter::lengthFromAngstroms(5.26); // measured in angstroms
+
 
     // If a first argument is provided, it is the number of unit cells
     if(numberOfArguments > 1) numberOfUnitCells = atoi(argumentList[1]);
@@ -34,10 +39,11 @@ int main(int numberOfArguments, char **argumentList)
     cout << "One unit of time is " << UnitConverter::timeToSI(1.0) << " seconds" << endl;
     cout << "One unit of mass is " << UnitConverter::massToSI(1.0) << " kg" << endl;
     cout << "One unit of temperature is " << UnitConverter::temperatureToSI(1.0) << " K" << endl;
+    cout << "One unit of diffusion coeffisient is " << UnitConverter::diffusionToSI(1.0) << "" << endl;
 
     System system;
     system.createFCCLattice(numberOfUnitCells, latticeConstant, initialTemperature);
-    system.potential().setEpsilon(1/8.62e-5);
+    system.potential().setEpsilon(1.0/8.6173303e-5); // /8.6173303e-5
     system.potential().setSigma(1.0);
 
 
@@ -51,24 +57,38 @@ int main(int numberOfArguments, char **argumentList)
             setw(20) << "Temperature" <<
             setw(20) << "KineticEnergy" <<
             setw(20) << "PotentialEnergy" <<
-            setw(20) << "TotalEnergy" << endl;
-    for(int timestep=1; timestep<6000; timestep++) {
-        statisticsSampler.sample(system);
-        if(system.steps() % 10000 == 0 ) {
-            // Print the timestep every 100 timesteps
-            cout << setw(20) << system.steps() <<
-                    setw(20) << system.time() <<
-                    setw(20) << statisticsSampler.temperature() <<
-                    setw(20) << statisticsSampler.kineticEnergy() <<
-                    setw(20) << statisticsSampler.potentialEnergy() <<
-                    setw(20) << statisticsSampler.totalEnergy() << endl;
-        }
-        system.step(dt);
+            setw(20) << "TotalEnergy" <<
+            setw(20) << "Diffusionconstant" << endl;
 
+    for(int timestep=0; timestep<10000; timestep++) {
+        statisticsSampler.sample(system);
+        system.step(dt);
+        if(system.steps() % 1000 == 0 ) {
+          // Print the timestep every 100 timesteps
+          cout << setw(20) << system.steps() <<
+            setw(20) << system.time() <<
+            setw(20) << statisticsSampler.temperature() <<
+            setw(20) << statisticsSampler.kineticEnergy() <<
+            setw(20) << statisticsSampler.potentialEnergy() <<
+            setw(20) << statisticsSampler.totalEnergy() <<
+            setw(20) << statisticsSampler.diffusionConst() << endl;
+
+        }
         movie.saveState(system);
     }
 
     movie.close();
+    ifstream stream1;
+    stream1.open("statistics.txt", ios::in);
+    string line;
+    ofstream stream2;
+    stream2.open(to_string(temp) + "diffusion.txt", ios::out);
+    while(getline(stream1,line)){
+        stream2 << line << " \n";
+    }
+    stream1.close();
+    stream2.close();
 
+    }
     return 0;
 }
