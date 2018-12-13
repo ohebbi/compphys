@@ -2,12 +2,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-import seaborn as sns
-sns.set()
 
-n = 3
-start = 275
-slutt = 325
+
+
+start = 500
+slutt = 700
+n = 50
 #f = open("50diffusion.txt", "r")
 
 L = np.linspace(start,slutt,n)
@@ -102,17 +102,21 @@ L = np.linspace(start,slutt,n)
 j=0
 Diffusjon = []
 Temperatur = []
+tInit = []
+tSlutt = []
+while start <= slutt:
 
-for i in L:
 
-    f = open("results/%idiffusion.txt" %i, "r")
+    f = open("%idiffusion.txt" %start, "r")
     f.readline()
     t=[]
+
     T = []
     Ek = []
     Ep = []
     Et = []
     Diff = []
+    rho = []
 
     differseoi = 0.0
     differseoi1 = 0.0
@@ -122,50 +126,26 @@ for i in L:
     for line in f:
         a = line.split(" ")
         t.append(float(a[0]))
-        T.append(float(a[1])*119.735)
+        T.append(float(a[1]))
         Ek.append(float(a[2]))
         Ep.append(float(a[3]))
         Et.append(float(a[4]))
         Diff.append(float(a[5]))
-
+        rho.append(float(a[6]))
+    Diffusjon.append(np.mean(Diff[-1000:-1]))
+    tInit.append(T[0])
+    tSlutt.append(np.mean(T[-1000:-1]))
     #Average values
-    for i in range(len(T)):
-        T0 += T[i]
-        differseoi += Diff[i]
-    T1 = T0 / len(T)
-    differseoi1 = float(differseoi / len(T))
+    start += n
+tForhold = []
+for i in range(len(tInit)):
+    tForhold.append(tSlutt[i]/tInit[i])
 
 
-    #Pretty plotting
-    if j>20 and j%9==0:
-        plt.plot(t,np.array(Diff),label='$T=%i K$'%(T1))
-    else:
-        plt.plot(t,np.array(Diff),',',alpha=0.02)
-    if j%9==0:
-        Temperatur.append(T1)
-        Diffusjon.append(differseoi1)
-
-    j +=1
-
-
-for i in range(len(Temperatur)):
-    print(Temperatur[i], " ", Diffusjon[i])
-
-
-
-plt.legend(loc='upper center')
-plt.xlabel("Time [MD-units]")
-plt.ylabel("Diffusion Coeffisient [MD-units]")
-plt.axis([-2,100, 0,0.035])
-plt.tight_layout()
-#plt.savefig("Time_vs_Diff.pdf")
+plt.plot(tSlutt, tForhold, 'x-')
 plt.show()
 
-plt.plot(Temperatur,Diffusjon)
-plt.xlabel("Temperatur [K]")
-plt.ylabel("Diffusjonskoeffisient [MD-units]")
-#plt.savefig("Temp_vs_Diff.pdf")
-plt.tight_layout()
+plt.plot(tSlutt, Diffusjon)
 plt.show()
 
 plt.subplot(2,1,1)

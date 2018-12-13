@@ -14,7 +14,7 @@ using namespace std;
 int main(int numberOfArguments, char **argumentList)
 {
 
-    for(int temp = 500; temp <= 3000; temp+=25)
+  for(int temp = 500; temp <= 900; temp+=50)
     {
     cout << temp << endl;
     ofstream m_file;
@@ -22,7 +22,7 @@ int main(int numberOfArguments, char **argumentList)
     m_file.close();
     int numberOfUnitCells =5;
     double initialTemperature = UnitConverter::temperatureFromSI(temp); // measured in Kelvin
-    double latticeConstant = UnitConverter::lengthFromAngstroms(5.26); // measured in angstroms
+    double latticeConstant = UnitConverter::lengthFromAngstroms(5.26/3.405); // measured in angstroms
 
 
     // If a first argument is provided, it is the number of unit cells
@@ -42,8 +42,9 @@ int main(int numberOfArguments, char **argumentList)
     cout << "One unit of diffusion coeffisient is " << UnitConverter::diffusionToSI(1.0) << "" << endl;
 
     System system;
+    
     system.createFCCLattice(numberOfUnitCells, latticeConstant, initialTemperature);
-    system.potential().setEpsilon(1.0/8.6173303e-5); // /8.6173303e-5
+    system.potential().setEpsilon(1.0); // /8.6173303e-5
     system.potential().setSigma(1.0);
 
 
@@ -58,20 +59,23 @@ int main(int numberOfArguments, char **argumentList)
             setw(20) << "KineticEnergy" <<
             setw(20) << "PotentialEnergy" <<
             setw(20) << "TotalEnergy" <<
-            setw(20) << "Diffusionconstant" << endl;
+            setw(20) << "Diffusionconstant" << 
+            setw(20) << "Density" <<endl;
 
-    for(int timestep=0; timestep<10000; timestep++) {
+    for(int timestep=0; timestep<7000; timestep++) {
         statisticsSampler.sample(system);
         system.step(dt);
         if(system.steps() % 1000 == 0 ) {
           // Print the timestep every 100 timesteps
           cout << setw(20) << system.steps() <<
             setw(20) << system.time() <<
-            setw(20) << statisticsSampler.temperature() <<
+            setw(20) << statisticsSampler.temperature()*119.8 <<
             setw(20) << statisticsSampler.kineticEnergy() <<
             setw(20) << statisticsSampler.potentialEnergy() <<
             setw(20) << statisticsSampler.totalEnergy() <<
-            setw(20) << statisticsSampler.diffusionConst() << endl;
+            setw(20) << statisticsSampler.diffusionConst() <<
+	    setw(20) << statisticsSampler.density() << endl;
+	  
 
         }
         movie.saveState(system);
