@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage{makecell}
 
 
 \begin{document}
@@ -19,6 +20,28 @@
 \section{Introduction}
 
 
+\begin{figure}[h]
+\begin{picture}(32,15)
+\setlength{\unitlength}{0.14in} % selecting unit length \centering % used for centering Figure \begin{picture}(32,15) % picture environment with the size (dimensions)
+\put(13,-4){\framebox(9,4){\thead{Initialize temperature, \\ number of unit cells, \\lattice constant and \\timestep}}} 
+\put(17,-4){\vector(0,-1){3}}
+\put(13.5,-10){\framebox(8,3){\thead{Create FCC lattice \\ based on initial \\ conditions}}}
+\put(17,-10){\vector(0,-1){3}}
+\put(13.5,-16){\framebox(8,3){\thead{Remove total \\ momentum}}}
+\put(17,-16){\vector(0,-1){4}}
+\put(14,-22){\framebox(7,2){\thead{$t<$final time?}}}
+\put(21,-21){\vector(1,0){4}}
+\put(22, -20.5){\makebox{\thead{YES}}}
+\put(25,-23){\framebox(18,4){\thead[l]{\, Sample\\ \, Calculate forces from Lennard-Jones potential \\ \, Apply periodic boundary conditions \\ \, $t+=dt$}}}
+\put(28, -19){\line(0, 1){1}}
+\put(28, -18){\vector(-1, 0){11}}
+\put(17,-22){\vector(0,-1){3}}
+\put(17.5, -23.75){\makebox{\thead{NO}}}
+\put(15.25,-26.75){\framebox(3.75,1.75){\thead{End}}}
+
+\end{picture}
+\end{figure}
+\vskip10cm
 
 
 \section{Theoretical Methods and Thechnicalities}
@@ -124,7 +147,7 @@ Similar, it is possible to calculate the units of the force and the pressure;
 	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{temperature}}{\textnormal{length}^3}
 \end{align}
 
->>>>>>> f8e9f87d137b2749e68b8c9caa50fd39f6262b9a
+
 \section{Results and Discussion}
 
 
