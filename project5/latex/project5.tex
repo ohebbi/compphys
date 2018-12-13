@@ -53,10 +53,10 @@ This far we have simply let the particles move with their initial velocity with 
 
 \begin{algorithm}[h]
 \For{$atom_i$}{
-	\If{rx $<$ 0}{
+	\If{rx $<$ -0.5size}{
 		rx = rx + size\;
 	}
-	\If{rx $\geq$ size}{
+	\If{rx $\geq$ 0.5size}{
 		rx = rx-size\;
 	}
 	\For{$atom_j$}{
@@ -76,7 +76,7 @@ To implement the PBC for three dimensions, the algorithm simply needs to be repe
 
 
 \subsection{Maxwell-Boltzmann Distribution and Mean Velocity}
-From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities. 
+From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but because our number of particles is far less than the number of possible velocities, the distributions of velocities will not follow the statistical distribution, and the sum of velocities for all the particles will not equal zero. 
 
 
 
@@ -88,13 +88,8 @@ To calculate the force between two atoms we use the Lennard-Jones potential
 	U(r_{ij})=4\epsilon\Big[\Big(\frac{\sigma}{r_{ij}}\Big)^{12}-\Big(\frac{\sigma}{r_{ij}}\Big)^{6}\Big]
 \end{align}
 
-where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance at which the potential is zero. The units that the system is using are
-\begin{align*}
-	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
-	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
-	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
-	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}
-\end{align*}
+where $r_{ij}=|\vec{r_j}-\vec{r_i}|$ is the distance from atom $j$ to atom $i$, $\epsilon$ is the depth of the potential well and $\sigma$ is the distance where the potential is zero. The units that the system is using are
+
 The definition of force is the negative derivative of the potential.
 $$\mathbf{F}=-\nabla \mathbf{U}$$
 where $\nabla$ is the Laplace operator.
@@ -125,23 +120,37 @@ Inserting into equation \ref{forcex} will result in
 The calculation of force is analogous in the $y$ and $z$ direction.
 
 
+\subsection{Temperature}
+The temperature is determined by the equipartition theorem
+$$\langle E_k\rangle=\frac{3}{2}NkT$$
+where $\langle E_k\rangle$ is the mean kinetic energy of the system, $N$ is the number of particles in the system, $k$ is Boltzmann's constant and $T$ is the temperature. As the system develops over time, the kinetic energy changes, leading to changes in the temperature of the system. The development of the temperature is kept track of by calculating the kinetic energy for each time step and using the equipartition theorem to find the temperature.
+
+
+\subsection{Diffusion}
+The diffusion constant of the system can be used to find the melting temperature. The constant is determined from the Einstein relation and its relation to the mean square displacement, $\langle r^2(t)\rangle$, is
+$$\langle r^2(t)\rangle = 6Dt$$
+where $D$ is the diffusion constant and $t$ is time. The mean square displacement is the average distance the particles of the system has traveled after a time $t$ and is defined as
+$$\mathbf{r}_i^2(t)=(\mathbf{r}_i(t)-\mathbf{r}_i(0))^2$$
+where $\mathbf{r}_i(t)$ is the position after a time $t$ and $\mathbf{r}_i(0)$ is the initial position of particle $i$. The diffusion constant is temperature dependent and describes how easily particles move in a system at a given temperature. Particles in a solid diffuses much slower than in liquid and gaseous phases, and the diffusion constant will be much smaller for temperatures at which the system is in the solid state than for temperatures above the melting point. Calculating the diffusion constant as a function of the temperature will therefore show a dramatic change around the melting point of the system and .
+
+
 \subsection{Units of the system}
 
-The SI-units are heavy to deal with on atomic level, and thus we chose to rescale them. Lattice size is usually measured in Ångstrøm, and mass is usually measured in atomic mass.
+The SI-units are heavy to deal with on atomic level, and thus we chose to rescale them. Lattice size is usually measured in Angstrom, and mass is usually measured in atomic mass.
 \begin{align}
-	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27} \textnormal{kg}\\
-	1 \textnormal{ unit of length} &= 1 \textnormal{Å} = 1.0\cdot 10^{-10} \textnormal{m}\\
-	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\textnormal{J}\\
-	1 \textnormal{ unit of temperature} &= 119.735\textnormal{K}\\
-	1 \textnormal{ unit of time} &= 1.00224\cdot 10^{-13} \textnormal{s}
+	1 \textnormal{ unit of mass} &= 1 \textnormal{a.m.u} = 1.661\cdot 10^{-27}\, \textnormal{kg}\\
+	1 \textnormal{ unit of length} &= 1 \textnormal{\AA} = 1.0\cdot 10^{-10}\, \textnormal{m}\\
+	1 \textnormal{ unit of energy} &= 1.651\cdot 10^{-21}\,\textnormal{J}\\
+	1 \textnormal{ unit of temperature} &= 119.735\,\textnormal{K}\\
+	1 \textnormal{ unit of time} &= 1.00224\cdot 10^{-13}\, \textnormal{s}
 \end{align}
-From this we can calculate the boltzmann constant as
+From this we can calculate the Boltzmann constant as
 \begin{align}
-	K_B = 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{length}^{-2}\cdot\textnormal{mass}^{-1}}{\textnormal{time}^{-2}\cdot\textnormal{temperature}^{-1}}=1
+	k_B = 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{length}^{-2}\cdot\textnormal{mass}^{-1}}{\textnormal{time}^{-2}\cdot\textnormal{temperature}^{-1}}=1
 \end{align}
-Thus, $\frac{\epsilon}{k_B}=119.8K=1$ and $\sigma = 3.405 \textnormal{Å}= 3.405$.
+Thus, $\frac{\epsilon}{k_B}=119.8\, \mathrm{K}=1$ and $\sigma = 3.405\, \mathrm{\AA}$.
 
-Similar, it is possible to calculate the units of the force and the pressure;
+Similarly, it is possible to calculate the units of the force and the pressure;
 \begin{align}
 	\textnormal{1 unit of force} &= \textnormal{mass}\cdot\frac{\textnormal{length}}{\textnormal{time}^2} = k_B \cdot \textnormal{ temperature}\cdot\textnormal{length}\\
 	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{temperature}}{\textnormal{length}^3}
