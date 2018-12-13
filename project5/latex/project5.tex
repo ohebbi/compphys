@@ -23,7 +23,7 @@
 \begin{figure}[h]
 \begin{picture}(32,15)
 \setlength{\unitlength}{0.14in} % selecting unit length \centering % used for centering Figure \begin{picture}(32,15) % picture environment with the size (dimensions)
-\put(13,-4){\framebox(9,4){\thead{Initialize temperature, \\ number of unit cells, \\lattice constant and \\timestep}}} 
+\put(13,-4){\framebox(9,4){\thead{Initialize temperature, \\ number of unit cells, \\lattice constant and \\timestep}}}
 \put(17,-4){\vector(0,-1){3}}
 \put(13.5,-10){\framebox(8,3){\thead{Create FCC lattice \\ based on initial \\ conditions}}}
 \put(17,-10){\vector(0,-1){3}}
@@ -76,11 +76,23 @@ To implement the PBC for three dimensions, the algorithm simply needs to be repe
 
 
 \subsection{Maxwell-Boltzmann Distribution and Mean Velocity}
-From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities. 
+From statistical mechanics we know that the mean velocity of a particle depends on the temperature and can be calculated from the Boltzmann distribution for a particle with energy $E=\frac{1}{2}mv^2$ where $v=|\vec{v}|$. The most likely velocity is zero, but the most likely speed is not because for each possible speed there are many possible velocities.
 
 
+\subsection{The FCC-lattice}
 
-
+Solid argon is most stable as a face-centered cubic lattice, where each unit cell contains four atoms. The lattice constant, which is the length of the side in the cubic unit cell, is $b=5.26$ Angstrom. The local coordinates are
+\begin{align*}
+	\vec{r_1} &= (0,0,0)\\
+	\vec{r_2} &= (b/2,b/2,0)\\
+	\vec{r_3} &= (0,b/2,b/2)\\
+	\vec{r_4} &= (b/2,0,b/2)
+\end{align*}
+This way we can expand it into a three dimensional unit cell, where the origin of the system is located as
+\begin{align*}
+	\vec{R_{i,j,k}}=(i,j,k)
+\end{align*}
+where $i=0,1,...,N_x-1$, $j=0,1,...,N_y-1$, $k=0,1,...,N_z-1$.
 \subsection{The Lennard Jones potential}
 
 To calculate the force between two atoms we use the Lennard-Jones potential
@@ -137,14 +149,17 @@ The SI-units are heavy to deal with on atomic level, and thus we chose to rescal
 \end{align}
 From this we can calculate the boltzmann constant as
 \begin{align}
-	K_B = 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{length}^{-2}\cdot\textnormal{mass}^{-1}}{\textnormal{time}^{-2}\cdot\textnormal{temperature}^{-1}}=1
+	K_B &= 1.38\cdot 10^{-23} \textnormal{m}^2\textnormal{kg}\textnormal{ s}^{-2}\textnormal{K}^{-1}\\
+	&= 1.38\cdot 10^{-23} \cdot \frac{\textnormal{(unit of length)}^{-2}\cdot\textnormal{(unit of mass)}^{-1}}{\textnormal{(unit of time)}^{-2}\cdot\textnormal{(unit of temperature)}^{-1}}\\
+	K_B &=1
 \end{align}
-Thus, $\frac{\epsilon}{k_B}=119.8K=1$ and $\sigma = 3.405 \textnormal{Å}= 3.405$.
+Thus, $\frac{\epsilon}{k_B}=119.8K \textnormal{(unit of temperature)}^{-1}=1$ and $\sigma = 3.405 \textnormal{Å}\textnormal{ (unit of length)}^{-1} = 3.405$.
 
 Similar, it is possible to calculate the units of the force and the pressure;
 \begin{align}
-	\textnormal{1 unit of force} &= \textnormal{mass}\cdot\frac{\textnormal{length}}{\textnormal{time}^2} = k_B \cdot \textnormal{ temperature}\cdot\textnormal{length}\\
-	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{temperature}}{\textnormal{length}^3}
+	\textnormal{1 unit of force} &= \textnormal{(unit of mass)}\cdot\frac{\textnormal{(unit of length)}}{\textnormal{(unit of time)}^2}\\
+	 &= k_B \cdot \textnormal{(unit of temperature)}\cdot\textnormal{(unit of length)}\\
+	\textnormal{1 unit of pressure} &=k_B \frac{\textnormal{(unit of temperature)}}{\textnormal{(unit of length)}^3}
 \end{align}
 
 
