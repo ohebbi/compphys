@@ -21,39 +21,18 @@ System::~System()
 }
 
 void System::applyPeriodicBoundaryConditions() {
-
-  for (Atom *atomi : m_atoms){
-    if (atomi->position.x()<= 0){ //tolerance for numerical precision
-          atomi->position.set(m_systemSize.x()-fabs(atomi->position.components[0]/m_systemSize.x()-nearbyint(atomi->position.components[0]/m_systemSize.x()))*m_systemSize.x(),atomi->position.y(),atomi->position.z());
-
-    }
-
-    if (atomi->position.x()>= m_systemSize.x()){
-      atomi->position.set(fabs(atomi->position.components[0]/m_systemSize.x()-nearbyint(atomi->position.components[0]/m_systemSize.x()))*m_systemSize.x(),atomi->position.y(),atomi->position.z());
-	  }
-    if (atomi->position.y()<= 0){ //tolerance for numerical precision
-
-      atomi->position.set(atomi->position.x(),m_systemSize.y()-fabs(atomi->position.components[1]/m_systemSize.y()-nearbyint(atomi->position.components[1]/m_systemSize.y()))*m_systemSize.y(),atomi->position.z());
+  for(Atom *atomi:m_atoms){
+    for(int i = 0; i <= 3; i++){
+      if(atomi->position[i] < -m_systemSize.components[i]*0.5) {
+	atomi->position[i] += m_systemSize.components[i]; 
+      }
+      else if(atomi->position[i] >= m_systemSize.components[i]*0.5){
+	atomi->position[i] -= m_systemSize.components[i];
+      }
+      
 
     }
-
-    if (atomi->position.y()>= m_systemSize.y()){
-      atomi->position.set(atomi->position.x(),fabs(atomi->position.components[1]/m_systemSize.y()-nearbyint(atomi->position.components[1]/m_systemSize.y()))*m_systemSize.y(),atomi->position.z());
-	  }
-
-    if (atomi->position.z()<= 0){ //tolerance for numerical precision
-
-      atomi->position.set(atomi->position.x(), atomi->position.y(), m_systemSize.z()-fabs(atomi->position.components[2]/m_systemSize.z()-nearbyint(atomi->position.components[2]/m_systemSize.z()))*m_systemSize.z());
-
-    }
-
-    if (atomi->position.z()>= m_systemSize.z()){
-      atomi->position.set(atomi->position.x(),atomi->position.y(), fabs(atomi->position.components[2]/m_systemSize.z()-nearbyint(atomi->position.components[2]/m_systemSize.z()))*m_systemSize.z());
-	  }
-
-
-
-
+  
   }
   
 }
@@ -117,25 +96,25 @@ void System::createFCCLattice(int numberOfUnitCellsEachDimension, double b, doub
 
                 Atom *atom1 = new Atom(UnitConverter::massFromSI(6.63352088e-26));
                 atom1->position.set(i*b,j*b,k*b);
-                atom1->initialPosition.set(i*b,j*b,k*b);
+                atom1->initialPosition = (atom1->position);
                 atom1->resetVelocityMaxwellian(temperature);
                 m_atoms.push_back(atom1);
 
                 Atom *atom2 = new Atom(UnitConverter::massFromSI(6.63352088e-26));
                 atom2->position.set(i*b +b_half,j*b+b_half,k*b);
-                atom2->initialPosition.set(i*b +b_half,j*b+b_half,k*b);
+                atom2->initialPosition = (atom2->position);
                 atom2->resetVelocityMaxwellian(temperature);
                 m_atoms.push_back(atom2);
 
                 Atom *atom3 = new Atom(UnitConverter::massFromSI(6.63352088e-26));
                 atom3->position.set(i*b,j*b+b_half,k*b+b_half);
-                atom3->initialPosition.set(i*b,j*b+b_half,k*b+b_half);
+                atom3->initialPosition = (atom3->position);
                 atom3->resetVelocityMaxwellian(temperature);
                 m_atoms.push_back(atom3);
 
                 Atom *atom4 = new Atom(UnitConverter::massFromSI(6.63352088e-26));
                 atom4->position.set(i*b +b_half,j*b,k*b + b_half);
-                atom4->initialPosition.set(i*b +b_half,j*b,k*b + b_half);
+                atom4->initialPosition = (atom4->position);
                 atom4->resetVelocityMaxwellian(temperature);
                 m_atoms.push_back(atom4);
 

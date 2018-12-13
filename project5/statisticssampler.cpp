@@ -3,6 +3,7 @@
 #include "lennardjones.h"
 #include <iostream>
 #include <math.h>
+
 using std::ofstream; using std::cout; using std::endl;
 
 StatisticsSampler::StatisticsSampler()
@@ -16,7 +17,7 @@ void StatisticsSampler::saveToFile(System &system)
     // First, open the file if it's not open already
 
     m_file.open("statistics.txt", ofstream::app);
-    m_file << system.time() << " " << m_temperature << " " << m_kineticEnergy << " " << m_potentialEnergy << " " << m_kineticEnergy+m_potentialEnergy << " " << m_diffusionConst <<  " \n";
+    m_file << system.time() << " " << m_temperature << " " << m_kineticEnergy << " " << m_potentialEnergy << " " << m_kineticEnergy+m_potentialEnergy << " " << m_diffusionConst << " " << m_density <<   " \n";
     // Print out values here
     m_file.close();
 }
@@ -50,7 +51,7 @@ void StatisticsSampler::sampleTemperature(System &system)
 {
     //vec3 systemSize = system.getSystemSize();
     //double N_atoms = 4*systemSize(0)*systemSize(1)*systemSize(2)/latticeConstant;
-    m_temperature = (2.0/3.0)*(m_kineticEnergy)/(system.atoms().size());
+  m_temperature = (2.0/3.0)*(m_kineticEnergy)/(system.atoms().size());
     
     // Hint: reuse the kinetic energy that we already calculated
 }
@@ -72,5 +73,26 @@ void StatisticsSampler::sampleDiffusionCoef(System &system)
 }
 void StatisticsSampler::sampleDensity(System &system)
 {
+  double rx=0;
+  double ry=0;
+  double  rz=0;
+  double rxi, ryi, rzi;
 
+  int i =0;
+  for (Atom *atomi: system.atoms()){
+    int j =0;
+    for (Atom *atomj: system.atoms()){
+      if (j>i){
+	rxi=fabs(atomi->position.x()-atomj->position.x());
+	if (rxi>rx)rx=rxi;
+	ryi=fabs(atomi->position.y()-atomj->position.y());
+	if (ryi>ry)ry=ryi;
+	rzi=fabs(atomi->position.z()-atomj->position.z());
+	if (rzi>rz)rz=rzi;
+      }
+      j++;
+    }
+    i++;
+  }
+  m_density=system.atoms().size()/(rx*ry*rz);
 }
