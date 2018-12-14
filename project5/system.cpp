@@ -24,17 +24,17 @@ void System::applyPeriodicBoundaryConditions() {
   for(Atom *atomi:m_atoms){
     for(int i = 0; i <= 3; i++){
       if(atomi->position[i] < -m_systemSize.components[i]*0.5) {
-	atomi->position[i] += m_systemSize.components[i]; 
+	       atomi->position[i] += m_systemSize.components[i];
       }
       else if(atomi->position[i] >= m_systemSize.components[i]*0.5){
-	atomi->position[i] -= m_systemSize.components[i];
+	       atomi->position[i] -= m_systemSize.components[i];
       }
-      
+
 
     }
-  
+
   }
-  
+
 }
 
 

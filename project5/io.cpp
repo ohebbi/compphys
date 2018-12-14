@@ -38,12 +38,24 @@ void IO::saveState(System &system)
 {
     if(file.is_open()) {
         file << system.atoms().size() << endl;
+        double j = 0;
         file << "The is an optional comment line that can be empty. The reason we use H is so particles get smaller in Ovito" << endl;
         for(Atom *atom : system.atoms()) {
-            file << "H " <<
+
+          //Want to observe a particle in a unit cell?
+          if (j == 365){
+            file << "A " <<
                     UnitConverter::lengthToAngstroms(atom->position.x()) << " " <<
                     UnitConverter::lengthToAngstroms(atom->position.y()) << " " <<
                     UnitConverter::lengthToAngstroms(atom->position.z()) << "\n";
+            }
+          else {
+          file << "H " <<
+                  UnitConverter::lengthToAngstroms(atom->position.x()) << " " <<
+                  UnitConverter::lengthToAngstroms(atom->position.y()) << " " <<
+                  UnitConverter::lengthToAngstroms(atom->position.z()) << "\n";
+               }
+          j += 1;
         }
     }
 }

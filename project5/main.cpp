@@ -14,15 +14,17 @@ using namespace std;
 int main(int numberOfArguments, char **argumentList)
 {
 
-  for(int temp = 500; temp <= 900; temp+=50)
+  for(int temp = 100; temp <= 800; temp+=10)
     {
     cout << temp << endl;
     ofstream m_file;
     m_file.open("statistics.txt");
     m_file.close();
+
+    // Define constants
     int numberOfUnitCells =5;
     double initialTemperature = UnitConverter::temperatureFromSI(temp); // measured in Kelvin
-    double latticeConstant = UnitConverter::lengthFromAngstroms(5.26/3.405); // measured in angstroms
+    double latticeConstant = UnitConverter::lengthFromAngstroms(5.26/3.405); // measured in angstroms //*1.09334252
 
 
     // If a first argument is provided, it is the number of unit cells
@@ -42,12 +44,9 @@ int main(int numberOfArguments, char **argumentList)
     cout << "One unit of diffusion coeffisient is " << UnitConverter::diffusionToSI(1.0) << "" << endl;
 
     System system;
-    
     system.createFCCLattice(numberOfUnitCells, latticeConstant, initialTemperature);
     system.potential().setEpsilon(1.0); // /8.6173303e-5
     system.potential().setSigma(1.0);
-
-
     system.removeTotalMomentum();
 
     StatisticsSampler statisticsSampler;
@@ -59,14 +58,14 @@ int main(int numberOfArguments, char **argumentList)
             setw(20) << "KineticEnergy" <<
             setw(20) << "PotentialEnergy" <<
             setw(20) << "TotalEnergy" <<
-            setw(20) << "Diffusionconstant" << 
+            setw(20) << "Diffusionconstant" <<
             setw(20) << "Density" <<endl;
 
-    for(int timestep=0; timestep<7000; timestep++) {
+    for(int timestep=0; timestep<10000; timestep++) {
         statisticsSampler.sample(system);
         system.step(dt);
+        // Print the timestep every 1000 timesteps
         if(system.steps() % 1000 == 0 ) {
-          // Print the timestep every 100 timesteps
           cout << setw(20) << system.steps() <<
             setw(20) << system.time() <<
             setw(20) << statisticsSampler.temperature()*119.8 <<
@@ -75,7 +74,7 @@ int main(int numberOfArguments, char **argumentList)
             setw(20) << statisticsSampler.totalEnergy() <<
             setw(20) << statisticsSampler.diffusionConst() <<
 	    setw(20) << statisticsSampler.density() << endl;
-	  
+
 
         }
         movie.saveState(system);
@@ -86,7 +85,7 @@ int main(int numberOfArguments, char **argumentList)
     stream1.open("statistics.txt", ios::in);
     string line;
     ofstream stream2;
-    stream2.open(to_string(temp) + "diffusion.txt", ios::out);
+    stream2.open(to_string(temp) + "boundary_5e.txt", ios::out);
     while(getline(stream1,line)){
         stream2 << line << " \n";
     }

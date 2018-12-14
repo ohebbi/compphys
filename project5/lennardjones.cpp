@@ -34,40 +34,42 @@ void LennardJones::setEpsilon(double epsilon)
 void LennardJones::calculateForces(System &system)
 {
     m_potentialEnergy = 0;
-  
+
     int i = 0;
-    
+
     for(Atom *atomi:system.atoms()) {
-      int j = 0;  
+      int j = 0;
 
       for(Atom *atomj:system.atoms()) {
-	if (j > i){
-            
-            vec3 rij = atomi->position - atomj->position;
-            
-	    for (int k = 0; k < 3; k++){
-	      if (rij[k] <= - system.systemSize()[k]*0.5){
-                    rij[k] += system.systemSize()[k];
-                } else if (rij[k] >= system.systemSize()[k]*0.5){
-                    rij[k] -= system.systemSize()[k];
+ 	          if (j > i){
+
+                vec3 rij = atomi->position - atomj->position;
+
+	              for (int k = 0; k < 3; k++){
+	                   if (rij[k] <= - system.systemSize()[k]*0.5){
+                          rij[k] += system.systemSize()[k];
+                      }
+                      else if (rij[k] >= system.systemSize()[k]*0.5){
+                          rij[k] -= system.systemSize()[k];
+                      }
                 }
-            }
             double rij2 = rij.lengthSquared();
-            double rij2inv = 1.0/rij2; // inverse delta r, unitless, squared
-            double rij2inv3 = pow(rij2inv, 3); //attractive
-            double rij2inv6 = pow(rij2inv3, 2); //repulsive
+            if (rij2 <= 9){
+                double rij2inv = 1.0/rij2; // inverse delta r, unitless, squared
+                double rij2inv3 = pow(rij2inv, 3); //attractive
+                double rij2inv6 = pow(rij2inv3, 2); //repulsive
 
-            m_potentialEnergy += m_epsilon*4*(rij2inv6 - rij2inv3);
+                m_potentialEnergy += 4*(rij2inv6 - rij2inv3);
 
-            vec3 F = m_epsilon*rij/rij2*(48*rij2inv6 - 24*rij2inv3);
-	    
-	    atomj->force -= F;
-            atomi->force += F;
-	}
-        j++; 
-	
+                vec3 F = rij/rij2*(48*rij2inv6 - 24*rij2inv3);
+
+                atomj->force -= F;
+                atomi->force += F;
+            }
+	         }
+        j++;
+
         }
       i++;
     }
-    return;
 }

@@ -4,10 +4,14 @@ import matplotlib.pyplot as plt
 import sys
 
 
-
-start = 500
-slutt = 700
-n = 50
+"""
+start = 100
+slutt = 1000
+n = 46
+"""
+start = 100
+slutt = 800
+n = 71
 #f = open("50diffusion.txt", "r")
 
 L = np.linspace(start,slutt,n)
@@ -18,7 +22,7 @@ Temperatur = []
 
 for i in L:
 
-    f = open("%idiffusion.txt" %i, "r")
+    f = open("%iboundary_5e.txt" %i, "r")
     f.readline()
     t=[]
     T = []
@@ -42,53 +46,61 @@ for i in L:
         Diff.append(float(a[5]))
 
     #Average values
+
     for i in range(len(T)):
-        T0 += T[i]
-        differseoi += Diff[i]
-    T1 = T0 / len(T)
-    differseoi1 = float(differseoi / len(T))
+        if i>9000:
+            T0 += T[i]
+        #differseoi += Diff[i]
+    T1 = T0 / (len(T)-9000)
+    #differseoi1 = float(differseoi / len(T))
 
 
     #Pretty plotting
-    if j>-1:
-        plt.plot(t,np.array(Diff),label='$T=%i K$'%(T1))
-    else:
-        plt.plot(t,np.array(Diff),',',alpha=0.02)
+    """
+    if j>20 and j%8==0:
+        #plt.plot(t,np.array(Diff),label='$T=%i K$'%(T1))
 
-    Temperatur.append(T1)
-    Diffusjon.append(differseoi1)
+    else:
+        #plt.plot(t,np.array(Diff),',',alpha=0.02)
+    """
+    if j%3  ==0:
+        Temperatur.append(T1)
+    #Diffusjon.append(differseoi1)
 
     j +=1
 
-
+"""
 for i in range(len(Temperatur)):
     print(Temperatur[i], " ", Diffusjon[i])
 
-
-
+"""
+"""
 plt.legend(loc='upper center')
 plt.xlabel("Time [MD-units]")
 plt.ylabel("Diffusion Coeffisient [MD-units]")
-plt.axis([-2,100, 0,0.035])
-plt.tight_layout()
+#plt.axis([-2,100, 0,0.008])
+#plt.tight_layout()
 #plt.savefig("Time_vs_Diff.pdf")
 plt.show()
-
+"""
+"""
 plt.plot(Temperatur,Diffusjon)
 plt.xlabel("Temperatur [K]")
 plt.ylabel("Diffusjonskoeffisient [MD-units]")
 #plt.savefig("Temp_vs_Diff.pdf")
 plt.tight_layout()
 plt.show()
+"""
+L = np.linspace(start, slutt, len(Temperatur))
 
 plt.subplot(2,1,1)
-plt.plot(Temperatur,L)
+plt.scatter(Temperatur,L,c=L)
 plt.xlabel("$T$ [K]")
 plt.ylabel("$T_0$ [K]")
 
-L = np.linspace(start, slutt, len(Diffusjon))
 plt.subplot(2,1,2)
-plt.plot(Temperatur,Temperatur/L)
+plt.scatter(Temperatur,Temperatur/L,c=L)
+plt.set_cmap('cool')
 plt.xlabel("$T$ [K] ")
 plt.ylabel("$T/T_0$")
 plt.tight_layout()

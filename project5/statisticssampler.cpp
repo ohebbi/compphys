@@ -49,10 +49,9 @@ void StatisticsSampler::samplePotentialEnergy(System &system)
 
 void StatisticsSampler::sampleTemperature(System &system)
 {
-    //vec3 systemSize = system.getSystemSize();
-    //double N_atoms = 4*systemSize(0)*systemSize(1)*systemSize(2)/latticeConstant;
+
   m_temperature = (2.0/3.0)*(m_kineticEnergy)/(system.atoms().size());
-    
+
     // Hint: reuse the kinetic energy that we already calculated
 }
 
@@ -70,9 +69,12 @@ void StatisticsSampler::sampleDiffusionCoef(System &system)
 
     }
     m_diffusionConst = generalDiffusion/system.atoms().size();
+
 }
+
 void StatisticsSampler::sampleDensity(System &system)
 {
+
   double rx=0;
   double ry=0;
   double  rz=0;
@@ -95,4 +97,5 @@ void StatisticsSampler::sampleDensity(System &system)
     i++;
   }
   m_density=system.atoms().size()/(rx*ry*rz);
+
 }
